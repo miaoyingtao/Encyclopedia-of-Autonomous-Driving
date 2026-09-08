@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车路协同 V2X · 驶向未来百科</title>
+<meta name="description" content="自动驾驶车路协同 V2X 专题：V2V/V2I/V2P/V2N、C-V2X 与 DSRC、车路云一体化。">
+<link rel="stylesheet" href="../../assets/style.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-tech">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../../index.html">首页</a>
+      <a href="../overview.html">认识自动驾驶</a>
+      <a href="../levels.html">分级标准 L0–L5</a>
+      <a href="../tech.html">核心技术</a>
+      <a href="../scenarios.html">应用场景</a>
+      <a href="../challenges.html">安全与挑战</a>
+      <a href="../future.html">未来展望</a>
+      <a href="../tutorial/index.html">系统教程</a>
+      <a href="../news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">核心技术 · 专题五</span>
+    <h1>车路协同 V2X</h1>
+    <p class="lead">单车智能的传感器只能“看见拐角之内”；V2X 让车“看见拐角之外”——红绿灯的倒计时、前方 1 公里的事故、被楼宇遮挡的行人。聪明的车，正在与智慧的路联网。</p>
+    <nav class="crumb">
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>车路协同 V2X</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#what">1. V2X 是什么</a>
+      <a href="#routes">2. 两条技术路线</a>
+      <a href="#help">3. V2X 能帮自动驾驶什么</a>
+      <a href="#cloud">4. 车路云一体化</a>
+      <a href="#status">5. 进展与难点</a>
+      <a href="#faq">6. 常见疑问</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="what">
+        <div class="sec-head"><span class="no">01</span><h2>V2X：Vehicle to Everything</h2></div>
+        <p>V2X 指车辆与外界万物通信，按对象分为四类：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🚗 V2V 车车通信</h3><p>邻近车辆交换位置、速度、刹车意图。前车急刹的提醒可在几百毫秒内送达后车，比视觉“看到刹车灯亮”更快更可靠。</p></div>
+          <div class="card reveal"><h3>🚦 V2I 车路通信</h3><p>车与红绿灯、路侧单元（RSU）通信：接收红绿灯倒计时、路口行人闯入告警、施工区与临时限速信息。</p></div>
+          <div class="card reveal"><h3>🚶 V2P 车人通信</h3><p>与行人手机/穿戴设备交互，让“鬼探头”场景提前预警（依赖行人端普及，目前推广有限）。</p></div>
+          <div class="card reveal"><h3>☁️ V2N 车网通信</h3><p>车通过蜂窝网络连接云端：获取实时路况、地图更新、OTA 升级，也是“车路云一体化”的骨干。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="routes">
+        <div class="sec-head"><span class="no">02</span><h2>DSRC 与 C-V2X：两条技术路线的竞赛</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>对比</th><th>DSRC</th><th>C-V2X</th></tr></thead>
+            <tbody>
+              <tr><td>全称</td><td>专用短程通信（IEEE 802.11p/Wi-Fi 衍生）</td><td>蜂窝车联网（LTE-V2X / 5G-V2X）</td></tr>
+              <tr><td>技术源头</td><td>Wi-Fi 家族</td><td>蜂窝移动通信家族，可复用运营商网络</td></tr>
+              <tr><td>演进性</td><td>相对封闭，生态逐渐收缩</td><td>随 4G→5G→6G 持续演进，容量与低时延潜力大</td></tr>
+              <tr><td>产业选择</td><td>美国曾力推，后逐步转向</td><td>中国明确以 C-V2X 为技术路线，欧洲也倾向于此</td></tr>
+              <tr><td>直连通信</td><td>支持 V2V/V2I 直连</td><td>同时支持直连（PC5）与蜂窝（Uu），双模更灵活</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>简单说：<b>DSRC 像“对讲机”，C-V2X 像“手机 + 对讲机”</b>。C-V2X 既能车与车直连（不依赖基站），也能通过 5G 上云，这种“两条腿走路”的能力让它赢得中国与欧洲的主流路线地位。</p>
+      </section>
+
+      <section class="sec scroll-target" id="help">
+        <div class="sec-head"><span class="no">03</span><h2>V2X 能帮自动驾驶解决什么问题</h2></div>
+        <ol class="steps">
+          <li><h3>超视距感知</h3><p>激光雷达看不到拐角后的来车，摄像头会被大车遮挡——路侧感知（RSU+摄像头+雷达）把这些“看不见的危险”通过 V2I 发给车辆，等效于把车的视野从 200 米延伸到整条路口。</p></li>
+          <li><h3>信号灯“透明化”</h3><p>红绿灯倒计时直接数字化下发，车可以提前规划车速，实现“绿波通行”——省油、少停、更顺畅，还能避免“闯黄灯”误判。</p></li>
+          <li><h3>协同决策</h3><p>多车共享轨迹后，汇入匝道可以“协商”出谁先谁后；救护车/公交优先通行可以广播，让社会车辆提前让行。</p></li>
+          <li><h3>降低单车依赖</h3><p>部分信息（路况、事故、信号灯）不必每辆车都靠昂贵传感器去感知，路侧统一采集分发，摊薄单车成本——这是“车路协同降低 L4 门槛”的核心逻辑。</p></li>
+        </ol>
+        <div class="panel info">
+          <span class="pt">典型的“灯下黑”场景</span>
+          <p>无保护左转时，对向直行车被另一辆左转车完全遮挡——摄像头看不见、激光雷达也看不见。若路口有路侧感知并广播“对向 2 号车道有车以 60km/h 接近”，系统就能更早决策“让还是走”。这正是 V2X 独有的价值。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="cloud">
+        <div class="sec-head"><span class="no">04</span><h2>车路云一体化：中国方案的“完全体”</h2></div>
+        <p>中国把 V2X 扩展为“<b>车路云一体化</b>”：不是车与路两方，而是“聪明的车 + 智慧的路 + 云控平台”三方协同，外加高精地图与信息安全体系：</p>
+        <div class="grid g3">
+          <div class="card reveal"><h3>🚗 车端 OBU</h3><p>车上的通信与计算单元，收发 V2X 消息，并把路侧信息接入决策系统；同时回传车辆状态与数据。</p></div>
+          <div class="card reveal"><h3>🛣️ 路端 RSU</h3><p>路侧单元 + 感知设备（摄像头、毫米波雷达、激光雷达）+ 边缘计算节点，负责采集路口/路段的“上帝视角”信息。</p></div>
+          <div class="card reveal"><h3>☁️ 云端平台</h3><p>汇聚全域数据：交通态势、信号灯配时、事件管理、远程驾驶与车队调度，并向区域广播。</p></div>
+        </div>
+        <p>这一架构的价值在于“<b>全局最优</b>”：单车只能做局部最优，云端能看到整片区域的拥堵与事故并提前疏导。多座城市已规划/建设车路云一体化示范区，涉及路口改造、RSU 部署与云控平台建设。</p>
+        <div class="panel warn">
+          <span class="pt">注意：V2X 是增强，不是替代</span>
+          <p>即使路侧设备全覆盖，车也必须具备<b>脱离 V2X 仍能安全行驶</b>的能力——因为通信可能中断、路侧设备可能故障、其他车未必联网。因此行业共识是“单车智能是基础，车路协同是增强”。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="status">
+        <div class="sec-head"><span class="no">05</span><h2>进展与真实的难点</h2></div>
+        <ul>
+          <li><b>进展</b>：国家级测试示范区与“双智”试点城市持续铺开；部分量产车已预装 C-V2X 通信模组；红绿灯信息推送等初级应用开始商用。</li>
+          <li><b>难点一 · 谁出钱</b>：路侧设备与云平台是重资产，投资回报周期长，需要政府、运营商、车企、图商共同分摊与探索商业模式。</li>
+          <li><b>难点二 · 标准与互通</b>：不同城市、不同厂商的 RSU 与平台若不能互联互通，“全国一张网”就无法形成规模效应。</li>
+          <li><b>难点三 · 安全与信任</b>：V2X 消息一旦被伪造（比如广播“前方急刹”造成连环事故），后果严重，需要数字证书、身份认证与消息签名体系，见 <a href="../challenges/cybersecurity.html">网络安全专题</a>。</li>
+          <li><b>难点四 · 装车率</b>：V2V/V2I 的价值随“联网车辆/联网路口数量”非线性增长，早期“车少路多”或“路少车多”都体验不佳。</li>
+        </ul>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">06</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>V2X 需要 5G 全覆盖才能用吗？</summary><p>不需要。车与车、车与路的“直连通信（PC5）”不依赖基站，覆盖范围几百米，低时延是它的核心能力；5G 主要用于 V2N 云端服务与远程驾驶等高带宽场景。</p></details>
+          <details><summary>我的车没有 V2X，能享受车路协同吗？</summary><p>部分应用可以通过手机 App 或后装设备体验（如红绿灯倒计时），但要让路侧信息直接参与驾驶决策，通常需要车载 OBU 与前装系统打通。这也是老车“享受不到”新基建红利的原因。</p></details>
+          <details><summary>路侧摄像头拍的画面会泄露隐私吗？</summary><p>合规的路侧感知会做“去标识化”处理：识别的是物体的位置、速度、类型，而不是人脸或车牌原始图像，存储与调用受数据安全法规约束，详见 <a href="../challenges/cybersecurity.html">数据安全</a>。</p></details>
+          <details><summary>车路协同什么时候能大规模落地？</summary><p>短期以“重点区域成网”为主（示范区、城市主干道、高速示范段），大规模全域覆盖取决于投资、标准与商业模式的成熟，属于 5–10 年尺度的工程。</p></details>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>横向关联</h3>
+        <p style="margin-bottom:10px">V2X 直接服务于感知与决策，它的安全体系与落地形态分别在安全与场景主题中展开。</p>
+        <div class="rel-links">
+          <a href="perception.html">环境感知</a>
+          <a href="decision.html">决策与规划</a>
+          <a href="../scenarios/robotaxi.html">Robotaxi 如何利用路侧信息</a>
+          <a href="../challenges/cybersecurity.html">V2X 网络安全</a>
+          <a href="../tech.html">返回核心技术总览</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../../index.html">首页</a>
+        <a href="../overview.html">认识自动驾驶</a>
+        <a href="../levels.html">分级标准</a>
+        <a href="../tech.html">核心技术</a>
+        <a href="../scenarios.html">应用场景</a>
+        <a href="../challenges.html">安全与挑战</a>
+        <a href="../future.html">未来展望</a>
+        <a href="../tutorial/index.html">系统教程</a>
+        <a href="../news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 车路协同 V2X</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>
+
+
+
+

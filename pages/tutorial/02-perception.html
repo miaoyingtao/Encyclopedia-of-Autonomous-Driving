@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>讲义 02 · 感知与状态估计 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程第 1 章：2D/3D 目标检测、BEV 与占用网络、多传感器融合、多目标跟踪与评价指标。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 第 1 章</span>
+    <h1>感知：检测、融合、跟踪与占用</h1>
+    <p class='lead'>感知的任务是把传感器原始数据变成“结构化世界描述”：哪里有什么、以什么速度动、以及哪些空间被占用。本章覆盖 2D/3D 检测、BEV 与占用网络、传感器融合和多目标跟踪的数学模型。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 1 章</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#obj'>1.1 学习目标</a>
+      <a href='#out'>1.2 感知输出与接口</a>
+      <a href='#det2d'>1.3 2D 目标检测</a>
+      <a href='#det3d'>1.4 3D 检测与深度</a>
+      <a href='#bev'>1.5 BEV 与占用网络</a>
+      <a href='#fusion'>1.6 多传感器融合</a>
+      <a href='#track'>1.7 多目标跟踪</a>
+      <a href='#eval'>1.8 评价指标</a>
+      <a href='#quiz'>1.9 自测题</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>1.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：进阶</span><span>预计：4–5 小时</span><span>前置：第 0 章</span></div>
+        <p>学完本章，你应该能：① 看懂 IoU、mAP、MOTA 等指标的定义并手算小例子；② 说清 BEV 网格的坐标公式与主流“图像转 BEV”的两条路线；③ 画出多传感器融合 + 卡尔曼跟踪的数据流；④ 理解为什么占用网络比“只输出目标框”更适合安全兜底。</p>
+      </section>
+
+      <section class='sec scroll-target' id='out'>
+        <div class='sec-head'><span class='no'>1.2</span><h2>感知输出：规划真正需要的“世界描述”</h2></div>
+        <p>规划不关心像素，只关心语义化的空间与运动。感知的对外接口至少包含三类：</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🚗 动态目标</h3><p>每个目标：类型、3D 位置与尺寸、航向、速度、加速度、置信度、以及被连续跟踪的全局 ID。</p></div>
+          <div class='card reveal'><h3>🛣️ 静态结构</h3><p>车道线、路沿、停止线、可行驶区域、红绿灯状态——决定“能往哪开、该不该停”。</p></div>
+          <div class='card reveal'><h3>🧱 占用空间</h3><p>BEV 栅格或 3D 体素的“占用 + 语义”，用于兜住“没被识别成目标”的未知障碍。</p></div>
+        </div>
+        <div class='panel info'><span class='pt'>设计原则</span><p>检测的目标是“召回一切会撞的东西”，宁可误报让规划保守，不可漏检让规划盲目。因此感知与规划之间常有“保守性过滤”策略：无法置信的目标保留一段时间，而不是立刻删除。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='det2d'>
+        <div class='sec-head'><span class='no'>1.3</span><h2>2D 目标检测：从框到语义</h2></div>
+        <p>检测器输出每帧图像中目标的类别、边框与置信度。评价检测质量最核心的量是交并比：</p>
+        <div class='math'>IoU(A,B) = |A ∩ B| / |A ∪ B|</div>
+        <p>通常 IoU ≥ 0.5（严格任务用 0.7）且类别正确才算一个“检测对”。把检测结果按置信度排序，可画出精确率-召回率曲线，曲线下按固定召回点取平均得到 mAP，这是检测任务的标准指标。</p>
+        <p>损失函数由三部分构成：</p>
+        <div class='math math-left'>分类损失：L_cls = −y log p − (1−y) log(1−p)（二值交叉熵）<br>定位损失：L_box = Σ (SmoothL1(bᵢ − b̂ᵢ)) 或 1 − GIoU<br>总损失：L = λ_cls L_cls + λ_box L_box</div>
+        <p>其中 SmoothL1 在误差小时用二次、大时用一次，比纯 L2 对大离群值更稳健。架构演进主线上，从 R-CNN 的两阶段（先提候选再分类），到 YOLO 的单阶段（网格直接回归），再到 DETR 把检测当成“集合预测问题”用 Transformer 直接输出框集合、去掉锚框与 NMS 后处理。</p>
+        <p>单帧检测只是“快照”，误检与漏检都要靠时间维度修正——这就是 1.7 跟踪存在的理由。</p>
+      </section>
+
+      <section class='sec scroll-target' id='det3d'>
+        <div class='sec-head'><span class='no'>1.4</span><h2>3D 检测：从图像/点云得到带姿态的盒子</h2></div>
+        <h3>三维框的表示</h3>
+        <p>3D 框通常用中心点 (cx, cy, cz)、尺寸 (w, l, h) 与绕 z 轴的航向 θ 表示（俯视下是一个旋转矩形）。给定一个点相对框中心的局部坐标 (x′, y′)，把它转回世界系的公式就是第 0 章的旋转平移：</p>
+        <div class='math'>p = R_z(θ) · [x′, y′, 0]ᵀ + [cx, cy, cz]ᵀ</div>
+        <h3>三种主流输入路线</h3>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📷 纯视觉</h3><p>成本低，但单目存在尺度-深度歧义：同一成像可以对应“近而小”与“远而大”。常用解法是融合运动信息（多帧三角化）、地面假设与深度估计网络。</p></div>
+          <div class='card reveal'><h3>📡 激光点云</h3><p>直接测距，3D 框更可信。稠密点云可用体素化网络（稀疏卷积），轻量方案把点云按柱体压缩成伪图像（PointPillars 风格）再走 2D 检测结构。</p></div>
+          <div class='card reveal'><h3>🔀 多模态</h3><p>相机给纹理语义、激光给几何深度，在 1.6 的“特征级融合”中取长补短，是量产高性能方案的主流。</p></div>
+        </div>
+        <p>3D 检测的评价在 BEV 空间计算旋转 IoU（IoU 3D 或 BEV IoU），并按距离区间（0–30 m、30–60 m、60 m+）分组报告，因为远距离性能才是真实差距所在。对速度/朝向这类连续量常用角度残差的 sin/cos 编码来避免“350° vs 10° 被当成 340° 误差”的环回问题。</p>
+      </section>
+
+      <section class='sec scroll-target' id='bev'>
+        <div class='sec-head'><span class='no'>1.5</span><h2>BEV 与占用网络：站在车顶看世界</h2></div>
+        <h3>BEV 栅格是规划的主坐标系</h3>
+        <p>规划在“俯视”的平面坐标系里工作，因此感知最好也直接输出俯视表示。一个 BEV 栅格就是一张俯视图，参数由原点、分辨率与尺寸决定：</p>
+        <div class='math'>网格(i, j) 的中心点 = (x_min + i·r + r/2, y_min + j·r + r/2)</div>
+        <p>反过来说，已知一个世界点 (x, y) 找它落在哪个格子：i = floor((x − x_min) / r)。代码里所有“坐标 ↔ 栅格”互转都该收敛到这一个函数，并配套单元测试。</p>
+        <h3>图像怎么变成 BEV：两条技术路线</h3>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>🌅 Lift-Splat 思路（显式深度）</h3><p>网络先为每个像素预测一个深度分布，把图像特征“抬升”成沿射线的三维点（lift），再按外参把所有相机散射到统一 BEV 栅格里（splat）。类似“把每张图的像素铲到地面上铺平”。</p></div>
+          <div class='card reveal'><h3>🎯 BEVFormer 思路（隐式 query）</h3><p>固定一组 BEV 网格查询，每个查询通过可变形注意力去各相机图像采样特征。相当于“先问每个栅格里有什么，再回图像里找证据”。Transformer 统一了时序建模，也能吸收上一帧 BEV 特征。</p></div>
+        </div>
+        <h3>占用网络：连“说不出名字的东西”也算进去</h3>
+        <p>目标检测要求“先分类再画框”，遇到没见过的异形障碍就失效。占用网络把空间离散成体素，让网络对每个体素直接预测“是否被占用 + 语义类别”：</p>
+        <div class='math'>L = Σ_voxel 交叉熵(类别) + λ_freespace 对空闲区间的监督</div>
+        <div class='codeblock'>for t in 每帧：
+  输入：多相机图像（+ 可选雷达点云）
+  1. 生成 BEV / 3D 体素查询（分辨率 0.1–0.4 m）
+  2. 跨相机采样特征并融合时序
+  3. 解码每个体素：占用概率 + 语义类别（+ 速度流）
+  4. 后处理：取占用概率阈值为 0.2–0.5，传给规划做碰撞检查</div>
+        <p>占用网络的重要扩展是 Occupancy Flow：不只给当前占用，还给未来 1–2 秒的“占用随速度流动”的预测，可直接作为规划器的动态障碍约束。</p>
+      </section>
+
+      <section class='sec scroll-target' id='fusion'>
+        <div class='sec-head'><span class='no'>1.6</span><h2>多传感器融合：在哪个层面融合？</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>① 数据级</h3><p>点云与图像像素级对齐后拼接，信息损失最少，但对标定与算力要求最高，量产较少单独使用。</p></div>
+          <div class='card reveal'><h3>② 特征级</h3><p>各模态各自提取特征后在中间层融合（如 BEV 特征相加/注意力融合），是当前 3D 检测与占用网络的主流。</p></div>
+          <div class='card reveal'><h3>③ 目标级</h3><p>各传感器独立检测，再在“目标列表”层面用 IoU 匹配合并，简单透明，但较难处理不同模态互相矛盾的情况。</p></div>
+        </div>
+        <p>无论哪种融合，<b>时间同步</b>都是前提。激光雷达帧、相机曝光与 IMU 采样时刻不同，常用运动补偿把各传感器数据外推到同一时刻：已知目标速度 v 与时间差 Δt，则</p>
+        <div class='math'>p(t₀) ≈ p(t₁) − v · Δt（对平移），航向角同理 θ(t₀) ≈ θ(t₁) − ω·Δt</div>
+        <p>空间上的“对齐”就是外参链：相机与激光雷达都外参到车体，任何两传感器之间都可通过车体互相换算（T_cam_lidar = T_cam_body · T_body_lidar）。</p>
+      </section>
+
+      <section class='sec scroll-target' id='track'>
+        <div class='sec-head'><span class='no'>1.7</span><h2>多目标跟踪：让“框”变成连续的“轨迹”</h2></div>
+        <p>跟踪解决三件事：同一目标跨帧怎么对上（数据关联）、目标运动状态怎么估计（滤波）、目标何时出生/消亡（生命周期）。标准流程：</p>
+        <div class='codeblock'>每帧 t：
+  1. 用 KF 预测每个已跟踪目标的新位置（0.4 节，常速度模型）
+  2. 把预测框与新检测框按 IoU / 特征距离算匹配代价矩阵 C
+  3. 用匈牙利算法求最小代价匹配，代价大于阈值的判为“新目标”或“失配”
+  4. 匹配成功 → KF 更新；连续失配 N 帧 → 轨迹删除
+  5. 连续匹配 M 帧 → 轨迹从 tentative 升为 confirmed 并分配全局 ID</div>
+        <p>匈牙利算法解决“N 个旧目标 × M 个新检测，怎么配对使总代价最小”的指派问题，复杂度约 O(N³)，对几十个目标足够快。实践中常用“级联匹配”：先给置信度高、被遮挡久的目标更高优先级，避免 ID 频繁切换。</p>
+        <p>单靠运动关联不够时，加上外观特征：为每个目标维护一个重识别特征向量，用余弦距离衡量“是不是同一个人/同一辆车”，这就是 DeepSORT 类方法的思路。遮挡时运动模型外推 + 外观记忆是保持 ID 的关键。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eval'>
+        <div class='sec-head'><span class='no'>1.8</span><h2>评价指标：离线准 ≠ 路上稳</h2></div>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>指标</th><th>公式/含义</th><th>关注什么</th></tr></thead>
+            <tbody>
+              <tr><td>mAP</td><td>各类别 AP（P-R 曲线面积）的平均</td><td>检测精度（IoU 阈值可调）</td></tr>
+              <tr><td>MOTA</td><td>1 − (FN + FP + IDSW) / GT</td><td>跟踪整体质量，漏检/误检/换 ID 都扣分</td></tr>
+              <tr><td>MOTP</td><td>匹配对间的平均位置误差</td><td>定位精度</td></tr>
+              <tr><td>IDF1</td><td>ID 层面的 F1</td><td>ID 保持能力</td></tr>
+              <tr><td>占用 IoU</td><td>预测占用与真值占用的交并比</td><td>占用网络的几何准确度</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel warn'><span class='pt'>工程提醒</span><p>离线指标高不等于路上可靠：要按场景分层看长尾（夜间、逆光、雨雾、异形车、遮挡起步），并关注“指标高但恰好漏掉罕见危险”的情况。量产团队常同时维护一套“安全关键场景回归集”，任何模型迭代必须先过它。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>1.9</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q1：BEV 分辨率 0.1 m、范围 x∈[−50, 50]，某目标中心 x=3.45，它落在哪列？</summary><p>令 x_min = −50、r = 0.1，则 i = floor((3.45+50)/0.1) = floor(534.5) = 534。</p></details>
+          <details><summary>Q2：为什么单目 3D 检测普遍比激光 3D 检测难？</summary><p>单目只有二维投影，深度信息需要从几何线索与先验推断；激光直接测距，几何无歧义。</p></details>
+          <details><summary>Q3：跟踪中“目标在帧间消失又出现”，如何减少 ID 切换？</summary><p>保留轨迹并预测（遮挡时用运动模型外推 + 外观特征缓存），设置合理的失配删除帧数；重新出现时优先与旧轨迹关联。</p></details>
+          <details><summary>Q4：占用网络相比“目标框 + 障碍物检测”的增量价值是什么？</summary><p>它不依赖“先识别类别再画框”，能表示异形/未知障碍与不可行驶区域，天然适合作为规划的碰撞约束。</p></details>
+          <details><summary>Q5：特征级融合为什么需要严格的时间同步？</summary><p>特征层面已经“分不清”哪个时刻，若两模态时刻错位，网络会把不同世界状态当成同一时刻融合，产生幻影或重影。</p></details>
+        </div>
+      </section>
+
+      <section class='related'>
+        <h3>下一站</h3>
+        <p style='margin-bottom:10px'>感知给出目标与占用后，第 2 章把它们变成“怎么开”的轨迹与指令。</p>
+        <div class='rel-links'>
+          <a href='03-planning-control.html'>第 2 章 决策规划与控制</a>
+          <a href='01-math-sensors.html'>返回第 0 章</a>
+          <a href='../tech/perception.html'>科普：环境感知</a>
+          <a href='../tech/perception/fusion.html'>科普：多传感器融合</a>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='01-math-sensors.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 0 章 · 数学与传感器建模</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='03-planning-control.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 2 章 · 决策规划与控制</b>
+      </a>
+      </nav>
+
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 02</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

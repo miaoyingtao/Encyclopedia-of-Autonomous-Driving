@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>讲义 05 · LLM/VLM/VLA 端到端智驾 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程第 4 章：多模态 token 化、端到端轨迹监督与损失、语言条件驾驶、VLA 架构与部署、开放词汇感知、评测与安全。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 第 4 章</span>
+    <h1>LLM 与 VLA：让“会说话的大模型”开车</h1>
+    <p class='lead'>这一章不再停留在“大模型能帮自动驾驶做什么”的科普层面，而是进入建模细节：图像、点云、语言、轨迹如何变成同一个模型的 Token？端到端策略的损失函数到底长什么样？VLA 上车要解决哪些延迟与算力问题？学完你能自己搭出一个最小可训练的驾驶策略基线。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 4 章 LLM 与 VLA</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#obj'>4.1 学习目标与前置</a>
+      <a href='#token'>4.2 表征统一：一切皆 Token</a>
+      <a href='#bc'>4.3 端到端策略：从行为克隆到强化学习</a>
+      <a href='#llm'>4.4 LLM/VLM 接入驾驶的三种方式</a>
+      <a href='#vla'>4.5 VLA 架构与车载部署</a>
+      <a href='#data'>4.6 数据与训练配方</a>
+      <a href='#eval'>4.7 评测体系</a>
+      <a href='#safety'>4.8 安全边界与落地架构</a>
+      <a href='#quiz'>4.9 自测题</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>4.1</span><h2>学习目标与前置</h2></div>
+        <div class='lesson-meta'><span>难度：高阶</span><span>预计：6–8 小时</span><span>前置：教程 0–3 章 + 科普 AI 前沿</span></div>
+        <p>学完本章，你应该能：① 说清视觉/激光/语言/轨迹各自如何“Token 化”并拼进一个 Transformer；② 写出行为克隆与轨迹回归的损失，并解释为什么会产生分布偏移；③ 设计一个“语言条件轨迹预测”的最小数据样本格式；④ 画出 VLA 的车载部署链路并估算延迟瓶颈；⑤ 用 minADE、约束违反率等指标客观评测一个端到端模型。</p>
+        <p>概念先修：<a href='../tech/foundation.html'>AI 前沿专题（科普）</a>给出“是什么”；本章负责“怎么建模、怎么训练、怎么验证”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='token'>
+        <div class='sec-head'><span class='no'>4.2</span><h2>表征统一：一切皆 Token</h2></div>
+        <p>端到端大模型的起点是把异构输入变成“同一本字典里的词”。每个模态都有自己的 Token 化方式：</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>输入</th><th>Token 化方式</th><th>典型粒度</th></tr></thead>
+            <tbody>
+              <tr><td>图像</td><td>切 patch 后线性投影（ViT 式）或 CNN 特征图压平</td><td>16×16 或 32×32 像素 / patch</td></tr>
+              <tr><td>BEV 栅格</td><td>把多相机融合出的 BEV 特征按 cell 拉平成序列</td><td>0.5 m/cell 级别（配合 Transformer）</td></tr>
+              <tr><td>点云</td><td>体素化后用稀疏卷积提特征，取非空体素/柱体 token</td><td>0.1–0.2 m 体素</td></tr>
+              <tr><td>文本/指令</td><td>BPE/词表分词（LLM 原生格式）</td><td>子词级</td></tr>
+              <tr><td>自车状态/地图</td><td>数值归一化后拼成向量，或转成文本描述</td><td>速度、档位、导航意图等</td></tr>
+              <tr><td>轨迹输出</td><td>连续轨迹离散成“轨迹词表”（K-means 聚类）或用 special token 引导回归</td><td>见 4.3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>数学上，图像 patch 的线性投影就是一次矩阵乘加可学习偏置：</p>
+        <div class='math'>e_p = W_e · flatten(x_p) + b_e，e_p ∈ R^d</div>
+        <p>拿到所有模态的 token 序列后，把它们拼成长序列送入自注意力层。自注意力的核心是“每对 token 之间算相关性再加权聚合”：</p>
+        <div class='math math-left'>Q = X W_Q，K = X W_K，V = X W_V<br>Attention(Q,K,V) = softmax( QKᵀ / √d_k ) · V</div>
+        <p>这正是第 2 章里“BEV query 到相机采样”背后同一套机制：BEVFormer 的每个 cell token 通过可变形注意力去图像特征里“问问题”，而 LLM 让文本 token 也能与视觉 token 互相“问答”。所谓“多模态大模型”，本质就是<b>把异构信号翻译进同一序列、用同一套注意力去建模它们的关系</b>。</p>
+        <div class='panel tip'><span class='pt'>理解建议</span><p>亲手把一段 4 秒、10 Hz 的环视视频“Token 化”：算一算总 token 数（帧数 × patch 数）。你会发现视觉 token 远多于文本，工程上大量技巧（空间下采样、时序降采样、token 压缩）都在解决同一个问题——序列太长，注意力代价是 O(N²)。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='bc'>
+        <div class='sec-head'><span class='no'>4.3</span><h2>端到端策略：从行为克隆到强化学习</h2></div>
+        <h3>行为克隆：把“老司机怎么开”学下来</h3>
+        <p>最直接的端到端训练是行为克隆（BC）：在状态 o（历史观测）下，专家动作 a*（真值轨迹/控制）已知，用最大似然训练策略 π_θ：</p>
+        <div class='math'>θ* = argmax_θ Σ_{(o,a*)∈D} log π_θ(a* | o)</div>
+        <p>连续动作通常假设高斯输出，等价于最小化轨迹回归损失。若轨迹是逐点回归：</p>
+        <div class='math'>L = Σ_t SmoothL1( ŷ_t − y*_t )，ŷ_t = 策略输出的未来航点</div>
+        <p>若把动作做成离散“词表”（如把每个速度/转向量化为 128 档，或用 K-means 把整条轨迹聚类成轨迹词），就变成标准的 token 预测，用交叉熵训练：</p>
+        <div class='math'>L = −Σ_i log p(w_i | w_{&lt;i}, o)，w_i 为第 i 个动作/轨迹 token</div>
+        <p>自回归地逐 token 生成轨迹，与 LLM 生成句子完全同构——这也是“把驾驶当成文本生成”的核心技巧（代表性研究如 Waymo EMMA：将未来轨迹表示为轨迹 token，用多模态大模型自回归解码）。</p>
+        <div class='panel warn'><span class='pt'>行为克隆的致命缺陷：分布偏移</span><p>训练数据是“专家在正常状态下的动作”，而部署时模型任何小偏差都会把车带进训练分布之外的状态；在分布外，BC 没有学过“如何纠正自己”，误差会累积（compounding error）。经典对策包括：</p>
+          <ul>
+            <li><b>DAgger</b>：用当前策略开，人类纠正其动作，把“纠正样本”加入训练集，迭代逼向专家闭环行为。</li>
+            <li><b>风险敏感加权</b>：对高风险样本（近距离、高相对速度）加重损失权重。</li>
+            <li><b>目标条件化</b>：不只学“平均动作”，还学“给定意图/导航目标的动作分布”，减少多模态平均导致的模糊（下节）。</li>
+          </ul>
+        </div>
+        <h3>强化学习：为“安全与效率”直接优化</h3>
+        <p>BC 只能模仿数据里的行为；想学“数据里没有但更安全”的行为，需要用奖励信号做强化学习。目标函数是期望折扣回报：</p>
+        <div class='math'>J(θ) = E_{τ~π_θ}[ Σ_{t≥0} γᵗ r(s_t, a_t) ]</div>
+        <p>策略梯度定理给出无偏估计：</p>
+        <div class='math'>∇_θ J = E[ ∇_θ log π_θ(a|s) · A(s,a) ]</div>
+        <p>A 是优势函数（该动作比平均水平好多少）。PPO 用重要性采样比率加裁剪，防止更新步长过大导致训练崩溃：</p>
+        <div class='math'>L^CLIP = E[ min( r(θ)·A，clip(r(θ), 1−ε, 1+ε)·A ) ]</div>
+        <p>其中 r(θ) = π_θ(a|s) / π_old(a|s) 是新旧策略的比值。驾驶奖励通常由多目标组成：</p>
+        <div class='math'>r = w₁·进度 + w₂·舒适(低 jerk) + w₃·规则(限速/车道) + w₄·安全(最小 TTC/间距) − w₅·碰撞惩罚</div>
+        <p>工业界常见的折中是：<b>BC 起步 + RL 微调 + 规则安全层保底</b>。纯 RL 在真实道路直接探索不可接受，因此 RL 多跑在仿真里，再配合真实数据回归。</p>
+      </section>
+
+      <section class='sec scroll-target' id='llm'>
+        <div class='sec-head'><span class='no'>4.4</span><h2>LLM/VLM 接入驾驶的三种方式</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>① 开放词汇感知</h3><p>传统检测器词表封闭。借助图文对齐模型，把“任意文字描述”与图像区域特征做相似度匹配，识别没见过的物体。</p></div>
+          <div class='card reveal'><h3>② 场景理解与推理</h3><p>VLM 把环视画面 + 地图文本理解成一段“场景报告”，支持交通灯状态、事故现场等复杂语义问答与推理。</p></div>
+          <div class='card reveal'><h3>③ 语言条件决策</h3><p>把导航、交规、乘客意图作为条件，让策略在给定语义约束下输出轨迹——语言成为“可组合的意图接口”。</p></div>
+        </div>
+        <h3>① 开放词汇：文本与视觉的余弦匹配</h3>
+        <p>把类别/描述文字 t 与候选区域特征 v 都映射到同一语义空间，用余弦相似度打分：</p>
+        <div class='math'>score(region, t) = cos( E_text(t), E_vis(region) ) = E_text(t)·E_vis(region) / (|E_text| |E_vis|)</div>
+        <p>于是“前方是不是一个倒了的施工牌”这类新词条，不需要重新训练检测头，只要给一段文字描述。工程上常把开放词汇输出再接到<b>规则校验</b>：模型“认为”是障碍，宁可保守也不漏。</p>
+        <h3>② VLM 场景理解：把世界“读成文字”</h3>
+        <p>设视觉 token 序列为 V，文本 token 为 T，送入多模态 Transformer 后生成回答/中间表征 Y。训练目标是文本最大似然：</p>
+        <div class='math'>L = −Σ log p(y_i | V, T, y_{&lt;i})</div>
+        <p>这种模型可以成为驾驶系统的“慢通道”：低频（1–10 Hz）理解全局语义（如交警手势、事故形态），把结论以结构化文本/向量交给高频规划器。它也能做 Chain-of-Thought——先写“前车刹车灯亮、左侧车道空、预计 3 秒后变道”再输出动作，给黑盒决策一个可读的中间推理。</p>
+        <h3>③ 语言条件策略：让约束“说进”模型里</h3>
+        <p>把策略写成条件分布：</p>
+        <div class='math'>π_θ(a | o, c)，c = 导航/交规/乘客指令的文本编码</div>
+        <p>训练样本形如：观测片段 o + 指令 c（“前方施工，走最左侧车道”“在第二个红绿灯右转”）+ 真值轨迹 a*。推理时把用户语音转成文本 c，模型在 c 的条件下生成轨迹。相比“用户指令 → 规则层改参数”的硬编码，语言条件让一个模型学会多种意图，并天然支持“不要压实线”这类难以参数化的软约束。</p>
+        <div class='codeblock'>最小数据样本格式（JSON 结构示意）：
+{
+  id: 000001,
+  observation: [环视图像 0..5 @10Hz ×4s, 自车速度/转向, 地图意图],
+  instruction: 前方车道收窄，提前并入左侧车道,
+  trajectory: [未来 6s 每 0.5s 一个航点 (x, y, v, heading)],
+  safety_meta: { 最近障碍距离, 限速, 是否施工区 }
+}</div>
+      </section>
+
+      <section class='sec scroll-target' id='vla'>
+        <div class='sec-head'><span class='no'>4.5</span><h2>VLA 架构与车载部署</h2></div>
+        <h3>VLA = 视觉语言模型 + 动作输出</h3>
+        <p>VLA（Vision-Language-Action）在 VLM 之上加一路“动作头”，把“看懂”延伸到“会开”。典型组件：</p>
+        <div class='codeblock'>环视相机 → 视觉编码器(ViT/CNN) → patch token
+                                    ↓ 投影层(MLP / Q-Former 风格)
+语音/导航 → 分词器 → 文本 token ──→ LLM 主干(decoder-only)
+                                    ↓ 动作头
+            自回归输出：文本解释 + 轨迹 token / 控制 token
+                                    ↓ 轨迹解码 → 安全校验 → 控制</div>
+        <p>几个必须想清楚的工程选择：</p>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>🎯 动作空间</h3><p>连续航点回归 vs 离散动作词表 vs 分层（先用 token 选意图/模式，再回归细粒度轨迹）。离散化把控制问题变成“下一个词预测”，与预训练语言模型无缝衔接。</p></div>
+          <div class='card reveal'><h3>📉 自回归延迟</h3><p>逐 token 解码延迟随序列长度线性增长；车载方案用并行解码、量化、剪枝与“小模型车端 + 大模型云端”分层。频率标定常以“每帧 10–50 ms 内输出”为工程目标，具体取决于 ODD 要求。</p></div>
+          <div class='card reveal'><h3>🖥 车端资源</h3><p>数百 TOPS 的域控制器跑 7B–70B 参数量级需 INT8/FP8 量化与算子定制；纯软件方案之外，常保留一套轻量传统端到端/规则兜底。</p></div>
+          <div class='card reveal'><h3>🧩 多任务头</h3><p>同一骨干同时输出目标框、占用、红绿灯与轨迹，可共享视觉特征、降低重复计算；但任务间损失平衡需要仔细调节。</p></div>
+        </div>
+        <div class='panel info'><span class='pt'>怎么理解 2025 年的“VLA 上车”</span><p>2025 年 8 月前后，理想、小鹏、元戎启行等相继宣布 VLA 大模型进入量产叙事，核心卖点是把“语言理解 + 场景理解 + 动作规划”放进一个网络，并支持语音指令直接改变驾驶行为。需要冷静区分的三点：第一，量产仍以 L2/L2+ 监督驾驶为主；第二，“VLA”在不同公司指代的具体结构并不相同；第三，能跑通不等于已通过全部安全论证——这正是本章最后两节要讨论的。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='data'>
+        <div class='sec-head'><span class='no'>4.6</span><h2>数据与训练配方</h2></div>
+        <h3>样本如何组装</h3>
+        <p>端到端大模型的数据以“驾驶片段 + 对齐标注”为单位。每段片段约 8–30 s，切成（观测窗口 2–4 s，预测窗口 4–10 s）的训练对。需要对齐的模态包括：传感器时间戳、自车真值状态、高精地图、指令文本、未来轨迹。</p>
+        <h3>训练配方（三个阶段是常见做法）</h3>
+        <ol class='steps'>
+          <li><h3>预训练（可选，通用底座）</h3><p>在海量图文/视频上得到通用视觉与语言能力，为“世界常识”打底；资源有限可跳过，直接加载开源 VLM 权重。</p></li>
+          <li><h3>驾驶对齐微调</h3><p>用驾驶样本做多任务训练：场景理解 + 轨迹预测 + 指令跟随。轨迹损失与文本损失加权：L_total = L_llm + λ_traj L_traj + λ_aux L_aux。</p></li>
+          <li><h3>闭环优化</h3><p>仿真里做 DAgger/RL 微调，重点修正“离线损失低但闭环会撞”的行为。</p></li>
+        </ol>
+        <h3>真值从哪来</h3>
+        <p>轨迹真值可以直接用车记录的自车状态（对“学习自车怎么开”足够）；但若学“聪明行为”，需要把人类司机的完整轨迹、接管前后片段都标注出来。接管片段是最珍贵的训练信号：它标出了“模型哪里不够好”。语言指令真值可自动改写自导航意图模板，再用大模型扩充表达多样性。</p>
+        <div class='panel warn'><span class='pt'>数据陷阱</span><p>① 传感器与真值时间戳不对齐会让损失“教错动作”；② 全部数据来自自家车/自家场景会产生偏差，跨车型、跨城市要单独回归；③ 轨迹多模态（直行/变道都合理）时，平均损失会鼓励“骑在两条路中间”的模糊轨迹——需要多假设输出或离散轨迹词表来规避。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='eval'>
+        <div class='sec-head'><span class='no'>4.7</span><h2>评测体系：离线指标 ≠ 会开车</h2></div>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>📏 开环轨迹误差</h3><p>minADE_K：K 条候选轨迹里，与真值平均位移误差最小的一条；minFDE_K：只看终点误差。开环误差低是必要不充分条件。</p></div>
+          <div class='card reveal'><h3>🎮 闭环仿真</h3><p>把模型放进仿真器自跑，统计碰撞率、出界率、任务完成率、平均进度、舒适度（jerk/横向加速度）与接管次数。这才是“会不会开车”的主指标。</p></div>
+          <div class='card reveal'><h3>🗣 语言与指令指标</h3><p>指令跟随成功率、对“为什么这样开”的回答一致性、幻觉探测（模型声称看见不存在障碍/错误解释决策的比例）。</p></div>
+          <div class='card reveal'><h3>🔒 安全漏斗指标</h3><p>预测违反约束率、安全层触发频率、最坏情况 TTC/间距分布、ODD 越界检测率。安全层的触发率不是越低越好，而是要与“危险场景实际占比”对得上。</p></div>
+        </div>
+        <p>minADE 的定义要能默写：给定 K 条预测轨迹 ŷ⁽ᵏ⁾ 与真值 y，先对每条算逐时刻 L2 的平均，再取 K 条中的最小：</p>
+        <div class='math'>minADE_K = (1/N)·Σᵢ min_k (1/T)·Σₜ ‖ŷ⁽ᵏ⁾ₜ − yₜ‖₂</div>
+        <p>评测端到端模型还有一个容易踩的坑：<b>同一模型在真值传感器输入上表现好，不代表在带噪声/延迟/失真的真车上好</b>。因此进阶评测必须注入传感器噪声、丢帧、延迟与天气扰动做鲁棒性测试。</p>
+      </section>
+
+      <section class='sec scroll-target' id='safety'>
+        <div class='sec-head'><span class='no'>4.8</span><h2>安全边界与落地架构</h2></div>
+        <p>大模型输出动作前必须经过独立于模型的安全层。推荐的双环架构是：</p>
+        <div class='codeblock'>VLA/端到端模型（提议者）：生成候选轨迹 + 置信度 + 文本解释
+      ↓
+安全校验层（验证者，规则/几何/动力学）：
+  1) 碰撞检查（占用栅格 + 预测）
+  2) 动力学可行性（曲率/加加速度限幅）
+  3) 交规与 ODD 边界（实线、限速、可行驶域）
+  4) 不确定性拒绝（OOD/低置信度时直接拒绝）
+      ↓
+通过 → 下发控制；不通过 → 保守降级（减速/靠边/请求接管）</div>
+        <p>为什么不能“信模型”：大模型有<b>幻觉</b>（编造场景）、<b>过度自信</b>（低置信也敢输出）、<b>分布外失效</b>（训练里没见过的场景）。所以安全论证永远分层：<b>模型负责上限，规则/物理层负责下限</b>，与 SOTIF（ISO 21448）和功能安全（ISO 26262）的框架对接。可延伸阅读 <a href='../challenges/safety.html'>科普·安全体系</a> 与第 3 章 3.8 节。</p>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>4.9</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q1：为什么“把轨迹写成文本 token”能让 LLM 学会开车？</summary><p>轨迹 token 与文本 token 共用同一序列和同一套自回归机制：模型按“上一时刻上下文预测下一个 token”的同一原则预测下一个动作 token；语言预训练带来的常识与多模态理解也被迁移进来。</p></details>
+          <details><summary>Q2：行为克隆的误差累积为什么必然发生？</summary><p>策略输出的任何小偏差都会改变后续状态；训练分布里没有这些偏差状态，模型在这些新状态上没有“纠错示范”可学，误差逐帧叠加。DAgger 用在线纠正样本填补这些状态。</p></details>
+          <details><summary>Q3：minADE_K 为什么取“K 条里最好的一条”？它的缺点是什么？</summary><p>它衡量“模型是否生成了至少一条接近真值的轨迹”，忽略了概率分配——模型可能把概率全压在错误轨迹上。因此还要看 miss rate、预测概率与真值的一致性。</p></details>
+          <details><summary>Q4：VLA 输出前为什么要过独立的几何校验层？</summary><p>因为轨迹损失低只说明“像训练数据”，不保证“物理可行、几何无碰撞、合法”；安全层用占用栅格与动力学约束做形式化校验，防止模型幻觉与分布外失效传导到执行器。</p></details>
+          <details><summary>Q5：为什么把动作离散成 token 有时比直接回归连续值更好？</summary><p>① 离散化天然支持多模态（不同轨迹簇对应不同 token），避免“平均到两难中间”；② 与语言模型的自回归训练无缝一致；③ 便于做分类损失校准不确定性。代价是精度受词表粒度限制，需足够密的词表或分层细化。</p></details>
+        </div>
+      </section>
+
+      <section class='related'>
+        <h3>下一章</h3>
+        <p style='margin-bottom:10px'>LLM/VLA 负责“看懂 + 会开”，而世界模型负责“在脑中预演未来、批量制造训练场景”——这是下一章的主题。</p>
+        <div class='rel-links'>
+          <a href='06-worldmodel.html'>第 5 章 世界模型</a>
+          <a href='index.html'>返回课程地图</a>
+          <a href='04-loc-sim-test.html'>第 3 章 定位·仿真·测试</a>
+          <a href='../tech/foundation.html'>科普：AI 前沿专题</a>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='04-loc-sim-test.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 3 章 · 定位·仿真·测试</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='06-worldmodel.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 5 章 · 世界模型</b>
+      </a>
+      </nav>
+
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 05</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

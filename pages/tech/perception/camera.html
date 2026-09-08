@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>摄像头传感器 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶摄像头专题：CMOS 原理、分辨率与 HDR、单目双目测距、车载布局与光照挑战。">
+<link rel="stylesheet" href="../../../assets/style.css">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-tech">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../../../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../../../index.html">首页</a>
+      <a href="../../overview.html">认识自动驾驶</a>
+      <a href="../../levels.html">分级标准 L0–L5</a>
+      <a href="../../tech.html">核心技术</a>
+      <a href="../../scenarios.html">应用场景</a>
+      <a href="../../challenges.html">安全与挑战</a>
+      <a href="../../future.html">未来展望</a>
+      <a href="../../tutorial/index.html">系统教程</a>
+      <a href="../../news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">核心技术 · 传感器深潜 ① / ⑤</span>
+    <h1>摄像头：自动驾驶的“眼睛”</h1>
+    <p class="lead">摄像头是唯一能“看懂”颜色、文字与灯光的传感器——它最像人眼，也最容易被光照欺骗。这一页讲清它的原理、参数、测距方式与挑战。</p>
+    <nav class="crumb">
+      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../tech.html">核心技术</a><span class="sep">/</span><a href="../perception.html">环境感知</a><span class="sep">/</span><span>摄像头</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#why">1. 为什么离不开摄像头</a>
+      <a href="#spec">2. 核心参数怎么看</a>
+      <a href="#depth">3. 摄像头如何测距</a>
+      <a href="#layout">4. 一辆车装多少颗</a>
+      <a href="#hard">5. 光照与天气难题</a>
+      <a href="#trend">6. 技术趋势</a>
+      <a href="#faq">7. 常见疑问</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="why">
+        <div class="sec-head"><span class="no">01</span><h2>为什么自动驾驶离不开摄像头</h2></div>
+        <p>激光雷达能测距、毫米波雷达能测速，但它们都“认不出”世界上的语义信息。只有摄像头能告诉系统：</p>
+        <ul>
+          <li>红绿灯此刻是<b>红色还是绿色</b>（靠颜色）；</li>
+          <li>路牌上写着“限速 40”还是“禁止左转”（靠文字识别）；</li>
+          <li>车道线是白虚线还是黄实线、前方是交警在指挥还是普通行人（靠纹理与形状）；</li>
+          <li>那个袋子是空的还是在飘动（靠颜色/纹理，激光雷达很难区分）。</li>
+        </ul>
+        <div class="panel info">
+          <span class="pt">与人类驾驶的类比</span>
+          <p>人类开车 90% 以上的信息来自眼睛，而人眼本质上就是一对“双目摄像头”。这意味着摄像头采集的数据<b>与人类驾驶经验同构</b>，可以用海量人类驾驶视频训练 AI——这是其他传感器不具备的优势。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="spec">
+        <div class="sec-head"><span class="no">02</span><h2>核心参数怎么看</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>参数</th><th>含义</th><th>为什么重要</th></tr></thead>
+            <tbody>
+              <tr><td><b>分辨率</b></td><td>像素数量，如 2MP / 8MP</td><td>越高越能看清远方的行人、路牌小字。行业正从 2–3MP 向 8MP 升级——同一颗镜头看得更远更细。</td></tr>
+              <tr><td><b>帧率 FPS</b></td><td>每秒拍摄帧数</td><td>高速行驶时帧率不足会导致目标“跳动”；量产前视通常 30fps，越高越有利（数据量也越大）。</td></tr>
+              <tr><td><b>视场角 FOV</b></td><td>能看到的角度范围</td><td>广角看得宽但远物小，长焦看得远但视野窄。一台车用多颗不同视场角镜头搭配。</td></tr>
+              <tr><td><b>HDR 动态范围</b></td><td>同时记录明暗细节的能力</td><td>隧道出入口、逆光场景下，普通摄像头会“一片黑/一片白”，HDR 能同时保住亮部与暗部细节。</td></tr>
+              <tr><td><b>LED 抗闪烁</b></td><td>应对 LED 屏/灯频闪</td><td>LED 交通灯按高频闪烁驱动，普通快门可能拍到“灯灭”的瞬间，需要专门曝光策略（LED Flicker Mitigation）。</td></tr>
+              <tr><td><b>芯片尺寸与像素</b></td><td>感光面积、像素大小</td><td>同分辨率下大像素感光更好，夜景噪点更少；大芯片还决定镜头与成本。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="depth">
+        <div class="sec-head"><span class="no">03</span><h2>摄像头怎么“测距离”</h2></div>
+        <p>单张照片本身没有深度信息，工程上有三种方案“算”出距离：</p>
+        <div class="grid g3">
+          <div class="card reveal"><h3>📷 单目测距</h3><p>用深度学习从图像语义估算深度：结合已知物体尺寸（车宽、车牌高度）与几何约束反推距离。实现简单、成本低，但属于“估计”，误差随距离与场景变化。</p></div>
+          <div class="card reveal"><h3>👀 双目测距</h3><p>用两颗间距固定的摄像头同时拍摄，通过左右图像的“视差”三角测距，与人眼原理一致。近中距精度好，但基线长度限制远距能力，标定要求高。</p></div>
+          <div class="card reveal"><h3>🔦 主动光深度</h3><p>投射结构光/红外图案测深度（类似手机 Face ID）。适合近距，车内感知与舱内监控常用。</p></div>
+        </div>
+        <p>注意：<b>“单目测不准距离”不等于单目方案不安全</b>——纯视觉方案会用时间序列（多帧）与运动视差来约束深度，并用 BEV/占用网络表达空间，实际精度已大幅提升。代价是需要更强的算法与数据闭环。</p>
+      </section>
+
+      <section class="sec scroll-target" id="layout">
+        <div class="sec-head"><span class="no">04</span><h2>一辆智能车通常装多少颗摄像头</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>位置</th><th>用途</th><th>典型规格</th></tr></thead>
+            <tbody>
+              <tr><td>前视主摄</td><td>主车道感知：车辆、行人、车道线、交通灯</td><td>8MP，30–120° FOV</td></tr>
+              <tr><td>前视长焦</td><td>远距离识别路牌、远车（>150m）</td><td>8MP，窄视场</td></tr>
+              <tr><td>周视 / 环视</td><td>车身 360° 覆盖，盲区与变道</td><td>4–6 颗广角/鱼眼</td></tr>
+              <tr><td>后视</td><td>倒车、后方来车</td><td>广角</td></tr>
+              <tr><td>舱内摄像头</td><td>驾驶员监控 DMS：是否分心、疲劳</td><td>红外，夜间可用</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>主流 L2+ 车型约 8–11 颗摄像头；更高阶方案还会在车顶加装“瞭望塔式”传感器套件。多颗摄像头画面必须做<b>拼接与时间对齐</b>，才能形成完整的 360° 感知，这依赖 BEV 架构，见 <a href="../perception.html#understand">环境感知页的 BEV 小节</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="hard">
+        <div class="sec-head"><span class="no">05</span><h2>摄像头的“天敌”：光照与天气</h2></div>
+        <div class="grid g2">
+          <div class="card reveal"><h3>☀️ 强光与黑夜</h3><p>逆光时前方车辆只剩剪影，黑夜中行人几乎不可见。应对：HDR、大光圈、高感光 CMOS，以及红外/微光技术；但物理极限仍存在——这是纯视觉方案被质疑最多的地方。</p></div>
+          <div class="card reveal"><h3>🌧️ 雨雾与脏污</h3><p>雨滴造成高光噪点，雾霾降低对比度，泥水遮挡镜头。应对：疏水涂层、雨刮、镜头加热与“脏污自检”；算法上也靠雷达/激光雷达交叉验证。</p></div>
+        </div>
+        <p>因此，多数 L4 方案不把摄像头作为唯一信息源，而是让它承担“语义主力”，同时用激光雷达与毫米波雷达保证“黑暗与雨雾中仍能看到”，融合策略见 <a href="fusion.html">多传感器融合</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="trend">
+        <div class="sec-head"><span class="no">06</span><h2>摄像头技术趋势</h2></div>
+        <ul>
+          <li><b>高分辨率普及</b>：8MP 前视成为新旗舰标配，一颗顶过去两颗，同时降低系统复杂度；</li>
+          <li><b>事件相机</b>：不按帧拍照、而是记录“像素亮度变化”，纳秒级延迟、超强动态范围，适合高速与强光场景，正在走向车规；</li>
+          <li><b>大模型感知</b>：Transformer/BEV 架构让多摄像头在“鸟瞰视角”联合推理，遮挡互补能力显著增强；语言与视觉融合的“大模型感知”延伸见 <a href="../foundation.html">AI 前沿专题</a>；</li>
+          <li><b>纯视觉 vs 融合</b>：特斯拉坚定纯视觉路线，国内多数厂商采用“摄像头为主 + 激光雷达增强”的冗余路线——两条路线短期并存，见 <a href="../perception.html#sensors">环境感知页</a>。</li>
+        </ul>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>贴黑色膜会影响摄像头吗？</summary><p>会。前挡风玻璃区域若贴深色膜或放置反光物，会显著影响前视摄像头的进光与成像，多数车型说明书中明确禁止在前摄区域贴膜。这也是很多事故的诱因之一。</p></details>
+          <details><summary>摄像头会被太阳直射损坏吗？</summary><p>长时间强光直射可能造成传感器过热或老化，但车规镜头有镀膜与散热设计。更常见的“硬伤”是眩光与鬼影，靠光学镀膜与算法抑制。</p></details>
+          <details><summary>为什么摄像头像素不是越高越好？</summary><p>像素越高数据量越大，对传输带宽、ISP 算力与神经网络的要求同步上升；且镜头光学分辨率若跟不上，像素就是浪费。因此“高像素”要搭配“高算力 + 好镜头”才有意义。</p></details>
+          <details><summary>摄像头坏了，自动驾驶还能开吗？</summary><p>取决于冗余设计。若仅单颗摄像头失效，系统可降级（限速、缩小 ODD）或继续依靠其他传感器工作；若关键前视全部失效，安全监控会触发最小风险策略——减速靠边停车，而不是继续行驶。</p></details>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>传感器专题之间</h3>
+        <p style="margin-bottom:10px">摄像头与激光雷达、毫米波雷达是“互补三人组”——横向看看另外两位，以及它们如何融合。</p>
+        <div class="rel-links">
+          <a href="lidar.html">激光雷达专题</a>
+          <a href="radar.html">毫米波雷达专题</a>
+          <a href="ultrasonic.html">超声波雷达专题</a>
+          <a href="fusion.html">多传感器融合</a>
+          <a href="../perception.html">返回环境感知</a>
+          <a href="../../tech.html">返回核心技术</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../../../index.html">首页</a>
+        <a href="../../overview.html">认识自动驾驶</a>
+        <a href="../../levels.html">分级标准</a>
+        <a href="../../tech.html">核心技术</a>
+        <a href="../../scenarios.html">应用场景</a>
+        <a href="../../challenges.html">安全与挑战</a>
+        <a href="../../future.html">未来展望</a>
+        <a href="../../tutorial/index.html">系统教程</a>
+        <a href="../../news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 摄像头专题</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../../../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../../";</script>
+<script src="../../../assets/search.js"></script>
+  <script src="../../../assets/site-update.js"></script>
+</body>
+</html>
+
+
+
+

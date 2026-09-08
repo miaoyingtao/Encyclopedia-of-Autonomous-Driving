@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>讲义 01 · 数学与传感器建模 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程第 0 章：线性代数与刚体变换、贝叶斯与卡尔曼滤波、相机与激光雷达几何模型、最小二乘优化。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 第 0 章</span>
+    <h1>数学基础与传感器建模</h1>
+    <p class='lead'>自动驾驶算法的“母语”是线性代数、概率与优化。这一章用最小必要篇幅把后续章节要用的工具一次补齐，并给相机、激光雷达建立可计算的几何模型。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 0 章</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#obj'>0.1 学习目标</a>
+      <a href='#linalg'>0.2 线性代数与刚体变换</a>
+      <a href='#prob'>0.3 概率与高斯分布</a>
+      <a href='#kf'>0.4 卡尔曼滤波</a>
+      <a href='#sensor'>0.5 传感器几何建模</a>
+      <a href='#opt'>0.6 最小二乘与优化</a>
+      <a href='#eng'>0.7 工程要点</a>
+      <a href='#quiz'>0.8 自测题</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>0.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：基础</span><span>预计：3–4 小时</span><span>前置：大学一年级数学</span></div>
+        <p>学完本章，你应该能独立完成：① 写出旋转矩阵与齐次变换，并做坐标系串联；② 写出卡尔曼滤波预测与更新公式并解释每个矩阵；③ 用针孔模型把世界点投影到像素、把激光点云投影到图像；④ 说明最小二乘为什么贯穿标定与定位。</p>
+      </section>
+
+      <section class='sec scroll-target' id='linalg'>
+        <div class='sec-head'><span class='no'>0.2</span><h2>线性代数与刚体变换</h2></div>
+        <p>自动驾驶里到处是“换坐标系”：激光雷达测得一个点，要换到车体、再换到世界、再投影到图像。所有变换都建立在下面三个工具上。</p>
+        <h3>内积：向量的“相似度”与投影</h3>
+        <div class='math'>a · b = |a| |b| cosθ = Σᵢ aᵢ bᵢ</div>
+        <p>归一化内积就是余弦相似度，深度学习里向量检索、跟踪里的“特征相似度”都基于它。向量 a 在单位向量 e 上的投影长度是 a·e，这是后续把误差“投影到某方向”时的直觉来源。</p>
+        <h3>旋转矩阵与正交性</h3>
+        <div class='math'>二维绕原点逆时针旋转：R(θ) = [[cosθ, −sinθ], [sinθ, cosθ]]</div>
+        <p>旋转矩阵的两个性质必须记住：<b>正交性</b> RᵀR = I，因此 <b>R⁻¹ = Rᵀ</b>（求逆＝转置，数值上又稳又快）；<b>行列式为 1</b>，不引入缩放。三维基本旋转是对某一轴的推广，例如绕 z 轴旋转与上式同形，绕 x、y 轴则把 sinθ 项移到对应行列。</p>
+        <h3>齐次变换：把“旋转 + 平移”写成一个矩阵</h3>
+        <div class='math'>T = [[R, t], [0, 1]]，点 p 的变换写作 p′ = R p + t</div>
+        <p>把三维点补成四维齐次坐标 [p; 1] 后，连续两次变换可以直接“矩阵相乘”串联：</p>
+        <div class='math'>p_c = T_cb · T_ba · p_a</div>
+        <p>其中 T_ba 表示“从 a 系到 b 系”。坐标系串联是感知、定位、规划里最常写的代码，务必亲手推一遍。逆变换也有闭式解，避免对 4×4 矩阵数值求逆：</p>
+        <div class='math'>T⁻¹ = [[Rᵀ, −Rᵀt], [0, 1]]</div>
+        <div class='panel tip'><span class='pt'>一次练习</span><p>设车体系到世界系的外参 T_wb（先平移 (1,2,0)，再绕 z 轴转 90°），手工把车体系点 (0,1,0) 变换到世界系，再用 T⁻¹ 验算回来。坐标系直觉就建立起来了。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='prob'>
+        <div class='sec-head'><span class='no'>0.3</span><h2>概率、高斯分布与贝叶斯公式</h2></div>
+        <p>传感器有噪声、估计有不确定性。自动驾驶的状态估计把“世界是什么样”写成概率分布，其中最常用的是高斯分布。</p>
+        <h3>贝叶斯公式：新证据如何修正旧信念</h3>
+        <div class='math'>P(x | z) = P(z | x) · P(x) / P(z)</div>
+        <p>读作“看到观测 z 之后对状态 x 的信念（后验）＝ 观测似然 × 先验信念 ÷ 归一化常数”。卡尔曼滤波、SLAM 后端、贝叶斯滤波都是它的特例。</p>
+        <h3>高斯分布：两个参数就够了</h3>
+        <div class='math'>p(x) = 1 / √(2π|Σ|) · exp(−½ (x−μ)ᵀ Σ⁻¹ (x−μ))</div>
+        <p>μ 是均值（最可能的位置），Σ 是协方差矩阵（不确定度的方向与大小）。二维高斯画成椭圆时，椭圆轴方向由 Σ 的特征向量给出，轴长正比于特征值的平方根。看协方差椭圆是理解“哪条不确定度大”最快的方法。</p>
+        <p>高斯分布有个“闭环”性质：线性变换仍高斯、两个高斯相乘（归一化后）仍高斯。这意味着只要系统是线性的、噪声是高斯的，我们就能用有限参数做精确推理——这正是卡尔曼滤波的前提。</p>
+      </section>
+
+      <section class='sec scroll-target' id='kf'>
+        <div class='sec-head'><span class='no'>0.4</span><h2>卡尔曼滤波：递归地融合预测与观测</h2></div>
+        <p>想象你要估计前车位置。你有一个“运动模型”预测它会在哪，也有激光雷达观测告诉你它实际在哪。卡尔曼滤波的智慧是：<b>按各自不确定度加权平均，且只保留上一个时刻的估计</b>（马尔可夫假设），因此每步计算量恒定，适合车载实时运行。</p>
+        <h3>系统模型</h3>
+        <div class='math math-left'>x_k = F x_(k−1) + B u_k + w_k，w_k ~ N(0, Q)<br>z_k = H x_k + v_k，v_k ~ N(0, R)</div>
+        <p>含义：F 是状态转移矩阵（上一时刻状态怎么变到这一时刻）；B 把控制输入 u（油门、转向）变成状态增量；H 把状态映射成观测；Q、R 分别刻画运动模型误差和传感器噪声。</p>
+        <h3>两步五式</h3>
+        <div class='math math-left'>预测：x̂⁻ = F x̂_(k−1) + B u_k<br>预测：P⁻ = F P_(k−1) Fᵀ + Q<br>更新：K = P⁻ Hᵀ (H P⁻ Hᵀ + R)⁻¹<br>更新：x̂ = x̂⁻ + K (z − H x̂⁻)<br>更新：P = (I − K H) P⁻</div>
+        <p>直觉解读：K 是 0 到 1 之间的“信任分配”。P⁻ 小（预测准）或 R 大（观测噪声大）时 K→0，更信预测；反之 K→1，更信观测。括号里的 (z − H x̂⁻) 叫“新息/残差”，就是“观测告诉我、而模型没想到”的部分。</p>
+        <div class='paper'><h4>匀速模型实例</h4><p>状态 x = [px, py, vx, vy]ᵀ（位置与速度），采样间隔 Δt，则 F = [[1,0,Δt,0],[0,1,0,Δt],[0,0,1,0],[0,0,0,1]]；只观测位置时 H = [[1,0,0,0],[0,1,0,0]]；若认为加速度随机，把加速度方差放到 Q 的对应位置。这套代码跑起来就是你自己的第一个“目标跟踪器”。</p></div>
+        <h3>扩展到非线性：EKF</h3>
+        <p>真实运动与观测往往非线性（如转角模型、距离方位观测）。扩展卡尔曼滤波的做法是：运动/观测函数保持不变，只用其一阶泰勒展开（雅可比矩阵）代替 F 与 H：</p>
+        <div class='math'>F ≈ ∂f/∂x |ₓ̂ ，H ≈ ∂h/∂x |ₓ̂</div>
+        <p>代价是强非线性时一阶近似可能发散。工程上因此还有无迹卡尔曼（UKF，用确定性采样近似传播分布）与粒子滤波（对非高斯分布直接采样），理解主线仍是“预测 + 按不确定度加权更新”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='sensor'>
+        <div class='sec-head'><span class='no'>0.5</span><h2>传感器几何建模</h2></div>
+        <h3>相机：针孔模型与内参</h3>
+        <p>相机把三维世界投影成二维像素。针孔模型假设光线过光心，世界点 P 到像素 u 的映射为：</p>
+        <div class='math'>z_c · [u, v, 1]ᵀ = K · [R | t] · [X, Y, Z, 1]ᵀ</div>
+        <p>其中 [R|t] 是相机外参（把世界系换到相机系），z_c 是点在相机系下的深度，内参矩阵 K 把相机系坐标变成像素：</p>
+        <div class='math'>K = [[fx, 0, cx], [0, fy, cy], [0, 0, 1]]</div>
+        <p>fx、fy 是焦距的像素度量（fx = f / dx，dx 为像元宽度）；cx、cy 是光心在图像上的像素位置。外参决定“相机装在车的哪里、朝哪看”，内参决定“同样距离的物体在图像上有多大”。</p>
+        <p>真实镜头还有畸变：径向畸变让直线变弯（桶形/枕形），切向畸变来自镜头与传感器不完全平行。常用 Brown 模型近似：</p>
+        <div class='math math-left'>r² = x² + y²（归一化坐标）<br>x_dist = x(1 + k₁r² + k₂r⁴ + k₃r⁶) + 2p₁xy + p₂(r² + 2x²)<br>y_dist = y(1 + k₁r² + k₂r⁴ + k₃r⁶) + p₁(r² + 2y²) + 2p₂xy</div>
+        <p>标定的本质就是：拍棋盘格等已知几何的靶标，优化内外参与畸变系数，使“重投影误差”最小。OpenCV 的 calibrateCamera 和棋盘格标定板是最常见实现。</p>
+        <h3>激光雷达：从球坐标到点云</h3>
+        <p>机械式激光雷达每个光束有固定的仰角 φ，通过旋转获得水平角 θ，再测量飞行时间得到距离 r。一帧里每个点由 (r, θ, φ) 唯一确定，转成三维坐标：</p>
+        <div class='math'>x = r cosφ sinθ，y = r cosφ cosθ，z = r sinφ</div>
+        <p>不同雷达的 θ、φ 定义略有差异（谁绕谁转、角零位在哪），读驱动文档时务必核对，这是点云“看起来歪了 90°”的经典来源。固态/半固态雷达用微镜或转镜扫描，帧率与视场角不同，但“按角度+距离建点”的数学一致。</p>
+        <h3>把激光点投到图像：外参标定的应用</h3>
+        <div class='math'>u = K · (R_ci · P_l + t_ci) / z_c</div>
+        <p>R_ci、t_ci 是“激光雷达到相机”的外参。手动观察“投影点是否压在图像中对应物体上”是最直观的外参校验手段；自动标定则把它建成一个多传感器联合优化问题（见 0.6 最小二乘）。</p>
+        <div class='panel warn'><span class='pt'>重要提醒</span><p>时间同步与空间标定同样关键：车在动、激光雷达在转、相机在曝光，若时间戳对不齐，哪怕外参精确，投影也会错位。工程上先做时钟同步与运动补偿，再谈空间标定。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='opt'>
+        <div class='sec-head'><span class='no'>0.6</span><h2>最小二乘与数值优化</h2></div>
+        <p>标定、配准、SLAM 后端、甚至神经网络的训练，底层都是同一个问题：找一组参数，让所有“残差”的平方和最小。</p>
+        <div class='math'>min_x Σᵢ ||rᵢ(x)||²</div>
+        <p>残差 rᵢ(x) 的典型形式是“预测 − 观测”，例如重投影误差 = 投影像素 − 标注像素。若 r 对 x 线性，可解正规方程 x = (AᵀA)⁻¹Aᵀb；若非线性，用高斯牛顿迭代：每步把 r 在当前 x 处线性化，解线性子问题：</p>
+        <div class='math'>δ = −(JᵀJ)⁻¹ Jᵀ r，然后 x ← x + δ</div>
+        <p>J 是残差对参数的雅可比矩阵。实际工程常用莱文伯格-马夸特（LM）给 JᵀJ 加阻尼 λ，在“梯度下降的稳健”与“高斯牛顿的快收敛”之间切换，这就是 SLAM 里 ceres/g2o 的核心。深度学习训练本质相同，只是把 Jᵀ 换成随机采样的小批量梯度。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eng'>
+        <div class='sec-head'><span class='no'>0.7</span><h2>工程要点：新手最容易翻车的五个地方</h2></div>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>🧭 坐标系约定</h3><p>同项目内必须统一“前/左/上”“北东地/东北天”。建议在代码里把坐标系写成类型或显式命名，杜绝裸数组。</p></div>
+          <div class='card reveal'><h3>⏱ 时间戳与延迟</h3><p>图像曝光时刻、点云扫完时刻、IMU 采样时刻各不相同；做融合前先对齐，并记录每个算法阶段的固定延迟。</p></div>
+          <div class='card reveal'><h3>🔢 矩阵求逆</h3><p>能用转置或解析解就不数值求逆；数值上优先用 Cholesky/QR 解线性方程，而非直接算逆矩阵。</p></div>
+          <div class='card reveal'><h3>📐 单位与量纲</h3><p>角度弧度制、位置米制、速度 m/s；混用 km/h 与 m/s 是最常见的低级 Bug。</p></div>
+          <div class='card reveal'><h3>🧪 先单元验证</h3><p>任何坐标变换先喂一个已知点，输出对上了再接入真实数据；这条规则能帮你省下几周调参时间。</p></div>
+          <div class='card reveal'><h3>🎲 噪声建模</h3><p>Q、R 别拍脑袋：用一段静止/匀速数据估计观测噪声方差，再用残差检验模型是否匹配。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>0.8</span><h2>自测题（先动手，再点开答案）</h2></div>
+        <div class='faq'>
+          <details><summary>Q1：旋转矩阵为什么求逆等于转置？</summary><p>旋转不改变向量长度与夹角，因此 RᵀR = I（正交性），两边同左乘 R⁻¹ 得 R⁻¹ = Rᵀ。</p></details>
+          <details><summary>Q2：卡尔曼更新公式中，观测噪声 R 趋于无穷大时，估计 x̂ 会变成什么？</summary><p>K → 0，x̂ → x̂⁻，即完全相信运动模型预测、忽略观测。</p></details>
+          <details><summary>Q3：针孔模型里，同一个物体放远一倍，在图像上大约缩小多少？</summary><p>投影坐标约与深度成反比（u ≈ fx·X/Z），所以距离翻倍，成像高度约为原来一半。</p></details>
+          <details><summary>Q4：为什么车规里常用 EKF/UKF 而很少直接用完整粒子滤波？</summary><p>车载算力与实时性约束：粒子滤波用大量采样近似任意分布，精度高但计算量随状态维数指数上升，难以在嵌入式平台跑高频。</p></details>
+          <details><summary>Q5：LM 阻尼 λ 很大时算法近似哪种方法，很小呢？</summary><p>λ 大时近似梯度下降（稳健、收敛慢）；λ 小时近似高斯牛顿（快、可能发散）。</p></details>
+        </div>
+      </section>
+
+      <section class='related'>
+        <h3>下一站</h3>
+        <p style='margin-bottom:10px'>0.5 的投影模型与 0.4 的卡尔曼滤波，正是第 1 章感知与跟踪的“地基”。</p>
+        <div class='rel-links'>
+          <a href='02-perception.html'>第 1 章 感知与状态估计</a>
+          <a href='index.html'>返回课程地图</a>
+          <a href='../tech/perception.html'>科普：环境感知</a>
+          <a href='../tech/perception/camera.html'>科普：摄像头</a>
+          <a href='../tech/perception/lidar.html'>科普：激光雷达</a>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <span class='chapter-link gap'></span>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='02-perception.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 1 章 · 感知与状态估计</b>
+      </a>
+      </nav>
+
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 01</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

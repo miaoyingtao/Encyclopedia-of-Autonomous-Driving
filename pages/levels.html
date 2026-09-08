@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分级标准 L0–L5 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶分级 L0–L5：SAE 与中国 GB/T 40429 标准详解、谁开车谁负责、L2 到 L3 的分水岭。">
+<link rel="stylesheet" href="../assets/style.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-levels">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../index.html">首页</a>
+      <a href="overview.html">认识自动驾驶</a>
+      <a href="levels.html">分级标准 L0–L5</a>
+      <a href="tech.html">核心技术</a>
+      <a href="scenarios.html">应用场景</a>
+      <a href="challenges.html">安全与挑战</a>
+      <a href="future.html">未来展望</a>
+      <a href="tutorial/index.html">系统教程</a>
+      <a href="news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">主题 2 / 6 · 分级标准</span>
+    <h1>自动驾驶分级 L0–L5</h1>
+    <p class="lead">“自动驾驶”是一个连续的光谱。全球通行做法是把人机职责按自动化程度切成六档（L0–L5）。看懂这一页，你就掌握了讨论自动驾驶最通用的语言。</p>
+    <nav class="crumb">
+      <a href="../index.html">首页</a><span class="sep">/</span><span>分级标准 L0–L5</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#why">1. 为什么需要分级</a>
+      <a href="#map">2. L0–L5 一张图看懂</a>
+      <a href="#table">3. 六级详解表</a>
+      <a href="#l2-l3">4. L2→L3 分水岭</a>
+      <a href="#standards">5. 中国与 SAE 标准</a>
+      <a href="#terms">6. 术语速查</a>
+      <a href="#myth">7. 常见疑问</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="why">
+        <div class="sec-head"><span class="no">01</span><h2>为什么需要给自动驾驶分级</h2></div>
+        <p>如果没有统一分级，消费者、工程师、监管部门与保险公司将无法对话：车企宣传“自动驾驶”，车主误以为可以睡觉，出了事故责任却说不清。分级把<b>“人在驾驶中的角色”和“系统承担的责任”</b>标准化，从而支撑三件事：</p>
+        <div class="grid g3">
+          <div class="card reveal"><div class="ci">🗣️</div><h3>沟通</h3><p>消费者能一眼判断：这个功能需要我一直盯着吗？出问题谁来兜底？避免“文字游戏式营销”造成误解。</p></div>
+          <div class="card reveal"><div class="ci">⚖️</div><h3>责任</h3><p>L2 及以下，人类驾驶员是法定驾驶主体；从 L3 起，系统可能成为责任主体，监管开始要求准入、保险与事故报告。</p></div>
+          <div class="card reveal"><div class="ci">🧪</div><h3>验证</h3><p>不同等级对应不同安全要求与测试方法：L2 看“人机共驾是否清晰”，L3+ 看“系统失效时能否安全降级”。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="map">
+        <div class="sec-head"><span class="no">02</span><h2>L0–L5：一条责任从人到车的光谱</h2></div>
+        <div class="levelbar">
+          <div class="lv-seg lv-l0">L0<span><small>应急辅助</small></span></div>
+          <div class="lv-seg lv-l1">L1<span><small>部分驾驶辅助</small></span></div>
+          <div class="lv-seg lv-l2">L2<span><small>组合驾驶辅助</small></span></div>
+          <div class="lv-seg lv-l3">L3<span><small>有条件自动驾驶</small></span></div>
+          <div class="lv-seg lv-l4">L4<span><small>高度自动驾驶</small></span></div>
+          <div class="lv-seg lv-l5">L5<span><small>完全自动驾驶</small></span></div>
+        </div>
+        <p class="legend-line">左侧（L0–L2）：系统是“助手”，人负责开车并时刻监督；右侧（L3–L5）：系统逐步成为“司机”，人从“开车”退化为“必要时接管”再到“完全不参与”。</p>
+        <div class="panel info">
+          <span class="pt">判断一辆车处于哪一级，只要问三个问题</span>
+          <p>① 系统是否<b>持续</b>执行横向（转向）或纵向（加减速）控制？<br>
+          ② 在运行条件内，系统是否负责“看路并应对突发”（OEDR）？<br>
+          ③ 系统请求接管时，人类是否<b>必须</b>响应，还是可以不做任何反应？</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="table">
+        <div class="sec-head"><span class="no">03</span><h2>六级详解表</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>等级</th><th>通俗称呼（中国 GB/T / SAE）</th><th>系统能做什么</th><th>人类要做什么</th><th>典型例子</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="tag lv0">L0</span></td>
+                <td>应急辅助 / 无自动化</td>
+                <td>只发出警告，或做瞬时干预（≤一次动作）</td>
+                <td>完成全部驾驶操作</td>
+                <td>AEB 自动紧急制动、FCW 前碰撞预警、ESC 车身稳定</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv1">L1</span></td>
+                <td>部分驾驶辅助 / 驾驶辅助</td>
+                <td>持续执行<b>横向或纵向</b>中的一种控制</td>
+                <td>完成另一种控制并全程监控</td>
+                <td>ACC 自适应巡航、LKA 车道保持辅助（单开）</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv2">L2</span></td>
+                <td>组合驾驶辅助 / 部分自动驾驶</td>
+                <td>同时执行<b>横向 + 纵向</b>控制（限速、跟车、转弯皆可由车完成）</td>
+                <td>仍须盯着路面、随时接管（可短暂脱手，不可脱眼）</td>
+                <td>高速/城市“导航辅助驾驶（NOA）”，多数量产智驾属此级</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv3">L3</span></td>
+                <td>有条件自动驾驶（两国同名）</td>
+                <td>在<b>运行设计条件（ODD）</b>内独立完成驾驶与 OEDR</td>
+                <td>不须持续监控，但须响应系统的接管请求，做“备用驾驶员”</td>
+                <td>高速拥堵/高速巡航有条件脱手脱眼（首批量产 L3 已出现）</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv4">L4</span></td>
+                <td>高度自动驾驶（两国同名）</td>
+                <td>在 ODD 内全程自主；系统自己处理故障并驶入<b>最小风险状态</b></td>
+                <td>通常无需任何接管（ODD 内）</td>
+                <td>无人出租车 Robotaxi、无人干线物流、园区接驳车</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv5">L5</span></td>
+                <td>完全自动驾驶（两国同名）</td>
+                <td>理论上覆盖所有道路与工况，无需 ODD 限制</td>
+                <td>只需设定目的地，可完全做乘客</td>
+                <td>概念阶段，尚未有量产落地</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="l2-l3">
+        <div class="sec-head"><span class="no">04</span><h2>为什么 L2→L3 是公认的“分水岭”</h2></div>
+        <p>从技术角度看，L2 与 L3 都能自动转向和加减速；真正的差别不在“会不会开车”，而在<b>出了问题由谁负责</b>：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>L2 组合驾驶辅助</th><th>L3 有条件自动驾驶</th></tr></thead>
+            <tbody>
+              <tr><td>法律身份</td><td>辅助系统，驾驶员是驾驶主体</td><td>自动驾驶系统成为 ODD 内的驾驶主体</td></tr>
+              <tr><td>监控要求</td><td>驾驶员全程监控路面（脱眼违规）</td><td>系统自我监控，用户可做其他事</td></tr>
+              <tr><td>交接机制</td><td>随时手动接管</td><td>系统提前发出接管请求，用户须“接管就绪”</td></tr>
+              <tr><td>系统失效</td><td>交给驾驶员</td><td>若用户未接管，系统须执行最小风险策略（如减速靠边停车）</td></tr>
+              <tr><td>量产门槛</td><td>较低，已广泛普及</td><td>需要法规准入、功能安全证明、保险与事件报告机制</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>这就是为什么许多车企宣称的“L2.9”“准 L3”只是营销话术——<b>只要法律仍把责任完整压在驾驶员身上，它本质上还是 L2</b>。从 L2 跃向 L3，拼的不是多一个传感器，而是可靠性与责任体系的完整设计，详见 <a href="challenges/safety.html">功能安全与验证</a>。</p>
+        <div class="panel tip">
+          <span class="pt">L4 与 L3 的又一关键区别</span>
+          <p>L3 仍需要“备用的人类驾驶员”响应接管，等于系统与人的交接永远存在风险窗口；L4 则假设在 ODD 内<b>用户不需要响应任何请求</b>，系统靠冗余与最小风险策略独立兜底。因此很多公司直言“跳过 L3，直奔 L4”或“L3 是过渡态”。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="standards">
+        <div class="sec-head"><span class="no">05</span><h2>中国与 SAE：两套主流标准</h2></div>
+        <p>目前最常被引用的分级来自两个体系，两者都采用 0–5 六级结构，总体思想一致：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🇺🇸 SAE J3016</h3><p>国际汽车工程师学会（SAE）发布的《道路机动车辆驾驶自动化系统相关术语的分类与定义》，被全球广泛引用。它明确了 DDT、OEDR、ODD、接管、最小风险状态等核心术语，并多次修订以澄清边界。</p></div>
+          <div class="card reveal"><h3>🇨🇳 GB/T 40429-2021</h3><p>中国国家标准《汽车驾驶自动化分级》，2022 年 3 月起实施。分级与 SAE 大体对应，但对 0–2 级给出了更细的中国式名称（应急辅助、部分驾驶辅助、组合驾驶辅助），并强调接管能力、ODD 与最小风险状态等要求。</p></div>
+        </div>
+        <div class="panel warn">
+          <span class="pt">给读者的提醒</span>
+          <p>不同国家、不同厂商即使都说“L2/L3”，细节定义可能略有差异。看参数时不要只认字母“L”，还要看它的<b>运行设计条件（ODD）</b>写得多宽——同样是 L4，固定园区 20km/h 的接驳车，和能在城区自由行驶的 Robotaxi，含金量完全不同。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="terms">
+        <div class="sec-head"><span class="no">06</span><h2>高频术语速查</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>术语</th><th>含义</th></tr></thead>
+            <tbody>
+              <tr><td><code>ODD</code></td><td>运行设计条件：系统能安全运行的地理、道路、天气、时段、速度等条件范围，是判断“系统能不能开”的前提。</td></tr>
+              <tr><td><code>DDT</code></td><td>动态驾驶任务：包括横向/纵向控制、OEDR、变道等实时驾驶动作，不含路径规划层面的目的地设定。</td></tr>
+              <tr><td><code>OEDR</code></td><td>对目标与事件的探测和响应：发现、识别、预测并应对路面上的各种情况。</td></tr>
+              <tr><td><code>接管</code></td><td>由自动驾驶状态切换回人类驾驶的过程。L3 依赖“请求式接管”，L4 靠“最小风险策略”兜底。</td></tr>
+              <tr><td><code>MRM / 最小风险状态</code></td><td>系统遇到无法继续运行的情况时，主动减速、变道并靠边停车的安全处置，是 L3+ 的必备能力。</td></tr>
+              <tr><td><code>脱手 / 脱眼 / 脱脑</code></td><td>分别指手离开方向盘、视线离开道路、认知离开驾驶。L2 允许短暂脱手但要求不脱眼；L3+ 才谈得上在 ODD 内脱脑。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="myth">
+        <div class="sec-head"><span class="no">07</span><h2>关于分级的高频疑问</h2></div>
+        <div class="faq">
+          <details><summary>“L2.5 / L2.9 / L2+”这些说法合法吗？</summary><p>它们不是标准等级，只是厂商用来强调“比普通 L2 强一点”的宣传口径。判断真实水平，应看它支持的 ODD、是否需人监督以及事故责任的归属。</p></details>
+          <details><summary>是不是等级越高就越安全？</summary><p>不一定。等级描述的是“自动化程度”与职责分配，不是“安全评级”。一个验证充分、边界清晰的 L2，可能比验证不足的 L3 更可靠；L4 的安全性来自系统设计、测试里程与冗余架构。</p></details>
+          <details><summary>L3 出了事故，责任算谁的？</summary><p>按主流监管思路：若事故发生在系统激活且处于 ODD 内，责任通常转向车企/系统方（车企需配合调查取证）；若是用户未按要求接管或超出 ODD 使用，则责任可能归用户。具体规则各国仍在立法细化中，详见 <a href="challenges/regulation.html">法规与伦理</a>。</p></details>
+          <details><summary>为什么很多公司说“不做 L3，直接做 L4”？</summary><p>因为 L3 要求人与机器在毫秒级交接，而人在分心后很难瞬间接管，这个“交接风险”难以证明安全。跳过 L3 等于把兜底责任全部交给系统自己，逻辑更自洽，但技术难度更高。</p></details>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>相关阅读</h3>
+        <p style="margin-bottom:10px">看懂了分级，下一步：弄清楚实现每一级所需的“眼脑手”，或者了解这些等级如何在不同场景落地。</p>
+        <div class="rel-links">
+          <a href="tech.html">实现分级的核心技术</a>
+          <a href="scenarios.html">各场景落在哪个等级</a>
+          <a href="challenges/safety.html">L3+ 如何证明安全</a>
+          <a href="overview.html">回到总览</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../index.html">首页</a>
+        <a href="overview.html">认识自动驾驶</a>
+        <a href="levels.html">分级标准</a>
+        <a href="tech.html">核心技术</a>
+        <a href="scenarios.html">应用场景</a>
+        <a href="challenges.html">安全与挑战</a>
+        <a href="future.html">未来展望</a>
+        <a href="tutorial/index.html">系统教程</a>
+        <a href="news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 分级标准 L0–L5</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../";</script>
+<script src="../assets/search.js"></script>
+  <script src="../assets/site-update.js"></script>
+</body>
+</html>

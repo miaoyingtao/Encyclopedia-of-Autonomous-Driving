@@ -1,0 +1,393 @@
+{
+  "_说明": "领域动态自动更新的源配置。maxTotal 表示数据文件只保留最新 N 条(默认30)：每次运行用本次抓取覆盖旧自动条目、超出的直接删除；dedupeTitleSimilarity 为同一天标题模糊去重阈值(0 关闭)。kind=bing/google 按检索词自动生成新闻RSS地址；kind=rss/atom 直接订阅固定地址。must: 命中任一关键词才收录；deny: 命中任一即排除；categoryHint: 自动归类不到时使用的默认分类。修改后运行 python tools/news_fetcher.py。 另有 dedupe（同事件去重：fuzzyDays 事件时间窗、aliases 品牌/中英别名归一）与 featured（精选标记：titleKeywords 命中且标题命中即标 featured，maxFeatured 控制最多条数）两个配置段。",
+  "network": {
+    "timeoutSeconds": 15,
+    "retries": 2,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+    "fetchDays": 45,
+    "maxPerQuery": 12,
+    "maxTotal": 30,
+    "dedupeTitleSimilarity": 0.66
+  },
+  "output": "assets/news-data.js",
+  "classify": {
+    "deny": [
+      "招聘",
+      "简历",
+      "股价",
+      "涨停",
+      "K线",
+      "炒股",
+      "基金",
+      "理财",
+      "福彩",
+      "开奖",
+      "兼职",
+      "房产",
+      "疫情通报",
+      "世界杯",
+      "电影票房"
+    ],
+    "cats": {
+      "政策与准入": {
+        "strong": [
+          "L3 准入",
+          "L3准入",
+          "准入许可",
+          "专用号牌",
+          "工信部",
+          "产品公告",
+          "上路试点",
+          "附条件许可",
+          "发牌",
+          "公告目录"
+        ],
+        "weak": [
+          "法规",
+          "条例",
+          "监管",
+          "标准",
+          "立法",
+          "许可",
+          "试点",
+          "管理办法",
+          "征求意见",
+          "智能网联汽车"
+        ]
+      },
+      "量产车型": {
+        "strong": [
+          "全球首发",
+          "首发",
+          "量产",
+          "预售",
+          "正式上市",
+          "开启交付",
+          "交付"
+        ],
+        "weak": [
+          "上市",
+          "车型",
+          "搭载",
+          "OTA",
+          "全系标配",
+          "开售",
+          "品牌"
+        ]
+      },
+      "出行运营": {
+        "strong": [
+          "Robotaxi",
+          "RoboTaxi",
+          "无人出租",
+          "自动驾驶出租",
+          "萝卜快跑",
+          "小马智行",
+          "Waymo",
+          "Zoox",
+          "Cruise",
+          "Aurora",
+          "车队规模",
+          "出行服务"
+        ],
+        "weak": [
+          "网约车",
+          "运营",
+          "乘客",
+          "车队",
+          "落地运营",
+          "商业化运营"
+        ]
+      },
+      "技术与研究": {
+        "strong": [
+          "世界模型",
+          "World Model",
+          "WorldModel",
+          "VLA",
+          "VLM",
+          "LLM",
+          "端到端",
+          "BEV",
+          "占用网络",
+          "Occupancy",
+          "CVPR",
+          "NeurIPS",
+          "ICLR",
+          "具身智能",
+          "强化学习",
+          "X-Mind",
+          "X-Foresight",
+          "Diffusion",
+          "扩散模型",
+          "大模型"
+        ],
+        "weak": [
+          "多模态",
+          "视觉语言",
+          "激光雷达",
+          "毫米波雷达",
+          "传感器",
+          "芯片",
+          "算法",
+          "仿真",
+          "论文",
+          "研究",
+          "Transformer",
+          "AI",
+          "智能驾驶技术",
+          "自动驾驶技术"
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "enabled": true,
+      "kind": "bing",
+      "name": "必应资讯·自动驾驶综合",
+      "lang": "zh",
+      "queries": [
+        "自动驾驶 最新 进展",
+        "智能驾驶 量产 车型"
+      ],
+      "must": [
+        "自动驾驶",
+        "智能驾驶",
+        "无人驾驶",
+        "智驾",
+        "Robotaxi"
+      ],
+      "deny": [],
+      "categoryHint": ""
+    },
+    {
+      "enabled": true,
+      "kind": "bing",
+      "name": "必应资讯·世界模型与大模型",
+      "lang": "zh",
+      "queries": [
+        "世界模型 自动驾驶",
+        "自动驾驶 大模型 VLA"
+      ],
+      "must": [
+        "世界模型",
+        "VLA",
+        "VLM",
+        "大模型",
+        "端到端",
+        "LLM",
+        "具身智能"
+      ],
+      "deny": [],
+      "categoryHint": "技术与研究"
+    },
+    {
+      "enabled": true,
+      "kind": "bing",
+      "name": "必应资讯·L3与准入试点",
+      "lang": "zh",
+      "queries": [
+        "L3 自动驾驶 准入",
+        "L3 级自动驾驶 上路试点"
+      ],
+      "must": [
+        "L3",
+        "L3级",
+        "准入",
+        "试点",
+        "工信部",
+        "号牌",
+        "公告",
+        "许可"
+      ],
+      "deny": [],
+      "categoryHint": "政策与准入"
+    },
+    {
+      "enabled": true,
+      "kind": "bing",
+      "name": "必应资讯·Robotaxi与出行",
+      "lang": "zh",
+      "queries": [
+        "Robotaxi 无人出租车",
+        "自动驾驶出租车 运营"
+      ],
+      "must": [
+        "Robotaxi",
+        "无人出租",
+        "自动驾驶出租",
+        "萝卜快跑",
+        "小马智行",
+        "Waymo",
+        "网约车",
+        "车队"
+      ],
+      "deny": [],
+      "categoryHint": "出行运营"
+    },
+    {
+      "enabled": false,
+      "kind": "google",
+      "name": "谷歌资讯·自动驾驶（境外网络可用时启用）",
+      "lang": "zh",
+      "queries": [
+        "自动驾驶 世界模型",
+        "自动驾驶 LLM VLA"
+      ],
+      "must": [
+        "自动驾驶",
+        "世界模型",
+        "VLA",
+        "大模型",
+        "LLM"
+      ],
+      "deny": [],
+      "categoryHint": ""
+    },
+    {
+      "enabled": false,
+      "kind": "rss",
+      "name": "Waymo 官方博客",
+      "lang": "en",
+      "url": "https://blog.waymo.com/feeds/posts/default",
+      "must": [
+        "Waymo",
+        "autonomous",
+        "robotaxi",
+        "world model",
+        "Driver"
+      ],
+      "deny": [],
+      "categoryHint": "出行运营",
+      "_note": "英文官方源；摘要保持英文，可按需自配中文资讯源。"
+    },
+    {
+      "enabled": false,
+      "kind": "rss",
+      "name": "示例·自建 RSSHub",
+      "lang": "zh",
+      "url": "https://rsshub.app/36kr/newsflashes",
+      "must": [
+        "自动驾驶",
+        "智能驾驶"
+      ],
+      "deny": [],
+      "categoryHint": ""
+    }
+  ],
+  "dedupe": {
+    "simThreshold": 0.66,
+    "fuzzyDays": 1,
+    "aliases": {
+      "Horizon Robotics": "地平线",
+      "Cybertruck": "Cybertruck",
+      "RoboSense": "速腾聚创",
+      "DeepRoute": "元戎启行",
+      "自动驾驶无人出租车": "自动驾驶出租车",
+      "24小时全天候运营": "24小时运营",
+      "xiaopeng": "小鹏",
+      "Qualcomm": "高通",
+      "mobileye": "Mobileye",
+      "Mobileye": "Mobileye",
+      "百度Apollo": "百度",
+      "完全自动驾驶能力": "FSD",
+      "cybercab": "Cybercab",
+      "Li Auto": "理想",
+      "Pony.ai": "小马智行",
+      "Horizon": "地平线",
+      "momenta": "Momenta",
+      "Momenta": "Momenta",
+      "无人驾驶出租车": "自动驾驶出租车",
+      "自动驾驶出租车": "自动驾驶出租车",
+      "Huawei": "华为",
+      "xiaomi": "小米",
+      "WeRide": "文远知行",
+      "NVIDIA": "英伟达",
+      "Apollo": "百度",
+      "无人驾驶车辆": "自动驾驶出租车",
+      "XPeng": "小鹏",
+      "Tesla": "特斯拉",
+      "Baidu": "百度",
+      "Hesai": "禾赛",
+      "无人出租车": "自动驾驶出租车",
+      "全天候运营": "24小时运营",
+      "24h运营": "24小时运营",
+      "小鹏汽车": "小鹏",
+      "理想汽车": "理想",
+      "AITO": "问界",
+      "鸿蒙智行": "鸿蒙智行",
+      "小米汽车": "小米",
+      "萝卜快跑": "萝卜快跑",
+      "DiDi": "滴滴",
+      "小马智行": "小马智行",
+      "pony": "小马智行",
+      "文远知行": "文远知行",
+      "速腾聚创": "速腾聚创",
+      "轻舟智航": "轻舟智航",
+      "元戎启行": "元戎启行",
+      "无人驾驶": "自动驾驶",
+      "特斯拉": "特斯拉",
+      "比亚迪": "比亚迪",
+      "BYD": "比亚迪",
+      "NIO": "蔚来",
+      "SU7": "SU7",
+      "YU7": "YU7",
+      "地平线": "地平线",
+      "英伟达": "英伟达",
+      "魔门塔": "Momenta",
+      "DJI": "大疆",
+      "FSD": "FSD",
+      "蔚来": "蔚来",
+      "华为": "华为",
+      "问界": "问界",
+      "智界": "智界",
+      "百度": "百度",
+      "滴滴": "滴滴",
+      "文远": "文远知行",
+      "禾赛": "禾赛",
+      "高通": "高通",
+      "卓驭": "卓驭",
+      "大疆": "大疆"
+    }
+  },
+  "featured": {
+    "enabled": true,
+    "maxFeatured": 8,
+    "label": "精选",
+    "titleKeywords": [
+      "世界模型",
+      "World Model",
+      "VLA",
+      "VLM",
+      "端到端",
+      "具身智能",
+      "大模型",
+      "LLM",
+      "GPT",
+      "L3 准入",
+      "L3准入",
+      "准入试点",
+      "全国首批",
+      "试点",
+      "Robotaxi",
+      "无人驾驶出租车",
+      "萝卜快跑",
+      "自动驾驶出租车",
+      "Waymo",
+      "小马智行",
+      "文远知行",
+      "Momenta",
+      "华为ADS",
+      "城市NOA",
+      "获准",
+      "获批",
+      "正式发布",
+      "量产",
+      "融资",
+      "商用",
+      "全球首个",
+      "首发"
+    ]
+  }
+}

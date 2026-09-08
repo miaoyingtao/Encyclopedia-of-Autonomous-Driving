@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="lg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#lg)"/>
+  <!-- 道路 -->
+  <path d="M8 47 L56 47 L53 53 L11 53 Z" fill="#ffffff" opacity=".9"/>
+  <!-- 车身 -->
+  <path d="M14 40 L16.8 29.4 A3.2 3.2 0 0 1 20 27.2 h24 a3.2 3.2 0 0 1 3.2 2.2 L50 40 Z" fill="#fff"/>
+  <!-- 车窗 -->
+  <path d="M22.5 27.4 L25 21.6 A2.6 2.6 0 0 1 27.5 20 h9 a2.6 2.6 0 0 1 2.5 1.6 L41.5 27.4 Z" fill="#93c5fd"/>
+  <rect x="26" y="27.6" width="12" height="2" rx="1" fill="#3b82f6" opacity=".0"/>
+  <!-- 车灯 -->
+  <circle cx="15.5" cy="35.5" r="1.4" fill="#fde68a"/>
+  <circle cx="48.5" cy="35.5" r="1.4" fill="#fca5a5"/>
+  <!-- 车轮 -->
+  <circle cx="21" cy="41.5" r="4.6" fill="#0f172a"/>
+  <circle cx="43" cy="41.5" r="4.6" fill="#0f172a"/>
+  <circle cx="21" cy="41.5" r="1.8" fill="#cbd5e1"/>
+  <circle cx="43" cy="41.5" r="1.8" fill="#cbd5e1"/>
+</svg>

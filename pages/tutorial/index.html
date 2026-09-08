@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>系统教程 · 从算法到工程 · 驶向未来百科</title>
+<meta name='description' content='自动驾驶系统化技术教程：课程地图、学习路径与讲义目录，覆盖数学基础、感知、规划控制、定位建图、仿真测试与 AI 大模型。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html' class='active'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>教程体系 · 课程地图</span>
+    <h1>自动驾驶：从概念科普到算法工程</h1>
+    <p class='lead'>这套教程把“科普篇”的一句话，展开成“为什么这样建模、公式是什么、工程上怎么实现、怎么验证”的完整讲义。适合想真正搞懂算法细节的工程师与学生：不需要你已经是专家，但需要你愿意动手算。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>课程地图</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#method'>1. 这套教程怎么读</a>
+      <a href='#map'>2. 课程地图</a>
+      <a href='#path'>3. 三条学习路径</a>
+      <a href='#notation'>4. 记号与坐标约定</a>
+      <a href='#qa'>5. 常见疑问</a>
+      <a href='#start' class='lv2-child'>现在开始：第 0 章</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='method'>
+        <div class='sec-head'><span class='no'>01</span><h2>这套教程怎么读</h2></div>
+        <p>本站内容分两层。<b>科普篇</b>（核心技术、应用场景等）回答“是什么、为什么”，帮你建立地图；<b>教程篇</b>（本目录以下各章）回答“公式是什么、代码怎么写、坑在哪里”。建议流程：先在 <a href='../tech.html'>核心技术</a> 花 10 分钟看全景，再按路径进入各章。</p>
+        <p>每一章都遵守同一份讲义结构，方便你系统对照：</p>
+        <ol class='steps'>
+          <li><h3>学习目标与前置</h3><p>开头明确“学完能干什么”与“需要会什么”，缺的数学在 01 章补齐。</p></li>
+          <li><h3>原理与数学建模</h3><p>核心公式逐行给出含义，不跳步：每个变量是什么、量纲是什么、为什么这样近似。</p></li>
+          <li><h3>算法与流程</h3><p>用文字步骤 + 伪代码给出可复现的算法骨架，而不是只贴结论。</p></li>
+          <li><h3>工程要点与坑</h3><p>时序、同步、数值、标定、算力等真实系统才会遇到的问题。</p></li>
+          <li><h3>自测题</h3><p>每题对应一个小知识点，答案折叠在题后，先自己写再看。</p></li>
+        </ol>
+        <div class='panel tip'><span class='pt'>推荐姿势</span><p>准备纸笔：每一章把公式自己推导一遍、把伪代码翻译成 Python 或 C++ 草稿。看懂的标志是你能在不看原文的情况下，把一个传感器数据流从头到尾“讲”成代码模块。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='map'>
+        <div class='sec-head'><span class='no'>02</span><h2>课程地图</h2></div>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>章节</th><th>核心内容</th><th>难度</th><th>预计用时</th><th>入口</th></tr></thead>
+            <tbody>
+              <tr><td><b>第 0 章</b><br>数学与传感器建模</td><td>线性代数与刚体变换、贝叶斯与卡尔曼滤波、相机与激光雷达的几何模型、最小二乘与优化</td><td>基础</td><td>3–4 小时</td><td><a href='01-math-sensors.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 1 章</b><br>感知与状态估计</td><td>2D/3D 检测、多传感器标定与融合、BEV 与占用网络、多目标跟踪与 ID 管理</td><td>进阶</td><td>4–5 小时</td><td><a href='02-perception.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 2 章</b><br>决策规划与控制</td><td>轨迹预测、行为决策、A* 与 Hybrid A*、轨迹优化、自行车模型与 PID/LQR/MPC</td><td>进阶</td><td>5–6 小时</td><td><a href='03-planning-control.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 3 章</b><br>定位·建图·仿真测试</td><td>GNSS/RTK 与 IMU 组合、点云配准、高精地图与 OpenDRIVE、数据闭环与 SOTIF 测试指标</td><td>进阶</td><td>4–5 小时</td><td><a href='04-loc-sim-test.html'>进入讲义</a></td></tr>
+            <tr><td><b>第 4 章</b><br>LLM/VLM/VLA 端到端</td><td>一切皆 Token 的表征统一、端到端行为克隆与强化学习、语言条件驾驶、VLA 架构与部署、开放词汇感知、评测与安全边界</td><td>高阶</td><td>6–8 小时</td><td><a href='05-llm-vla.html'>进入讲义</a></td></tr>
+            <tr><td><b>第 5 章</b><br>世界模型</td><td>视频/潜空间世界模型建模、可控反事实生成、规划预演、评测指标与工程安全边界</td><td>高阶</td><td>5–7 小时</td><td><a href='06-worldmodel.html'>进入讲义</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class='sec-sub'>概念背景不足时，随时退回对应科普页：<a href='../tech/perception.html'>环境感知</a>、<a href='../tech/decision.html'>决策规划</a>、<a href='../tech/control.html'>控制执行</a>、<a href='../tech/mapping.html'>定位地图</a>、<a href='../tech/v2x.html'>V2X</a>、<a href='../future.html'>未来展望</a>。</p>
+      </section>
+
+      <section class='sec scroll-target' id='path'>
+        <div class='sec-head'><span class='no'>03</span><h2>三条学习路径</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🧮 算法与规划方向</h3><p>想进规划控制、决策算法岗：0 → 2 章全精读，重点啃状态空间搜索、轨迹优化与 MPC 推导；1 章了解感知输出格式即可。</p></div>
+          <div class='card reveal'><h3>👁️ 感知与 AI 方向</h3><p>想进感知、端到端方向：0 → 1 章精读，之后补 AI 前沿科普（见 <a href='../tech/foundation.html'>LLM 与世界模型</a>），再回到 3 章的数据闭环。</p></div>
+          <div class='card reveal'><h3>🛡️ 系统与安全方向</h3><p>想进功能安全、测试评价：先通读 3 章，再横跳 <a href='../challenges/safety.html'>安全体系</a> 与 <a href='../challenges/testing.html'>测试评价</a>，最后回头精读 2 章看安全层如何“罩住”算法。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='notation'>
+        <div class='sec-head'><span class='no'>04</span><h2>全书统一的记号与坐标约定</h2></div>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>记号</th><th>含义</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>x, u, z</td><td>状态、控制输入、观测</td><td>x 表示被估计或待规划的量</td></tr>
+              <tr><td>R, t, T</td><td>旋转矩阵、平移向量、齐次变换矩阵</td><td>T = [R | t; 0 1]，见第 0 章</td></tr>
+              <tr><td>P, Q, R</td><td>协方差、过程噪声、观测噪声</td><td>矩阵大写，量纲随状态而定</td></tr>
+              <tr><td>K</td><td>卡尔曼增益</td><td>衡量“信观测还是信预测”</td></tr>
+              <tr><td>θ, δ, v, a</td><td>航向角、前轮转角、速度、加速度</td><td>车体模型常用变量</td></tr>
+              <tr><td>w, l, h</td><td>目标宽度、长度、高度</td><td>3D 框参数</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class='sec-sub'>坐标约定全书统一：<b>世界系</b>取右手直角系（东 x、北 y、天 z 的 ENU 或近似路面坐标系）；<b>车体系</b>取 x 指前、y 指左、z 指上（ISO 8855 风格）。阅读论文遇到不同约定时，先花一分钟对齐坐标轴，90% 的“公式对不上”都源于此。</p>
+      </section>
+
+      <section class='sec scroll-target' id='qa'>
+        <div class='sec-head'><span class='no'>05</span><h2>常见疑问</h2></div>
+        <div class='faq'>
+          <details><summary>数学基础一般，能跟上吗？</summary><p>可以。第 0 章把后续要用的矩阵、概率、优化全部过一遍并标注用途；若遇到完全陌生的概念，先跳过符号、抓住“这个公式在解决什么问题”，回头再补推导。</p></details>
+          <details><summary>只有公式没有代码，怎么算教程？</summary><p>每章给出可运行思路的伪代码与参数表；算法类题目强烈建议对照伪代码用 Python + NumPy 复现一次——多数自动驾驶算法的最小原型只需要几十行。</p></details>
+          <details><summary>教程与科普页会重复吗？</summary><p>不重复：科普页管“概念与语境”，教程页管“建模与实现”，两者互链。想快速了解某个词，看科普；想弄懂某个算法，进教程。</p></details>
+          <details><summary>更新到“大模型/世界模型”了吗？</summary><p>最新方向先由 <a href='../tech/foundation.html'>AI 前沿专题</a> 承担概念部分；教程第 1、3 章已预留与其衔接的训练数据、评测与安全章节，可在读完 0–3 章后综合理解。</p></details>
+        </div>
+      </section>
+
+      <section class='related scroll-target' id='start'>
+        <h3>现在开始</h3>
+        <p style='margin-bottom:10px'>如果你第一次接触，先完成第 0 章；如果只想补某一环，可直接跳对应章节，页内会给前置指引。</p>
+        <div class='rel-links'>
+          <a href='01-math-sensors.html'>第 0 章 数学与传感器建模</a>
+          <a href='02-perception.html'>第 1 章 感知与状态估计</a>
+          <a href='03-planning-control.html'>第 2 章 决策规划与控制</a>
+          <a href='04-loc-sim-test.html'>第 3 章 定位·仿真·测试</a>
+          <a href='05-llm-vla.html'>第 4 章 LLM 与 VLA</a>
+          <a href='06-worldmodel.html'>第 5 章 世界模型</a>
+          <a href='../tech.html'>回到核心技术科普</a>
+          <a href='../../index.html'>返回首页</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 系统教程</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

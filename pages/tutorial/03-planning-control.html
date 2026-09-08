@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>讲义 03 · 决策规划与控制 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程第 2 章：轨迹预测、行为决策、A* 与 Hybrid A*、Frenet 轨迹优化、自行车模型与 PID/LQR/MPC 控制。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 第 2 章</span>
+    <h1>决策、运动规划与控制</h1>
+    <p class='lead'>感知回答“世界是什么样”，本章回答“我接下来怎么开、并把它变成方向盘与踏板的指令”。这是自动驾驶里最“算法密集”的一章：搜索、采样、优化与反馈控制在这里汇合。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 2 章</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#obj'>2.1 学习目标</a>
+      <a href='#arch'>2.2 决策规划的控制栈</a>
+      <a href='#predict'>2.3 轨迹预测</a>
+      <a href='#search'>2.4 全局与几何搜索：A* / Hybrid A*</a>
+      <a href='#traj'>2.5 局部轨迹生成与优化</a>
+      <a href='#behav'>2.6 行为决策</a>
+      <a href='#ctrl'>2.7 控制：PID / LQR / MPC</a>
+      <a href='#eng'>2.8 工程要点</a>
+      <a href='#quiz'>2.9 自测题</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>2.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：进阶</span><span>预计：5–6 小时</span><span>前置：第 0 章 + 第 1 章</span></div>
+        <p>学完本章，你应该能：① 口算 A* 的 g/f/h 并实现一个网格版；② 解释 Frenet 坐标为什么适合车道场景、写出最小 jerk 轨迹的目标函数；③ 推导自行车运动学模型；④ 讲清 PID、LQR、MPC 各自解决什么问题、代价与约束怎么定；⑤ 描述一套“决策 → 规划 → 校验 → 控制”的工业级数据流。</p>
+      </section>
+
+      <section class='sec scroll-target' id='arch'>
+        <div class='sec-head'><span class='no'>2.2</span><h2>决策规划控制栈的分层与接口</h2></div>
+        <p>工业系统通常按下述顺序逐级“降尺度、升频率”，每层输出为下层输入：</p>
+        <div class='codeblock'>输入：高精地图 + 定位 + 感知目标列表 + 占用栅格
+  ├─ 全局路径规划（Hz 级）：路网图 → 车道序列
+  ├─ 行为决策（10–30 Hz）：车道序列 → 驾驶意图（跟车/变道/让行/停车）
+  ├─ 运动规划（10–50 Hz）：意图 → 未来 3–10 s 的轨迹（时间戳 + 位置 + 速度）
+  ├─ 安全校验（与规划同频）：碰撞检查、限速、ODD 检查
+  └─ 控制（50–100 Hz）：轨迹 → 转向角与油门/制动指令</div>
+        <p>轨迹是本章的“硬通货”：它是一条带时间的曲线，通常写成 x(t)、y(t) 与 v(t)（或航向与曲率），规划的目标是生成“安全、合法、高效、舒适”且“控制能跟得上”的轨迹。</p>
+      </section>
+
+      <section class='sec scroll-target' id='predict'>
+        <div class='sec-head'><span class='no'>2.3</span><h2>轨迹预测：把不确定性带进决策</h2></div>
+        <p>预测的本质是估计其他交通参与者“未来几秒最可能做什么”。最简单基线是常速度/常加速度外推：</p>
+        <div class='math'>x(t+τ) = x(t) + v(t)·τ + ½·a(t)·τ²</div>
+        <p>但真实驾驶是多模态的：一辆车在路口可能直行、左转或靠边，各有概率。因此现代预测输出的是<b>一组带概率的候选轨迹</b>（通常 3–8 条）或未来占用热图：</p>
+        <div class='math'>Pred = { (Traj₁, p₁), (Traj₂, p₂), … }，Σ pᵢ = 1</div>
+        <p>实现上可分三档：地图规则驱动（沿车道几何生成“直行/换道”候选并打分）、意图分类 + 轨迹集、以及学习型（把历史轨迹编码，用目标点或潜变量生成多模态轨迹）。学习型网络常用“轨迹终点采样 + 评分”思路：先在可到达区域采样 K 个终点，为每个终点生成一条轨迹，再用一个评分头输出每条的概率。</p>
+        <div class='panel warn'><span class='pt'>安全设计原则</span><p>预测永远有错。规划层不赌“它一定直行”，而是把预测的不确定性转成约束：对低概率但危险的多模态保留安全距离，或对“最坏情况”做保守处理（见 2.6）。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='search'>
+        <div class='sec-head'><span class='no'>2.4</span><h2>搜索类规划：A* 与 Hybrid A*</h2></div>
+        <h3>A*：带启发式的 Dijkstra</h3>
+        <p>A* 在地图（栅格或车道图）上搜索代价最小路径。每个节点 n 维护两个值：从起点到 n 的实际代价 g(n)，以及 n 到终点的启发式估计 h(n)。每次从开放集中取 f(n) = g(n) + h(n) 最小的节点扩展。</p>
+        <div class='codeblock'>open = { start }; g[start] = 0
+while open 非空：
+    n = open 中 f(n) 最小的节点；若 n == goal：回溯输出路径
+    对 n 的每个邻居 m：
+        new_g = g[n] + cost(n, m)
+        if new_g < g[m]：更新 g[m]、parent[m]，把 m 加入 open</div>
+        <p>h(n) 常用欧氏距离。当 h 满足“不超过真实代价”（可采纳）时，A* 保证最优；h 越接近真实代价，扩展越少、越快。把 cost 设计成交规代价（变道惩罚、跨实线禁止）与时间代价之和，就能让路径“好走”而不是“最短”。</p>
+        <h3>Hybrid A*：给 A* 装上运动学</h3>
+        <p>普通 A* 找出的折线路径车开不出来：车辆不能原地转向。Hybrid A* 把搜索节点从 (x, y) 扩展为位姿 (x, y, θ)（乃至曲率 κ），每一步只做“方向盘转多少、油门踩多少”这样真实可执行的动作：</p>
+        <div class='math'>状态：(x, y, θ, κ)，控制：(a, δ)，θ̇ = v·κ，κ 与 δ 的关系见 2.7</div>
+        <p>离散控制动作生成一小段一小段真实可行的弧线；到终点附近再用 Dubins/Reeds-Shepp 曲线（满足最小转弯半径的几何连线）快速收尾。代价函数一般同时惩罚时间、倒车、转向突变与靠近障碍物，并用后处理平滑曲线。</p>
+      </section>
+
+      <section class='sec scroll-target' id='traj'>
+        <div class='sec-head'><span class='no'>2.5</span><h2>局部轨迹生成：Frenet 坐标与轨迹优化</h2></div>
+        <h3>在“贴着车道”的坐标系里生成轨迹</h3>
+        <p>Frenet 坐标把平面运动拆成沿参考线（如车道中心线）的纵向距离 s 与横向偏移 l：</p>
+        <div class='math'>路径点 (x,y) ↔ (s, l)，l 相对参考线的法向偏移（左正右负可约定）</div>
+        <p>好处：车道边界约束变成简单的 l 上下界；换道就是 l 从 0 平顺移到目标车道中心的“横向规划问题”；纵向则单独规划 s(t)（跟车、巡航、刹停）。横纵解耦后各用多项式插值：</p>
+        <div class='math'>l(s) = a₀ + a₁s + a₂s² + a₃s³ + a₄s⁴ + a₅s⁵（五次多项式）</div>
+        <p>五次多项式有 6 个系数，可同时满足两端的位置、速度（一阶导）与加速度（二阶导）共 6 个边界条件，保证轨迹连续到加速度级。纵向常以“舒适性”为目标——最小化 jerk 的平方积分：</p>
+        <div class='math'>min ∫ (d³s/dt³)² dt，约束：不撞前车、不超速、限位</div>
+        <p>实现上通常“采样 + 评估”：对候选目标（跟车距离/巡航速度/终点 l 值）批量生成轨迹，逐条计算总代价后取最优：</p>
+        <div class='math'>J = w_safe·碰撞代价 + w_eff·行程时间 + w_comf·jerk 积分 + w_rule·压线/超速惩罚</div>
+        <p>碰撞检查不是“一个点撞没撞”，而是轨迹与障碍预测占用在<b>每个时刻</b>做时空相交检查：把轨迹离散成 (t, x, y)，把障碍预测展开成未来的膨胀圆/占用，逐段检测。障碍形状用半径膨胀的圆族近似，可将碰撞检测降到 O(轨迹点数 × 障碍数)。</p>
+        <div class='panel tip'><span class='pt'>RRT 家族在真实系统里的位置</span><p>RRT/RRT* 适合“几何上难、约束复杂”的开放空间（自动泊车、园区），用随机采样快速探索可行域并保证渐进最优；但在结构化公路上，车道参考线 + 采样/优化的确定性方案更稳定、更好调试，因此量产以后者为主。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='behav'>
+        <div class='sec-head'><span class='no'>2.6</span><h2>行为决策：从“会不会”到“该不该”</h2></div>
+        <p>行为决策是策略层：它不画轨迹，而是决定“跟车、变道、超车、让行、停车、绕障”等驾驶模式。三种主流实现：</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📋 规则状态机</h3><p>有限状态机/行为树按条件跳转：前车太慢且左侧安全 → 变道。直观、可解释、易做安全分析，但状态爆炸。</p></div>
+          <div class='card reveal'><h3>📊 代价评分</h3><p>把“每个候选意图的收益”量化打分：预期通行时间、碰撞风险、规则违反、舒适度，选分数最高者。可解释性好，是工业主流折中。</p></div>
+          <div class='card reveal'><h3>🧮 MDP/POMDP</h3><p>把驾驶写成马尔可夫决策过程：状态 s、动作 a、转移概率 P(s′|s,a)、奖励 r。最优策略 π* 满足贝尔曼方程：</p></div>
+        </div>
+        <div class='math'>V*(s) = max_a [ r(s,a) + γ Σ_s′ P(s′|s,a) V*(s′) ]</div>
+        <p>POMDP 再引入“不完全可观测”的信念状态 b(s)（因为别人在想什么不可直接观测），理论上更优雅，但精确求解复杂，量产多为简化近似或作为研究路线。无论哪种实现，都必须回答两个安全问题：当前意图是否可行（几何/交规检查），以及不可行/超时时如何降级到“最小风险状态”（减速靠边停车）。</p>
+      </section>
+
+      <section class='sec scroll-target' id='ctrl'>
+        <div class='sec-head'><span class='no'>2.7</span><h2>控制：把轨迹变成转向与加减速</h2></div>
+        <h3>先有车模型：自行车运动学</h3>
+        <p>低速下可用自行车模型近似：车简化为前后轴连线，后轴中心为参考点，前轮转角 δ 决定曲率：</p>
+        <div class='math math-left'>ẋ = v cosθ<br>ẏ = v sinθ<br>θ̇ = (v / L) tanδ</div>
+        <p>L 是轴距，δ 是前轮转角。可见曲率 κ ≈ tanδ / L：轴距越长、同一转角下转弯半径越大。高速或大侧向加速度时需要引入带质心侧偏角的动力学模型（含轮胎侧偏刚度），这里从运动学起步已足够理解控制主线。</p>
+        <h3>横向跟踪：从纯追踪到状态反馈</h3>
+        <p><b>纯追踪</b>：在当前点前方找参考点（前视距离 Ld），计算转向前轮角度，使车沿“当前点—参考点”的圆弧走：</p>
+        <div class='math'>δ = arctan( 2·L·sinα / Ld )</div>
+        <p>α 是航向与“指向参考点方向”的夹角。前视距离越大越稳但越“抄近路”，需要随速度调整。</p>
+        <p><b>LQR</b>：把误差动力学线性化，求解状态反馈 u = −K e 使代价最小：</p>
+        <div class='math'>J = Σ ( eᵀ Q e + uᵀ R u )，K 由黎卡提方程给出</div>
+        <p>Q、R 的比值决定“更快纠正误差”还是“更少打方向”。LQR 适合线性、无约束、定点调节的场景，是理解“代价函数 → 控制器”的标准跳板。</p>
+        <h3>MPC：预测未来、处理约束</h3>
+        <p>MPC 在每个控制周期解一个<b>有限时域开环最优控制问题</b>，只执行第一步，下一周期带着新状态重新求解（滚动时域）：</p>
+        <div class='math math-left'>min Σ_{k=0}^{N−1} ( ||e_k||²_Q + ||u_k||²_R ) + ||e_N||²_P<br>s.t. x_{k+1} = f(x_k, u_k)<br>u_min ≤ u_k ≤ u_max，转向/加减速限幅<br>x 保持在道路边界、避开障碍（软约束 + 松弛变量）</div>
+        <p>每步把非线性 f 在当前点线性化（或直接用非线性求解器），转成二次规划后快速求解。MPC 相比 LQR 的增量价值是：<b>能显式处理约束</b>（转角限位、加速度上限、避障边界），代价是每个周期要在线解一个优化问题，对实时性要求高（数十毫秒内）。</p>
+        <h3>纵向控制</h3>
+        <p>纵向用双层结构：上层“速度规划器”给出期望速度曲线（跟车时按安全时距 τ 保持间距：v_des 使 d ≥ v·τ + d₀），下层用 PID/MPC 跟踪。制动与驱动是两套执行器，切换处要做好平滑，避免“油门到底—刹停—再油门”的顿挫。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eng'>
+        <div class='sec-head'><span class='no'>2.8</span><h2>工程要点</h2></div>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>⏱ 频率与延迟预算</h3><p>规划轨迹要与执行延迟对齐：控制执行的是“几百毫秒前规划、补偿过延迟”的指令，轨迹里要带时间戳并按当前时刻插值。</p></div>
+          <div class='card reveal'><h3>🛡 最后一道校验</h3><p>规划输出进入控制前必须再过一次硬校验：碰撞、边界、加加速度、执行器限位。校验不过就丢弃并降级，而不是把“最优但危险”的轨迹直接下发。</p></div>
+          <div class='card reveal'><h3>📉 数值积分</h3><p>车模型积分用固定小步长（如 10–20 ms）并保证单位一致；长时间积分要留意误差累积。</p></div>
+          <div class='card reveal'><h3>🧭 参考线管理</h3><p>高精地图的离散车道线要先重采样、平滑成参数化参考线（如按弧长均匀重采样），Frenet 转换才能稳定。</p></div>
+          <div class='card reveal'><h3>😌 舒适性参数</h3><p>典型舒适标定：纵向加减速约 2–3 m/s² 以内、急刹除外；横向加速度 1–2 m/s² 量级；jerk 控制在更严量级。具体随品牌体验标定不同，作为初始值而非金标准。</p></div>
+          <div class='card reveal'><h3>🧪 仿真先行</h3><p>策略与参数先在场景仿真回归（路口博弈、加塞、鬼探头、接管边界），再上实车——这也是第 3 章的主题。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>2.9</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q1：A* 的启发函数为什么要求“不大于真实代价”？</summary><p>可采纳启发保证不会把尚未扩展但可能更优的节点误判为最差而剪掉，从而保证第一次到达终点时就是最优路径。</p></details>
+          <details><summary>Q2：五次多项式横向换道为什么至少要用五次而不是三次？</summary><p>需要 6 个边界条件（位置、速度、加速度各两个端点），五次多项式恰好 6 个系数可唯一满足，保证轨迹在连接点处加速度连续。</p></details>
+          <details><summary>Q3：MPC 相比纯追踪/Stanley 的“杀手锏”是什么？</summary><p>在预测时域内显式处理状态与控制约束（转向限位、避障边界、加速度上限），纯追踪只解决“跟住参考线”不解决约束。</p></details>
+          <details><summary>Q4：自行车模型里 θ̇ = (v/L)tanδ，说明低速大转角 vs 高速小转角哪个更危险？</summary><p>高速时同样的 δ 产生更大横摆角速度需求，实际轮胎力会饱和，超出运动学模型适用范围——所以高速必须用带侧偏角的动力学模型。</p></details>
+          <details><summary>Q5：为什么预测输出“多条带概率轨迹”比只输出最可能一条更安全？</summary><p>只信一条会把小概率危险（如突然变道）完全忽略；多模态概率化后，规划可以对其保守约束或保持安全距离。</p></details>
+        </div>
+      </section>
+
+      <section class='related'>
+        <h3>下一站</h3>
+        <p style='margin-bottom:10px'>轨迹再完美，车也得知道“我在哪”并证明它足够安全——第 3 章讲定位、建图与仿真测试。</p>
+        <div class='rel-links'>
+          <a href='04-loc-sim-test.html'>第 3 章 定位·仿真·测试</a>
+          <a href='02-perception.html'>返回第 1 章</a>
+          <a href='../tech/decision.html'>科普：决策与规划</a>
+          <a href='../tech/control.html'>科普：控制执行</a>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='02-perception.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 1 章 · 感知与状态估计</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='04-loc-sim-test.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 3 章 · 定位·仿真·测试</b>
+      </a>
+      </nav>
+
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 03</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

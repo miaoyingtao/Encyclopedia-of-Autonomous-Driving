@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>安全与挑战 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶面临的安全与挑战：长尾场景、功能安全、网络安全、法规伦理、测试评价与商业落地难题。">
+<link rel="stylesheet" href="../assets/style.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-challenges">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../index.html">首页</a>
+      <a href="overview.html">认识自动驾驶</a>
+      <a href="levels.html">分级标准 L0–L5</a>
+      <a href="tech.html">核心技术</a>
+      <a href="scenarios.html">应用场景</a>
+      <a href="challenges.html">安全与挑战</a>
+      <a href="future.html">未来展望</a>
+      <a href="tutorial/index.html">系统教程</a>
+      <a href="news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">主题 5 / 6 · 安全与挑战</span>
+    <h1>自动驾驶的安全与挑战</h1>
+    <p class="lead">自动驾驶最难的部分不是“会开车”，而是“在所有意外里都开得安全、说得清责任、守得住规则”。这一主题拆解技术长尾、功能安全、网络安全、法规伦理与测试验证四大难关。</p>
+    <nav class="crumb">
+      <a href="../index.html">首页</a><span class="sep">/</span><a href="challenges.html">安全与挑战</a><span class="sep">/</span><span>总览</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#quad">1. 挑战四象限</a>
+      <a href="#four">2. 四大安全支柱</a>
+      <a href="#trust">3. 责任与信任</a>
+      <a href="#longtail">4. 长尾难题</a>
+      <a href="#myth">5. 常见疑问</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="quad">
+        <div class="sec-head"><span class="no">01</span><h2>自动驾驶的挑战四象限</h2></div>
+        <div class="grid g2">
+          <div class="card reveal">
+            <div class="ci">🧩</div><h3>技术挑战</h3>
+            <p>长尾场景（Corner Case）无穷无尽：极端天气、遮挡、罕见交通姿态、区域习俗……每修好一个，可能又冒出十个。还有算力、时延与系统复杂度带来的工程难题。</p>
+            <a class="more" href="tech.html">回看技术栈</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🛠️</div><h3>安全工程挑战</h3>
+            <p>功能安全（系统坏了怎么办）、预期功能安全（系统没坏但场景超出能力怎么办）、网络安全（被恶意攻击怎么办）——三线并进，缺一不可。</p>
+            <a class="more" href="challenges/safety.html">功能安全与 SOTIF</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">⚖️</div><h3>法规与伦理挑战</h3>
+            <p>出了事故责任在谁？算法该不该在“撞一个人还是撞一群人”之间做选择？数据与地图能不能跨境？监管落后于技术的窗口期如何过渡？</p>
+            <a class="more" href="challenges/regulation.html">法规与伦理</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">💰</div><h3>商业挑战</h3>
+            <p>一辆 L4 车的传感器与算力成本、海量测试里程、7×24 运维、保险与责任准备金，都让“技术跑通了”不等于“账算得过来”。</p>
+            <a class="more" href="future.html">看商业闭环趋势</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="four">
+        <div class="sec-head"><span class="no">02</span><h2>四大安全支柱（可继续下钻）</h2></div>
+        <div class="grid g2">
+          <div class="card reveal">
+            <div class="ci">🛡️</div><h3>功能安全与预期功能安全</h3>
+            <p>ISO 26262 管“系统坏了不会伤人”，ISO 21448（SOTIF）管“系统没坏但遇到设计没想到的情况也不会伤人”。L3+ 的安全论证必须同时通过这两关。</p>
+            <span class="tag">ISO 26262</span><span class="tag">SOTIF</span><span class="tag">ASIL</span>
+            <a class="more" href="challenges/safety.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🔐</div><h3>网络安全与数据安全</h3>
+            <p>智能汽车变成“轮子上的数据中心”，攻击面从 CAN 总线扩展到 OTA、App 与 V2X。ISO/SAE 21434、UN R155/R156 与各国数据法规构成防线。</p>
+            <span class="tag">入侵检测</span><span class="tag">OTA</span><span class="tag">隐私</span>
+            <a class="more" href="challenges/cybersecurity.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">📜</div><h3>法规、伦理与责任</h3>
+            <p>从路测许可到 L3/L4 准入，从事故责任划分到保险设计，再到“算法伦理困境”，全球都在边试点边立法。中国采取“地方试点 + 国家准入”并行路径。</p>
+            <span class="tag">准入试点</span><span class="tag">责任</span><span class="tag">保险</span>
+            <a class="more" href="challenges/regulation.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🧪</div><h3>测试、验证与评价</h3>
+            <p>“开多少公里才算安全？”答案是：无法只用真实里程证明。仿真、封闭场地、开放道路与数据回环四层金字塔共同构成证据链。</p>
+            <span class="tag">仿真</span><span class="tag">封闭场地</span><span class="tag">路测</span>
+            <a class="more" href="challenges/testing.html">进入专题</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="trust">
+        <div class="sec-head"><span class="no">03</span><h2>终极难题：如何让社会“信任”它</h2></div>
+        <p>技术上的“安全”与社会认知上的“安全”之间存在落差。人类司机平均每小时会造成一定事故率，公众却普遍接受；但一台自动驾驶汽车只要发生一次伤亡事故，就可能被舆论放大为“技术不可靠”。这种<b>“对比基准错位”</b>给行业提出了比工程更难的课题：</p>
+        <div class="grid g3">
+          <div class="card reveal"><div class="ci">📊</div><h3>透明的数据</h3><p>主动公开安全指标、接管率、事故报告，用可核查的数据说话，而不是只发营销宣传片。</p></div>
+          <div class="card reveal"><div class="ci">🎓</div><h3>公众教育</h3><p>让用户分清 L2 与 L4、理解 ODD，避免把辅助驾驶当无人驾驶使用——很多事故源于误用。</p></div>
+          <div class="card reveal"><div class="ci">🏛️</div><h3>监管与保险</h3><p>通过准入、认证、责任保险与事故调查制度，把“信任”从口号变成一套可执行的社会契约。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="longtail">
+        <div class="sec-head"><span class="no">04</span><h2>什么是“长尾难题”</h2></div>
+        <p>自动驾驶研发者常说：常见场景（直行、跟车、转弯）已经解决了 99%，难的是剩下的 1%——</p>
+        <ul>
+          <li>暴雨、大雾、积雪覆盖车道线、阳光直射造成镜头眩光；</li>
+          <li>行人打伞逆行、骑手钻缝、货车掉落的异物、被风吹来的塑料袋；</li>
+          <li>临时施工、交警手势、事故现场、动物穿行、罕见车型与加装设备；</li>
+          <li>其他车辆“不讲理”的驾驶行为——加塞、急刹、闯红灯。</li>
+        </ul>
+        <p>长尾问题的核心是<b>“分布极不均匀”</b>：哪怕你用 10 亿公里路测，也很难碰齐全部罕见场景。行业应对它的方法是：仿真场景生成、Corner Case 挖掘、端到端大模型泛化、以及“系统知道自己不会”的谦逊设计——识别不了就降级，详见 <a href="challenges/testing.html">测试与评价</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="myth">
+        <div class="sec-head"><span class="no">05</span><h2>公众最常见的疑问</h2></div>
+        <div class="faq">
+          <details><summary>自动驾驶汽车会被黑客远程劫持吗？</summary><p>任何联网系统都有攻击面，但车规级防护在持续增强：安全启动、网关隔离、入侵检测、OTA 签名校验等层层设防。真正的风险更多来自供应链与第三方 App，详见 <a href="challenges/cybersecurity.html">网络安全专题</a>。</p></details>
+          <details><summary>既然 AI 也会犯错，凭什么相信它？</summary><p>基准不是“AI 永不犯错”，而是它能否<b>明显优于人类平均驾驶水平</b>，且在犯错时把后果控制在最小风险状态。监管会要求厂商用数据证明这一点，而不是口头承诺。</p></details>
+          <details><summary>出了事故，是算法背锅还是厂商背锅？</summary><p>早期多起事故的教训是：责任需要由“数据”而非“公关”来认定——行车记录、系统日志、接管请求时间线都是证据。各国正在建立“自动驾驶事故调查 + 产品责任 + 保险”三位一体的机制。</p></details>
+          <details><summary>自动驾驶会先让司机失业吗？</summary><p>短期内不会“一夜失业”：L4 只在限定区域运营，且需要远程安全员与运维人员；长期看职业司机岗位会逐步转型为“安全员—调度员—维护员”，产业会创造新岗位，也存在转型阵痛。</p></details>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>选择一条安全支线深入</h3>
+        <p style="margin-bottom:10px">最值得优先阅读的是“测试与评价”——它回答“凭什么说安全”；之后是“功能安全与 SOTIF”，理解系统设计与安全的关系。</p>
+        <div class="rel-links">
+          <a href="challenges/safety.html">功能安全与 SOTIF</a>
+          <a href="challenges/cybersecurity.html">网络安全与数据安全</a>
+          <a href="challenges/regulation.html">法规、伦理与责任</a>
+          <a href="challenges/testing.html">测试、验证与评价</a>
+          <a href="../index.html">返回首页</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../index.html">首页</a>
+        <a href="overview.html">认识自动驾驶</a>
+        <a href="levels.html">分级标准</a>
+        <a href="tech.html">核心技术</a>
+        <a href="scenarios.html">应用场景</a>
+        <a href="challenges.html">安全与挑战</a>
+        <a href="future.html">未来展望</a>
+        <a href="tutorial/index.html">系统教程</a>
+        <a href="news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 安全与挑战</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../";</script>
+<script src="../assets/search.js"></script>
+  <script src="../assets/site-update.js"></script>
+</body>
+</html>

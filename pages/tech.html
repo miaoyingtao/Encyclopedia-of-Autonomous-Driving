@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核心技术 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶核心技术总览：环境感知、决策规划、控制执行、定位与高精地图、车路协同 V2X。">
+<link rel="stylesheet" href="../assets/style.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-tech">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../index.html">首页</a>
+      <a href="overview.html">认识自动驾驶</a>
+      <a href="levels.html">分级标准 L0–L5</a>
+      <a href="tech.html">核心技术</a>
+      <a href="scenarios.html">应用场景</a>
+      <a href="challenges.html">安全与挑战</a>
+      <a href="future.html">未来展望</a>
+      <a href="tutorial/index.html">系统教程</a>
+      <a href="news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">主题 3 / 6 · 核心技术</span>
+    <h1>自动驾驶的核心技术</h1>
+    <p class="lead">自动驾驶本质上是把“会开车的人”拆解成可工程化的能力：看清世界、想好动作、精准执行，并用地图、通信与安全机制兜底。本主题可继续下钻到各子技术。</p>
+    <nav class="crumb">
+      <a href="../index.html">首页</a><span class="sep">/</span><a href="tech.html">核心技术</a><span class="sep">/</span><span>总览</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#pipeline">1. 技术栈总览</a>
+      <a href="#topics">2. 五大技术专题</a>
+      <a href="#base">3. 算力与软件底座</a>
+      <a href="#schools">4. 技术流派之争</a>
+      <a href="#next" class="lv2-child">下一步怎么读</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="pipeline">
+        <div class="sec-head"><span class="no">01</span><h2>一套完整的技术栈长什么样</h2></div>
+        <p>一辆 L4 级自动驾驶车，内部就像一套“实时操作系统 + AI 大脑 + 精密底盘”：传感器把物理世界数字化，算法把它变成决策，执行器把决策变成车轮的每一度转向与每一次制动。整个链条以毫秒级延迟闭环运行：</p>
+        <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);overflow-x:auto">
+        <svg viewBox="0 0 920 330" role="img" aria-label="自动驾驶技术栈流程示意图" style="min-width:760px;width:100%;height:auto;font-family:inherit">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2563eb"/></marker>
+            <marker id="arrUp" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 10L5 0L10 10z" fill="#94a3b8"/></marker>
+          </defs>
+          <g font-size="13.5" text-anchor="middle">
+            <rect x="20" y="40" width="130" height="64" rx="12" fill="#e0f2fe" stroke="#0ea5e9"/>
+            <text x="85" y="68" font-weight="700" fill="#075985">传感器</text>
+            <text x="85" y="88" fill="#0c4a6e">摄像·雷达·激光</text>
+
+            <line x1="150" y1="72" x2="198" y2="72" stroke="#2563eb" stroke-width="3" marker-end="url(#arr)"/>
+            <rect x="200" y="40" width="150" height="64" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+            <text x="275" y="68" font-weight="700" fill="#1e40af">环境感知</text>
+            <text x="275" y="88" fill="#1e3a8a">识别·跟踪·预测</text>
+
+            <line x1="350" y1="72" x2="398" y2="72" stroke="#2563eb" stroke-width="3" marker-end="url(#arr)"/>
+            <rect x="400" y="40" width="150" height="64" rx="12" fill="#c7d2fe" stroke="#6366f1"/>
+            <text x="475" y="68" font-weight="700" fill="#3730a3">决策与规划</text>
+            <text x="475" y="88" fill="#312e81">选路·避障·轨迹</text>
+
+            <line x1="550" y1="72" x2="598" y2="72" stroke="#2563eb" stroke-width="3" marker-end="url(#arr)"/>
+            <rect x="600" y="40" width="150" height="64" rx="12" fill="#ede9fe" stroke="#8b5cf6"/>
+            <text x="675" y="68" font-weight="700" fill="#5b21b6">控制执行</text>
+            <text x="675" y="88" fill="#4c1d95">转向·制动·驱动</text>
+
+            <line x1="750" y1="72" x2="798" y2="72" stroke="#2563eb" stroke-width="3" marker-end="url(#arr)"/>
+            <rect x="800" y="40" width="100" height="64" rx="12" fill="#d1fae5" stroke="#059669"/>
+            <text x="850" y="72" font-weight="700" fill="#065f46">车辆</text>
+
+            <line x1="550" y1="180" x2="550" y2="112" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrUp)"/>
+            <rect x="20" y="180" width="230" height="60" rx="12" fill="#fef9c3" stroke="#eab308"/>
+            <text x="135" y="205" font-weight="700" fill="#713f12">定位与高精地图</text>
+            <text x="135" y="225" fill="#854d0e">“我在哪·车道在哪”</text>
+
+            <rect x="345" y="180" width="230" height="60" rx="12" fill="#ffedd5" stroke="#f97316"/>
+            <text x="460" y="205" font-weight="700" fill="#7c2d12">车路协同 V2X</text>
+            <text x="460" y="225" fill="#9a3412">“看见红绿灯与盲区”</text>
+
+            <rect x="670" y="180" width="230" height="60" rx="12" fill="#fce7f3" stroke="#ec4899"/>
+            <text x="785" y="205" font-weight="700" fill="#831843">仿真与数据闭环</text>
+            <text x="785" y="225" fill="#9d174d">“用千万场景训练验证”</text>
+          </g>
+        </svg>
+        </div>
+        <div class="panel info">
+          <span class="pt">闭环的意义</span>
+          <p>感知结果必须能解释“为什么做出这个决策”（可解释与可审计），执行之后系统还要通过监控判断“效果是否符合预期”。因此现代智驾是一个<b>数据—训练—仿真—实车—路测—再训练</b>的持续闭环，而不仅仅是一段车载程序。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="topics">
+        <div class="sec-head"><span class="no">02</span><h2>技术专题（可继续下钻）</h2></div>
+        <div class="grid g2">
+          <div class="card reveal">
+            <div class="ci">👁️</div><h3>环境感知 Perception</h3>
+            <p>如何把摄像头、激光雷达、毫米波雷达的数据变成“前方 80 米有行人、右侧车道可以变道”的结构化理解。含传感器逐个深挖。</p>
+            <span class="tag">摄像头</span><span class="tag">激光雷达</span><span class="tag">毫米波雷达</span><span class="tag">BEV/占用网络</span>
+            <a class="more" href="tech/perception.html">进入专题并下钻</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🧮</div><h3>决策与规划 Decision & Planning</h3>
+            <p>预测行人下一秒的动向，再算出一条安全、舒适、符合交规的轨迹——从全局路径到每秒数十次的局部重规划。</p>
+            <span class="tag">行为预测</span><span class="tag">运动规划</span><span class="tag">强化学习</span>
+            <a class="more" href="tech/decision.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🎛️</div><h3>控制执行 Control</h3>
+            <p>让规划出的轨迹真正落到方向盘与刹车上：线控底盘、横纵向控制算法、执行器冗余与故障降级。</p>
+            <span class="tag">线控转向</span><span class="tag">线控制动</span><span class="tag">MPC</span>
+            <a class="more" href="tech/control.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">📍</div><h3>定位与高精地图 Localization & HD Map</h3>
+            <p>厘米级回答“我在哪”，用车道级地图补足传感器看不远的局限，并应对隧道、地下车库等无 GNSS 环境。</p>
+            <span class="tag">GNSS/RTK</span><span class="tag">惯性导航</span><span class="tag">点云配准</span>
+            <a class="more" href="tech/mapping.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">📡</div><h3>车路协同 V2X</h3>
+            <p>让车与车、车与路、车与云端对话：看见被遮挡的行人、接收红绿灯倒计时、提前感知前方事故。</p>
+            <span class="tag">V2V/V2I/V2N</span><span class="tag">C-V2X</span><span class="tag">车路云一体化</span>
+            <a class="more" href="tech/v2x.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🔋</div><h3>算力平台 Compute</h3>
+            <p>支撑上述一切的“车载超级电脑”：AI 芯片、域控制器、高带宽传感器接口与安全实时操作系统，算力以每秒万亿次（TOPS）计。</p>
+            <span class="tag">域控制器</span><span class="tag">TOPS</span><span class="tag">车规级</span>
+            <a class="more" href="tech/perception.html#compute">在感知页看算力小节</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🧠</div><h3>AI 大模型与智驾前沿</h3>
+            <p>大语言模型 LLM、多模态大模型（VLM/VLA）与世界模型如何进入汽车：从“听懂人话”“识别没见过的东西”，到让模型在脑海里预演未来几秒再开车。</p>
+            <span class="tag">LLM</span><span class="tag">VLM/VLA</span><span class="tag">世界模型</span><span class="tag">端到端</span>
+            <a class="more" href="tech/foundation.html">进入 AI 前沿专题</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="base">
+        <div class="sec-head"><span class="no">03</span><h2>看不见的底座：算力、软件与数据</h2></div>
+        <p>五大专题之上还有三层“地基”，决定系统能不能实时、可靠、持续进化：</p>
+        <ol class="steps">
+          <li><h3>车载算力平台</h3><p>早期智驾用一台工控机，如今走向车规级域控制器：大算力 SoC（几百到上千 TOPS）、ASIL-D 级功能安全 MCU、冗余电源与散热，组成“移动的超算中心”。</p></li>
+          <li><h3>软件与中间件</h3><p>自动驾驶操作系统之上运行感知、规划、控制等模块；需要满足确定性调度（关键任务毫秒级完成）、通信安全与 OTA 升级能力。</p></li>
+          <li><h3>数据闭环</h3><p>真实路测数据回传 → 自动筛选“罕见但危险”的 Corner Case → 标注 → 训练新模型 → 仿真回归 → OTA 推送给车队。谁能高效闭环数据，谁就进化得快，详见 <a href="challenges/testing.html">测试与评价</a>。</p></li>
+        </ol>
+      </section>
+
+      <section class="sec scroll-target" id="schools">
+        <div class="sec-head"><span class="no">04</span><h2>三大技术流派之争</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>流派</th><th>核心思路</th><th>优势</th><th>挑战</th></tr></thead>
+            <tbody>
+              <tr><td><b>模块化（传统）</b></td><td>感知、预测、规划、控制各自独立成模块，层层传递结果</td><td>可解释、易调试、便于逐项验证与安全审计</td><td>模块间误差累积、规则写不完所有场景</td></tr>
+              <tr><td><b>端到端（学习型）</b></td><td>用一个神经网络把传感器输入直接映射为控制指令</td><td>少写规则、更像人类、上限高，近期借助大模型快速发展</td><td>黑盒难解释、数据依赖强、需要海量高质量数据与仿真验证</td></tr>
+              <tr><td><b>车路协同（网联型）</b></td><td>不只靠单车智能，让“聪明的车+智慧的路+云端大脑”分工协作</td><td>超视距感知、缓解单车成本与长尾难题</td><td>依赖基础设施投资与运营方协同，规模化慢</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="sec-sub">现实中厂商多采用“混合路线”：主干用端到端模型提升能力上限，同时保留模块化安全兜底与可审计接口。这条路线的演化见 <a href="future.html">未来展望</a>；与 LLM、世界模型结合的完整脉络见 <a href="tech/foundation.html">AI 前沿专题</a>。</p>
+      </section>
+
+      <section class="related scroll-target" id="next">
+        <h3>深入哪一条支线？</h3>
+        <p style="margin-bottom:10px">建议按兴趣选择：想了解“用什么传感器、如何识别”，进入环境感知；想看“车怎么自己决定路线”，进入决策与规划；想了解与交通设施联动，进入车路协同。</p>
+        <div class="rel-links">
+          <a href="tech/perception.html">环境感知（可下钻到传感器）</a>
+          <a href="tech/decision.html">决策与规划</a>
+          <a href="tech/control.html">控制执行</a>
+          <a href="tech/mapping.html">定位与高精地图</a>
+          <a href="tech/v2x.html">车路协同 V2X</a>
+          <a href="tech/foundation.html">AI 大模型与智驾前沿</a>
+          <a href="tutorial/index.html">系统教程（进阶讲义）</a>
+          <a href="challenges/testing.html">仿真与测试验证</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../index.html">首页</a>
+        <a href="overview.html">认识自动驾驶</a>
+        <a href="levels.html">分级标准</a>
+        <a href="tech.html">核心技术</a>
+        <a href="scenarios.html">应用场景</a>
+        <a href="challenges.html">安全与挑战</a>
+        <a href="future.html">未来展望</a>
+        <a href="tutorial/index.html">系统教程</a>
+        <a href="news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 核心技术</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../";</script>
+<script src="../assets/search.js"></script>
+  <script src="../assets/site-update.js"></script>
+</body>
+</html>

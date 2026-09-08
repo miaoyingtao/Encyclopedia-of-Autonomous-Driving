@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>应用场景 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶应用场景：Robotaxi、干线物流、港口矿区、末端配送与自动泊车，为什么封闭场景先落地。">
+<link rel="stylesheet" href="../assets/style.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-scenarios">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../index.html">首页</a>
+      <a href="overview.html">认识自动驾驶</a>
+      <a href="levels.html">分级标准 L0–L5</a>
+      <a href="tech.html">核心技术</a>
+      <a href="scenarios.html">应用场景</a>
+      <a href="challenges.html">安全与挑战</a>
+      <a href="future.html">未来展望</a>
+      <a href="tutorial/index.html">系统教程</a>
+      <a href="news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">主题 4 / 6 · 应用场景</span>
+    <h1>自动驾驶的应用场景</h1>
+    <p class="lead">自动驾驶不会同时在所有地方出现，而是沿着“封闭 → 半开放 → 开放”“低速 → 高速”“货运 → 客运”的路径逐个场景渗透。判断一个场景能否先落地，有一套通用逻辑。</p>
+    <nav class="crumb">
+      <a href="../index.html">首页</a><span class="sep">/</span><a href="scenarios.html">应用场景</a><span class="sep">/</span><span>总览</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#logic">1. 场景先行的逻辑</a>
+      <a href="#ladder">2. 落地难度光谱</a>
+      <a href="#topics">3. 四大落地场景</a>
+      <a href="#checklist">4. 先落地场景的特征</a>
+      <a href="#next" class="lv2-child">下一步怎么读</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="logic">
+        <div class="sec-head"><span class="no">01</span><h2>为什么说“场景先行”</h2></div>
+        <p>上一页的分级标准告诉我们，L4 只在<b>运行设计条件 ODD</b>内负责。ODD 划得越小、越可控，技术难度、安全证明成本与法规阻力就越低。因此自动驾驶产业不是“一步到位的无人驾驶”，而是<b>把一个个具体场景变成可盈利的生意</b>：</p>
+        <div class="grid g3">
+          <div class="card reveal"><div class="ci">🧱</div><h3>封闭场景最易落地</h3><p>港口、矿区、园区内没有随机行人，路线固定、速度低、可统一管理。这类场景已出现真正的无人化商业运营。</p></div>
+          <div class="card reveal"><div class="ci">🛣️</div><h3>结构化道路次之</h3><p>高速公路车道线清晰、规则单一、没有行人非机动车。干线物流、高速领航辅助已接近商业化拐点。</p></div>
+          <div class="card reveal"><div class="ci">🏙️</div><h3>城区最富挑战也最有价值</h3><p>行人、外卖车、逆行车、施工、交警手势……城市长尾场景无穷无尽，但也是 Robotaxi 商业想象力的核心。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="ladder">
+        <div class="sec-head"><span class="no">02</span><h2>落地难度光谱</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>环境开放度</th><th>速度</th><th>复杂度</th><th>当前阶段</th></tr></thead>
+            <tbody>
+              <tr><td>矿区 / 港口</td><td>封闭、可管控</td><td>低（<60km/h）</td><td>中：扬尘、重载、车流混杂</td><td>已规模化无人运营</td></tr>
+              <tr><td>园区接驳 / 环卫</td><td>半封闭</td><td>低</td><td>低</td><td>多城市示范运营</td></tr>
+              <tr><td>末端配送</td><td>半开放（非机动车道）</td><td>低</td><td>中高：突发多、路权待明确</td><td>局部试点</td></tr>
+              <tr><td>干线物流</td><td>开放高速</td><td>高（80–120km/h）</td><td>中：车道规则清晰但车速快、反应距离长</td><td>有人监督的商业试运营、编队试验</td></tr>
+              <tr><td>Robotaxi（城市）</td><td>全开放</td><td>中高</td><td>极高：人车混行 + 极端天气 + 长尾</td><td>有限区域收费运营</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel warn">
+          <span class="pt">一个反直觉的事实：低速≠简单</span>
+          <p>许多人以为“开得慢就安全、就简单”。其实低速场景常混入行人、儿童、宠物与非机动车，轨迹极难预测；而高速场景虽然快，但交通参与主体是“守规矩的机动车”，反而规则性强。因此<u>“低速场景”未必比“高速场景”更容易</u>，只能放在具体 ODD 里比较。</p>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="topics">
+        <div class="sec-head"><span class="no">03</span><h2>四大落地场景（可继续下钻）</h2></div>
+        <div class="grid g2">
+          <div class="card reveal">
+            <div class="ci">🚕</div><h3>出行服务 Robotaxi</h3>
+            <p>无人驾驶出租车。商业逻辑：砍掉司机成本、提高车辆利用率，把出行变成按次付费的服务。是 L4 技术的“皇冠明珠”，也是竞争最激烈的战场。</p>
+            <span class="tag">L4</span><span class="tag">收费运营</span><span class="tag">远程介入</span>
+            <a class="more" href="scenarios/robotaxi.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🚛</div><h3>干线物流 Trucking</h3>
+            <p>长途货运面临司机短缺、疲劳驾驶与成本压力。高速公路结构化程度高，先做 L2+/L3“有人监督”，再向 L4 编队与枢纽到枢纽模式演进。</p>
+            <span class="tag">L3/L4</span><span class="tag">编队行驶</span><span class="tag">Hub-to-Hub</span>
+            <a class="more" href="scenarios/freight.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🏗️</div><h3>港口与矿区</h3>
+            <p>全球自动化码头与无人矿卡的代表性案例都在中国。场景封闭、路线固定、7×24 作业，是“自动驾驶最先赚钱”的验证场。</p>
+            <span class="tag">封闭场景</span><span class="tag">无人集卡</span><span class="tag">矿卡改造</span>
+            <a class="more" href="scenarios/port-mining.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🛵</div><h3>末端配送与自动泊车</h3>
+            <p>无人配送车解决“最后三公里”，自动代客泊车（AVP）解决“最后一公里停车”。小而美，却是普通人最先频繁接触的自动驾驶。</p>
+            <span class="tag">无人配送车</span><span class="tag">AVP</span><span class="tag">低速</span>
+            <a class="more" href="scenarios/delivery-avp.html">进入专题</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="checklist">
+        <div class="sec-head"><span class="no">04</span><h2>先落地的场景，通常具备哪些特征</h2></div>
+        <ol class="steps">
+          <li><h3>边界可控</h3><p>有明确 ODD：封闭/半封闭环境、可预测的交通参与者，甚至能通过物理设施（闸机、护栏）过滤意外。</p></li>
+          <li><h3>有真实痛点与经济账</h3><p>无人化能显著降本（司机、7×24 工时、油耗），或解决招不到人的问题——不是“为自动而自动”。</p></li>
+          <li><h3>法规给了路</h3><p>有路测牌照、准入试点或明确的管理办法，出了事故责任清晰。参见 <a href="challenges/regulation.html">法规与伦理</a>。</p></li>
+          <li><h3>技术栈能闭环</h3><p>感知、定位、规划在限定区域内有足够冗余与保底策略（地图先验、固定路线、远程介入）。</p></li>
+          <li><h3>可逐步扩展</h3><p>从一条路、一个港、一片园区起步，验证后把 ODD 一圈圈扩大，边运营边积累数据。</p></li>
+        </ol>
+      </section>
+
+      <section class="related scroll-target" id="next">
+        <h3>选择感兴趣的场景深入了解</h3>
+        <p style="margin-bottom:10px">如果关心“什么时候能打到无人出租车”，看 Robotaxi；如果想了解货运行业怎么被改变，看干线物流；如果想知道“最先赚钱的自动驾驶”在哪，看港口与矿区。</p>
+        <div class="rel-links">
+          <a href="scenarios/robotaxi.html">Robotaxi 出行服务</a>
+          <a href="scenarios/freight.html">干线物流</a>
+          <a href="scenarios/port-mining.html">港口与矿区</a>
+          <a href="scenarios/delivery-avp.html">末端配送与自动泊车</a>
+          <a href="tech.html">回看支撑技术</a>
+          <a href="future.html">看商业化前景</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../index.html">首页</a>
+        <a href="overview.html">认识自动驾驶</a>
+        <a href="levels.html">分级标准</a>
+        <a href="tech.html">核心技术</a>
+        <a href="scenarios.html">应用场景</a>
+        <a href="challenges.html">安全与挑战</a>
+        <a href="future.html">未来展望</a>
+        <a href="tutorial/index.html">系统教程</a>
+        <a href="news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 本地静态站点 · 应用场景</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../";</script>
+<script src="../assets/search.js"></script>
+  <script src="../assets/site-update.js"></script>
+</body>
+</html>

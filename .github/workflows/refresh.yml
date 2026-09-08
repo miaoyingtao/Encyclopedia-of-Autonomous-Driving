@@ -1,0 +1,41 @@
+name: Auto refresh news
+
+# 定时抓取并提交最新领域动态：
+#   cron 使用 UTC，'0 1,13 * * *' = 北京时间 09:00 与 21:00。
+# 提交会触发 pages.yml（push）自动重新部署。
+on:
+  schedule:
+    - cron: '0 1,13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest news
+        env:
+          TZ: Asia/Shanghai
+        run: |
+          python tools/news_fetcher.py --quiet
+          python tools/check_links.py --stamp
+
+      - name: Commit and push if changed
+        env:
+          TZ: Asia/Shanghai
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/news-data.js assets/site-update.js
+          if git diff --cached --quiet; then
+            echo "No data change, skip commit."
+          else
+            git commit -m "chore(news): auto refresh $(date +%F)"
+            git push
+          fi

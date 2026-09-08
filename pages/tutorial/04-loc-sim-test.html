@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>讲义 04 · 定位建图与仿真测试 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程第 3 章：GNSS/RTK 与 IMU 组合定位、点云配准与因子图、高精地图与 OpenDRIVE、仿真测试与 SOTIF、数据闭环。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../overview.html'>认识自动驾驶</a>
+      <a href='../levels.html'>分级标准 L0–L5</a>
+      <a href='../tech.html'>核心技术</a>
+      <a href='../scenarios.html'>应用场景</a>
+      <a href='../challenges.html'>安全与挑战</a>
+      <a href='../future.html'>未来展望</a>
+      <a href='index.html'>系统教程</a>
+      <a href='../news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 第 3 章</span>
+    <h1>定位、建图、仿真与测试</h1>
+    <p class='lead'>“我在哪”是规划的前提；“我怎么证明它足够安全”是量产的前提。本章把组合导航、点云配准、高精地图讲到底层数学，再把仿真、SOTIF 与数据闭环串成一套可执行的验证方法论。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 3 章</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#obj'>3.1 学习目标</a>
+      <a href='#task'>3.2 定位问题的分层</a>
+      <a href='#gnss'>3.3 GNSS 与 RTK</a>
+      <a href='#ins'>3.4 IMU 与航位推算</a>
+      <a href='#fuse'>3.5 组合导航与因子图</a>
+      <a href='#map'>3.6 高精地图与匹配</a>
+      <a href='#sim'>3.7 仿真与测试体系</a>
+      <a href='#safety'>3.8 SOTIF 与安全指标</a>
+      <a href='#data'>3.9 数据闭环</a>
+      <a href='#quiz'>3.10 自测题</a>
+    </aside>
+
+    <div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>3.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：进阶</span><span>预计：4–5 小时</span><span>前置：第 0–2 章</span></div>
+        <p>学完本章，你应该能：① 写出 RTK 相对单点定位提升精度的原理（差分消掉什么误差）；② 解释组合导航为什么必须“GNSS + IMU”互为补充；③ 用 ICP/NDT 的目标函数说明点云配准在干什么；④ 看懂 OpenDRIVE 车道元素的最小骨架；⑤ 把 SOTIF 的场景分区映射到测试策略。</p>
+      </section>
+
+      <section class='sec scroll-target' id='task'>
+        <div class='sec-head'><span class='no'>3.2</span><h2>定位问题的分层：三种信息来源</h2></div>
+        <p>自动驾驶需要“车道级”定位：横向上要能分辨自己在哪条车道，误差通常要求分米级以内。定位是三类信息的融合：</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🛰 全局观测</h3><p>GNSS 给出绝对位置但有漂移、多径与遮挡；RTK 可到厘米级但依赖基站与开阔天空。</p></div>
+          <div class='card reveal'><h3>🌀 航位推算</h3><p>IMU、轮速计短时高频且不受遮挡，但误差随时间积分发散（“越走越偏”）。</p></div>
+          <div class='card reveal'><h3>🗺 地图匹配与感知</h3><p>激光/视觉与高精地图或道路特征匹配，得到相对车道的约束，误差有界但不一定处处可匹配。</p></div>
+        </div>
+        <p>三者单独都不可靠，组合才是答案：<b>用 IMU 短时补 GNSS 的遮挡，用 GNSS/地图匹配校准 IMU 的漂移</b>，这正是 3.5 的状态估计。</p>
+      </section>
+
+      <section class='sec scroll-target' id='gnss'>
+        <div class='sec-head'><span class='no'>3.3</span><h2>GNSS 与 RTK：伪距、载波与差分</h2></div>
+        <h3>单点定位：解伪距方程</h3>
+        <p>接收机测量与卫星的距离（伪距），位置由至少 4 颗卫星联立解出（3 个坐标 + 1 个接收机钟差）：</p>
+        <div class='math'>ρᵢ = |r_satᵢ − r_rov| + c·dt + Iᵢ + Tᵢ + εᵢ</div>
+        <p>I 是电离层延迟、T 是对流层延迟、dt 是钟差。单点定位精度约米级，因为电离层延迟与钟差难以精确建模。</p>
+        <h3>差分与 RTK：把共同误差“减掉”</h3>
+        <p>RTK 的基本思想：基准站位置已知，它与流动站（车）在同一片天空下，两者的电离层/对流层/星历误差高度相关。把两站对同一卫星的观测相减，公共误差被消掉，只留几何差与模糊度：</p>
+        <div class='math math-left'>单差：Δρ = ρ_rov − ρ_base ≈ Δr + c·Δdt<br>双差：对两颗卫星再做一次差，消掉接收机钟差<br>载波相位观测含整周模糊度 N：λ·φ = r + λ·N + …</div>
+        <p>载波相位精度远高于码相位（毫米级波长），但必须先估计整数模糊度 N：先求浮点解，再用 LAMBDA 等算法固定为整数（fixed），固定后可达 1–2 cm 精度。RTK 的弱点也清晰：离开基站覆盖、穿过城市峡谷时固定解丢失，会退化为分米~米级——所以要 IMU 在中间“撑着”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='ins'>
+        <div class='sec-head'><span class='no'>3.4</span><h2>IMU 与航位推算：高频但会漂</h2></div>
+        <p>IMU 输出角速度（陀螺）与比力（加速度计），典型频率 100–1000 Hz。捷联惯导的思想是把这些增量连续积分出姿态、速度与位置：</p>
+        <div class='math math-left'>姿态更新：q ← q ⊗ Δq(ω·Δt)<br>速度更新：v ← v + (R·a − g)·Δt<br>位置更新：p ← p + v·Δt</div>
+        <p>关键问题是<b>零偏</b>：静止时加速度计/陀螺仍有小偏置，积分一次变速度误差、两次变位置误差，并随时间增长；同时姿态误差会通过重力耦合到水平速度，形成“姿态漂 → 速度漂 → 位置漂”的恶性循环。</p>
+        <div class='panel warn'><span class='pt'>零偏模型</span><p>工程上把零偏建模为“随机游走”并放进状态向量估计：ḃ = 高斯白噪声。这正是组合导航里状态维数比“位置+速度+姿态”多 6 维（3 陀螺零偏 + 3 加速度计零偏）的原因。误差来源分清后，IMU 选型（零偏稳定性、噪声密度）与算法选型才能有的放矢。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='fuse'>
+        <div class='sec-head'><span class='no'>3.5</span><h2>组合导航：状态估计的经典应用</h2></div>
+        <p>把 GNSS、IMU、轮速、地图匹配放进第 0 章的卡尔曼框架：</p>
+        <div class='math math-left'>状态 x = [p, v, q(姿态), b_a, b_g]（15 维或更多）<br>预测：用 IMU 积分（高频率推进状态与协方差）<br>更新：GNSS 位置/速度、轮速、车道匹配等作为观测 z</div>
+        <p>“松组合”把 GNSS 解算好的位置/速度当观测；“紧组合”直接用原始伪距/载波观测做更新，遮挡时仍能利用未受污染的卫星，抗差能力更强。城市环境下“IMU + 轮速 + 车道匹配”可以撑住数秒到数十秒的 GNSS 盲区，这也是“隧道里也能开”的原因。</p>
+        <h3>从滤波到因子图：SLAM/建图的视角</h3>
+        <p>滤波只保留上一时刻估计（马尔可夫假设）；而建图时我们希望“全局一起调”，让所有历史位姿与观测互相修正。因子图把问题画成二分图：<b>变量节点</b>（每个时刻的位姿、地图点）+ <b>因子节点</b>（相邻位姿间的里程计约束、与地图的观测约束、GNSS 先验）。目标是最小化所有因子残差的平方和：</p>
+        <div class='math'>min_X Σ_f ||r_f(X)||²_Σf</div>
+        <p>r_f 是某条约束的残差，Σf 是其协方差（权重）。求解用第 0 章的非线性最小二乘（高斯牛顿/LM）。这是理解激光 SLAM 后端（如 LIO-SAM、FAST-LIO 类系统）的一把钥匙：前端负责“匹配给了什么约束”，后端负责“把这些约束揉成一个一致地图”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='map'>
+        <div class='sec-head'><span class='no'>3.6</span><h2>高精地图与点云/视觉匹配</h2></div>
+        <h3>点云配准：让两片点云对齐</h3>
+        <p>定位到地图的本质是求一个位姿 T，使“当前帧点云”与“地图点云”最好地对齐。ICP 迭代最近点：每步把每个当前点关联到地图最近点，再求最优刚体变换：</p>
+        <div class='math'>min_{R,t} Σᵢ || R·pᵢ + t − q_j(i) ||²</div>
+        <p>q_j(i) 是 pᵢ 的最近邻。ICP 的缺点是依赖初始位姿与最近邻匹配质量。NDT（正态分布变换）把地图体素化成高斯分布，评分函数变成“当前点落在该分布上的概率密度之和”，对初值更鲁棒、工程上常用：</p>
+        <div class='math'>score(T) = Σᵢ exp( −½ (qᵢ − μ_j)ᵀ Σ_j⁻¹ (qᵢ − μ_j) )</div>
+        <p>视觉侧做类似的事：把“地图里的特征点/语义地标”重投影到图像，用重投影误差做位姿优化（见第 0 章 0.6）。激光测距稳但怕环境剧变与空旷路段，视觉/语义丰富但怕光照与视角变化——因此量产常做“激光几何 + 视觉语义”的互补匹配。</p>
+        <h3>高精地图的数据结构：以 OpenDRIVE 为例</h3>
+        <p>车道级高精地图至少分三层：<b>导航层</b>（道路连接关系，类似普通导航地图）、<b>车道层</b>（车道几何、宽度、与相邻车道的拓扑）、<b>定位/属性层</b>（交通标志、停止线、限速等）。OpenDRIVE 用 XML 描述这些元素，最小骨架大致是：</p>
+        <div class='codeblock'>OpenDRIVE
+  └─ road（一条路）
+       ├─ planView：道路中心线的几何段（直线/螺旋/圆弧）
+       ├─ elevationProfile / lateralProfile：高程与横坡
+       ├─ lanes：车道集合
+       │    ├─ laneSection
+       │    └─ lane：含 id（左正右负）、宽度、类型（driving/curb…）
+       ├─ link：道路之间的连接关系
+       └─ signals/objects：交通标志与路侧对象</div>
+        <p>地图必须与“在线感知”互为校验：地图说限速、感知说路障，冲突时按更保守者处理。众包更新与 OTA 是地图保鲜的工程主线——静止的地图是“昨天的世界”，而车端真正消费的是“本地化之后的车道拓扑”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='sim'>
+        <div class='sec-head'><span class='no'>3.7</span><h2>仿真与测试体系：验证金字塔</h2></div>
+        <p>无人驾驶无法用“开到 10 亿公里再发布”来验证，必须把测试分层、让大部分验证发生在仿真里：</p>
+        <ol class='steps'>
+          <li><h3>单元与模块测试</h3><p>感知单帧、跟踪单轨、单个规划函数的输入输出正确性（离线数据集上回归）。</p></li>
+          <li><h3>场景仿真</h3><p>在可控场景里跑“整车闭环”：本车 + 交通参与者 + 传感器模型。分为真实数据回放、参数化场景（改变速度/距离/天气组合）与生成式场景。</p></li>
+          <li><h3>封闭场地与实车路测</h3><p>仿真验证不了的传感器物理、执行器时延、人机交互，在试验场和限定 ODD 的真实道路收尾。</p></li>
+        </ol>
+        <p>场景是测试的基本单位，至少包含五类元素：道路结构、静态物体、动态交通参与者、环境条件（光照/雨雾）、传感器与执行器状态。测试的价值来自<b>覆盖度</b>：不是“测了多少小时”，而是这些元素组合覆盖了多少比例的危险区间。</p>
+        <div class='panel tip'><span class='pt'>世界模型与生成式仿真</span><p>传统参数化场景靠工程师写模板，覆盖长尾效率低。生成式世界模型（见 <a href='../tech/foundation.html'>AI 前沿专题</a>）能从真实数据“改写”出罕见变体，用可控条件批量生成困难场景；其价值是扩大测试分布，但不能替代真实传感器物理回归。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='safety'>
+        <div class='sec-head'><span class='no'>3.8</span><h2>SOTIF 与安全指标：把“没想到”也管起来</h2></div>
+        <p>传统功能安全（ISO 26262）处理“系统坏了怎么办”：电子故障有概率模型可分析。但智驾更大的风险是“系统没坏、却遇到设计没想到的场景”——这就是预期功能安全 SOTIF（ISO 21448）的领域。</p>
+        <p>SOTIF 把运行场景按“是否已知 + 是否安全”分成四类：</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th></th><th>已知</th><th>未知</th></tr></thead>
+            <tbody>
+              <tr><td><b>安全</b></td><td>验证过、放行</td><td>通过场景挖掘不断“未知 → 已知”</td></tr>
+              <tr><td><b>危险</b></td><td>必须修复或限制 ODD</td><td>核心风险：用功能不足分析 + 运行监控兜底</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>工程动作对应为：系统性识别“功能局限”（如传感器雨雾退化、规划对异形车误判）→ 设计运行监控与降级 → 用仿真/路测持续把未知危险场景转化为已知并回归。ISO 26262 的 ASIL 等级则按严重度 S、暴露率 E、可控性 C 组合划分 A–D，D 最高（如高速无冗余的转向控制）。两者叠加构成“功能失效 + 功能不足”的双重保障叙事。</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📏 接管/干预率</h3><p>MPI（两次人工接管间的行驶里程）是 L2/L3 时代最常用粗指标，但“接管原因”比次数更重要。</p></div>
+          <div class='card reveal'><h3>📉 影子模式指标</h3><p>系统与人类驾驶员并行“想象驾驶”，统计两者决策分歧的严重度，用于挖长尾。</p></div>
+          <div class='card reveal'><h3>🔒 安全缓冲区指标</h3><p>如与障碍最小间距、TTC（碰撞时间）、预测违反约束率——比“出没出事故”更早反映风险。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='data'>
+        <div class='sec-head'><span class='no'>3.9</span><h2>数据闭环：让系统越开越聪明</h2></div>
+        <p>感知/规划的每个模型版本都依赖数据喂养。完整闭环是：</p>
+        <div class='codeblock'>路采/影子模式触发采集
+  → 自动挖掘（按 TTC、接管、预测误差、模型低置信度等打分筛选）
+  → 标注（3D 框、车道、占用、语义；人工 + 自动标注 + 交叉质检）
+  → 清洗与均衡（按场景要素去重、补长尾）
+  → 训练 / 仿真回归 / 安全关键场景回归
+  → 灰度 OTA → 回到采集</div>
+        <p>数据工程与算法同等重要，三个常被低估的细节：</p>
+        <ul>
+          <li><b>标注一致性</b>：同一条车道线两个人标出两种结果，等于给模型喂噪声；需要标注规范与自动质检。</li>
+          <li><b>分布审计</b>：模型变好可能只是“训练分布越来越像旧测试集”，要用留出的分布外数据持续审计。</li>
+          <li><b>回放 ≠ 闭环</b>：回放旧数据只能回归旧决策；真正验证要能“把模型换进去重放、看它是否会撞”，即仿真闭环。</li>
+        </ul>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>3.10</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q1：为什么 RTK 需要基准站？</summary><p>需要基准站提供同一天空下的参考观测，做差分才能消掉电离层、对流层与星历等共同误差；单机无法获得这份“参考”。</p></details>
+          <details><summary>Q2：为什么 IMU 零偏必须在线估计而不能出厂标定后不管？</summary><p>零偏随温度、老化、振动缓慢变化，且积分后会被放大成位置漂移；在线把它放进状态向量由观测持续修正，是最有效的补偿方式。</p></details>
+          <details><summary>Q3：ICP 的目标函数优化的是什么？前提条件是什么？</summary><p>优化刚体变换使点对距离平方和最小；前提是初始位姿足够近、最近邻关联大致正确，否则会落入局部最优。</p></details>
+          <details><summary>Q4：为什么 SOTIF 说“多测几百万公里”不能单独证明安全？</summary><p>安全风险集中在极罕见场景，均匀随机路测很难命中；需要“场景化 + 按危险组合定向生成 + 覆盖度分析”来系统逼近未知危险区。</p></details>
+          <details><summary>Q5：回放测试能代替仿真闭环测试吗？</summary><p>不能。回放只检验“旧决策是否仍然复现”，仿真闭环把新版本模型放回场景重跑，才能发现“因为模型变了而新产生的危险行为”。</p></details>
+        </div>
+      </section>
+
+      <section class='related'>
+        <h3>教程至此完成主线</h3>
+        <p style='margin-bottom:10px'>0–3 章串起来就是一套完整的自动驾驶软件栈。接下来建议回到 <a href='../tech/foundation.html'>AI 前沿专题</a>，把大模型/世界模型放在你已掌握的框架里再读一遍。</p>
+        <div class='rel-links'>
+          <a href='03-planning-control.html'>返回第 2 章</a>
+          <a href='index.html'>返回课程地图</a>
+          <a href='05-llm-vla.html'>第 4 章 LLM 与 VLA</a>
+          <a href='06-worldmodel.html'>第 5 章 世界模型</a>
+          <a href='../tech/mapping.html'>科普：定位与高精地图</a>
+          <a href='../challenges/testing.html'>科普：测试与评价</a>
+          <a href='../challenges/safety.html'>科普：安全体系</a>
+          <a href='../tech/foundation.html'>AI 前沿：LLM 与世界模型</a>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='03-planning-control.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 2 章 · 决策规划与控制</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='05-llm-vla.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 4 章 · LLM 与 VLA</b>
+      </a>
+      </nav>
+
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../overview.html'>认识自动驾驶</a>
+        <a href='../levels.html'>分级标准</a>
+        <a href='../tech.html'>核心技术</a>
+        <a href='../scenarios.html'>应用场景</a>
+        <a href='../challenges.html'>安全与挑战</a>
+        <a href='../future.html'>未来展望</a>
+        <a href='index.html'>系统教程</a>
+        <a href='../news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 04</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>
