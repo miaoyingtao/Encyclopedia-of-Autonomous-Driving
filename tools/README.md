@@ -70,12 +70,12 @@ python tools\news_fetcher.py
 内容增删改之后建议按下面顺序维护一次：
 
 ```powershell
-python tools\build_search_index.py   # ① 重建站内搜索索引（会显示“indexed pages: 39”）
+python tools\build_search_index.py   # ① 重建站内搜索索引（会显示“indexed pages: 40”）
 python tools\check_links.py          # ② 全站质检：应输出“错误 0 个，警告 0 个”
 python tools\check_links.py --stamp  # ③ 写入今日日期到 assets/site-update.js（页脚显示“内容维护于 …”）
 ```
 
-- `check_links.py` 每次检查 39 个页面：内部链接与锚点、静态资源、主导航/页脚完整性、重复 id、常见标签配对、BOM/CRLF、搜索索引是否过期。
+- `check_links.py` 每次检查 40 个页面：内部链接与锚点、静态资源、主导航/页脚完整性、重复 id、常见标签配对、BOM/CRLF、搜索索引是否过期。
 - `--stamp` 是幂等的：自动生成 `assets/site-update.js`，并给每个页面补齐页脚 `<span id="site-stamp">`、`site-update.js` 引用与 `<link rel="icon">`（站点 favicon 为根目录 `favicon.svg`）。
 - 深色模式与移动端样式集中在 `assets/style.css` 末尾的“主题增强”段，改动页面后无需另建样式文件。
 - 其他参数：`--quiet` 只输出错误、`--print-index` 打印搜索索引条数。
