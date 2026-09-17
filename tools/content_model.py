@@ -198,7 +198,8 @@ class Content(object):
             if not page:
                 errors.append("卡片 %s 缺少 canonical 页" % cid)
             stem = os.path.basename(page)[:-5] if page.endswith(".html") else ""
-            if stem and stem not in self.topics and stem not in self.tutorial:
+            if page and page not in self.topics and page not in self.tutorial \
+                    and stem and not any(t.get("slug") == stem for t in self.topics.values()):
                 warnings.append("卡片 %s 的 canonical 页在内容源中找不到对应主题: %s" % (cid, page))
             for ex in re.findall(r"\{\{example:([^}|]+)", card.body):
                 if ex.strip() not in self.examples:

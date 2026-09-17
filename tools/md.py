@@ -172,6 +172,18 @@ def render(text, resolver=None):
             out.append("</ol>")
             continue
 
+        # 独占一行的占位符 → 块级输出（避免被 <p> 包裹）
+        if resolver is not None:
+            pm = PLACEHOLDER.fullmatch(s)
+            if pm:
+                html = resolver(pm.group("kind"), pm.group("arg").strip(),
+                                pm.group("mode") or "")
+                if html is not None:
+                    flush_para()
+                    out.append(html)
+                    i += 1
+                    continue
+
         # 普通段落
         para.append(s)
         i += 1

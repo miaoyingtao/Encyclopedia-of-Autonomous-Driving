@@ -1,0 +1,22 @@
+{
+  "groups": [
+    { "id": "perception", "title": "感知与传感器" },
+    { "id": "planning", "title": "决策与控制" },
+    { "id": "safety", "title": "安全与合规" },
+    { "id": "business", "title": "场景与商业" }
+  ],
+  "cards": {
+    "time-alignment": {
+      "group": "perception",
+      "prereq": ["bev"],
+      "extends": [],
+      "contrasts": []
+    },
+    "bev": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["time-alignment"],
+      "contrasts": []
+    }
+  }
+}

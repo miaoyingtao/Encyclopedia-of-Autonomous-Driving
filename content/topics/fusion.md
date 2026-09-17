@@ -14,6 +14,8 @@ crumb: "环境感知|../../../pages/tech/perception.html"
 crumb: "多传感器融合|"
 ---
 
+{{card:time-alignment|full}}
+
 <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么必须做融合</h2></div>
         <p>回顾前四个专题，每种传感器都有“一票否决”的盲区：</p>
