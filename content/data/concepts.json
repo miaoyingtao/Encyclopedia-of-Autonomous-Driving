@@ -4,6 +4,8 @@
     { "id": "perception", "title": "感知与传感器" },
     { "id": "planning", "title": "决策与控制" },
     { "id": "safety", "title": "安全与合规" },
+    { "id": "engineering", "title": "系统与工程" },
+    { "id": "ai", "title": "AI 前沿" },
     { "id": "business", "title": "场景与商业" }
   ],
   "cards": {
@@ -77,6 +79,42 @@
       "group": "business",
       "prereq": [],
       "extends": [],
+      "contrasts": []
+    },
+    "world-model": {
+      "group": "ai",
+      "prereq": ["end-to-end"],
+      "extends": [],
+      "contrasts": []
+    },
+    "end-to-end": {
+      "group": "planning",
+      "prereq": [],
+      "extends": ["world-model"],
+      "contrasts": []
+    },
+    "calibration": {
+      "group": "perception",
+      "prereq": ["time-alignment"],
+      "extends": [],
+      "contrasts": []
+    },
+    "redundancy": {
+      "group": "engineering",
+      "prereq": [],
+      "extends": ["mrm", "asil"],
+      "contrasts": []
+    },
+    "data-loop": {
+      "group": "engineering",
+      "prereq": [],
+      "extends": ["calibration"],
+      "contrasts": []
+    },
+    "takeover-rate": {
+      "group": "business",
+      "prereq": ["odd"],
+      "extends": ["unit-economics"],
       "contrasts": []
     }
   }

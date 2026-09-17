@@ -66,7 +66,9 @@ crumb: "环境感知|"
 
       <section class="sec scroll-target" id="understand">
         <div class="sec-head"><span class="no">05</span><h2>从“看见”到“理解”：BEV 与占用网络</h2></div>
-        <p>BEV（鸟瞰视角）把多相机图像统一投影到以自车为中心的俯视坐标系，占用网络则直接预测每个体素“是否被占据”。两者让感知从“识别已知目标”走向“理解未知空间”，是应对长尾障碍物的关键。</p>
+{{card:bev|full}}
+
+{{card:occupancy-network|full}}
 
       </section>
 
