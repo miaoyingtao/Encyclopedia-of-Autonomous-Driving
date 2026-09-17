@@ -38,7 +38,7 @@
     };
     sc.onerror = function () {
       indexLoading = false;
-      showMessage("索引加载失败。请确认 assets/search-data.js 存在（缺少时运行 python tools\\build_search_index.py）。");
+      showMessage("索引加载失败，请稍后重试。");
     };
     document.head.appendChild(sc);
   }
@@ -85,7 +85,7 @@
     emptyEl.hidden = true;
     if (!top.length) {
       emptyEl.hidden = false;
-      emptyEl.textContent = "没有找到与“" + q + "”相关的内容。试试更短的关键词，或运行 python tools\\build_search_index.py 更新索引。";
+      emptyEl.textContent = "没有找到与“" + q + "”相关的内容。试试更短的关键词。";
       return;
     }
     top.forEach(function (o) {

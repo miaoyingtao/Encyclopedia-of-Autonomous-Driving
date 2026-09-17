@@ -15,7 +15,7 @@ python tools\serve.py
 
 | 路径 | 说明 |
 | --- | --- |
-| `index.html` / `pages/` | 全站页面（34 个 HTML，全部使用相对路径，可直接放入子目录部署） |
+| `index.html` / `pages/` | 全站页面（39 个 HTML，全部使用相对路径，可直接放入子目录部署） |
 | `assets/` | 样式、脚本、站内搜索索引、领域动态数据 `news-data.js` |
 | `favicon.svg` | 站点图标 |
 | `tools/` | Python 工具：`news_fetcher.py`、`serve.py`、`check_links.py`、`build_search_index.py` |

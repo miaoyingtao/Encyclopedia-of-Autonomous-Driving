@@ -189,16 +189,16 @@
       var viaLocalHttp = viaHttp && /^(127\.0\.0\.1|localhost|\[::1\]|::1)$/.test(location.hostname);
       if (!viaHttp) {
         refreshBtn.disabled = true;
-        refreshBtn.title = "file:// 模式无法运行 Python，请先启动 python tools/serve.py";
+        refreshBtn.title = "当前无法在线刷新";
         refreshNote.hidden = false;
-        refreshNote.textContent = "提示：当前以 file:// 方式打开，浏览器不能执行本机 Python。请先运行 python tools/serve.py，再用 http://127.0.0.1:8765/pages/news.html 打开本页，点击“刷新动态”即可自动抓取并更新列表。";
+        refreshNote.textContent = "提示：当前无法在线获取最新动态。";
         refreshNote.className = "news-refresh-note hint";
       } else if (!viaLocalHttp) {
         refreshBtn.disabled = true;
-        refreshBtn.title = "线上静态托管无法执行 Python，由 GitHub Actions 定时自动更新";
+        refreshBtn.title = "动态会自动更新";
         refreshNote.hidden = false;
         var onlineUpd = (window.NEWS_META && window.NEWS_META.updatedAt) ? "，数据更新：" + fmtDate(window.NEWS_META.updatedAt) : "";
-        refreshNote.textContent = "提示：当前是线上静态版本，无需手动刷新；领域动态由 GitHub Actions 定时抓取并自动发布" + onlineUpd + "。";
+        refreshNote.textContent = "提示：领域动态会自动更新" + onlineUpd + "。";
         refreshNote.className = "news-refresh-note hint";
       } else {
         refreshBtn.addEventListener("click", function () {
@@ -207,7 +207,7 @@
           var oldText = refreshBtn.textContent;
           refreshBtn.textContent = "刷新中…";
           refreshNote.hidden = false;
-          refreshNote.textContent = "正在运行 python tools/news_fetcher.py 联网抓取，请稍候（约 10–60 秒）…";
+          refreshNote.textContent = "正在获取最新动态，请稍候…";
           refreshNote.className = "news-refresh-note ok";
           fetch("/api/refresh", { method: "POST", cache: "no-store" })
             .then(function (resp) {
@@ -222,14 +222,14 @@
               } else {
                 refreshBtn.disabled = false;
                 refreshBtn.textContent = oldText;
-                refreshNote.textContent = "刷新失败：" + ((data && data.message) || "未知错误") + "。可运行 python tools/news_fetcher.py 排查。";
+                refreshNote.textContent = "刷新失败，请稍后重试。";
                 refreshNote.className = "news-refresh-note err";
               }
             })
             .catch(function (err) {
               refreshBtn.disabled = false;
               refreshBtn.textContent = oldText;
-              refreshNote.textContent = "刷新失败：无法连接本地服务（" + err + "）。请确认已运行 python tools/serve.py。";
+              refreshNote.textContent = "刷新失败：暂时无法获取最新动态，请稍后重试。";
               refreshNote.className = "news-refresh-note err";
             });
         });

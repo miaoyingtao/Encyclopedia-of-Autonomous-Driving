@@ -4,7 +4,7 @@
  */
 
 window.SITE_UPDATE = {
-  updatedAt: "2026-09-08",
+  updatedAt: "2026-09-17",
   note: "内容维护日期，由 tools/check_links.py --stamp 写入"
 };
 
