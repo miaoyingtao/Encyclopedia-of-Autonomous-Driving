@@ -4,6 +4,7 @@
     { "id": "perception", "title": "感知与传感器" },
     { "id": "planning", "title": "决策与控制" },
     { "id": "safety", "title": "安全与合规" },
+    { "id": "localization", "title": "定位与地图" },
     { "id": "engineering", "title": "系统与工程" },
     { "id": "ai", "title": "AI 前沿" },
     { "id": "business", "title": "场景与商业" }
@@ -193,6 +194,60 @@
       "group": "perception",
       "prereq": [],
       "extends": ["sensor-fusion"],
+      "contrasts": []
+    },
+    "imu-dead-reckoning": {
+      "group": "localization",
+      "prereq": [],
+      "extends": ["gnss-rtk-ppp"],
+      "contrasts": []
+    },
+    "icp-ndt": {
+      "group": "localization",
+      "prereq": [],
+      "extends": ["slam"],
+      "contrasts": []
+    },
+    "slam": {
+      "group": "localization",
+      "prereq": ["icp-ndt"],
+      "extends": [],
+      "contrasts": []
+    },
+    "hdmap-layers": {
+      "group": "localization",
+      "prereq": [],
+      "extends": ["map-freshness"],
+      "contrasts": []
+    },
+    "map-freshness": {
+      "group": "localization",
+      "prereq": ["hdmap-layers"],
+      "extends": ["crowdsourced-update"],
+      "contrasts": []
+    },
+    "crowdsourced-update": {
+      "group": "localization",
+      "prereq": ["map-freshness"],
+      "extends": [],
+      "contrasts": []
+    },
+    "map-less-debate": {
+      "group": "localization",
+      "prereq": ["hdmap-layers"],
+      "extends": [],
+      "contrasts": []
+    },
+    "localization-integrity": {
+      "group": "localization",
+      "prereq": ["gnss-rtk-ppp"],
+      "extends": ["lane-level-accuracy"],
+      "contrasts": []
+    },
+    "lane-level-accuracy": {
+      "group": "localization",
+      "prereq": [],
+      "extends": ["localization-integrity"],
       "contrasts": []
     }
   }
