@@ -12,8 +12,8 @@ crumb: "首页|../index.html"
 crumb: "技术全景|../pages/tech.html"
 crumb: "闭环仿真实验台|"
 layout: "full"
-styles: ["assets/adsim/adsim.css"]
-scripts: ["assets/adsim/core/math.js", "assets/adsim/core/world.js", "assets/adsim/core/perception.js", "assets/adsim/core/prediction.js", "assets/adsim/core/decision.js", "assets/adsim/core/planning.js", "assets/adsim/core/control.js", "assets/adsim/core/metrics.js", "assets/adsim/core/sim.js", "assets/adsim/scenarios.js", "assets/adsim/ui.js"]
+styles: ["assets/adsim/adsim.css", "assets/adsim/panels.css"]
+scripts: ["assets/adsim/core/math.js", "assets/adsim/core/world.js", "assets/adsim/core/perception.js", "assets/adsim/core/prediction.js", "assets/adsim/core/decision.js", "assets/adsim/core/planning.js", "assets/adsim/core/control.js", "assets/adsim/core/metrics.js", "assets/adsim/core/sim.js", "assets/adsim/scenarios.js", "assets/adsim/ui.js", "assets/adsim/opendrive.js", "assets/adsim/labs.js", "assets/adsim/editor.js"]
 ---
 
 <div class="panel info">

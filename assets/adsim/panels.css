@@ -1,0 +1,68 @@
+/* ADSim 扩展面板样式：模块实验室 / 场景编辑器 / OpenDRIVE 导入 */
+.adsim-lab, .adsim-tool { margin: 26px 0 34px; }
+.adsim-lab-title, .adsim-tool-title { font-size: 1.05rem; margin: 0 0 10px; }
+.adsim-lab-title small, .adsim-tool-title small {
+  margin-left: 8px; font-weight: 400; color: var(--muted, #8b949e); font-size: .82rem;
+}
+.adsim-lab-tabs, .adsim-tool-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.adsim-btn.is-active {
+  border-color: var(--accent, #2f81f7); color: #79c0ff; background: rgba(47, 129, 247, .12);
+}
+.adsim-lab-desc, .adsim-tool-desc {
+  color: var(--muted, #8b949e); font-size: .86rem; line-height: 1.7; margin: 0 0 12px;
+}
+.adsim-lab-body { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 14px; align-items: start; }
+.adsim-lab-params {
+  display: flex; flex-direction: column; gap: 6px; padding: 10px 12px;
+  background: var(--panel-2, #161b22); border: 1px solid var(--border, #30363d); border-radius: 8px;
+}
+.adsim-lab-param {
+  display: grid; grid-template-columns: 1fr 92px 46px; align-items: center; gap: 6px;
+  font-size: .8rem; color: var(--muted, #8b949e);
+}
+.adsim-lab-param input[type=range] { width: 100%; }
+.adsim-lab-param b {
+  color: var(--fg, #c9d1d9); font-family: ui-monospace, Menlo, Consolas, monospace; text-align: right;
+}
+.adsim-lab-charts { display: grid; gap: 10px; }
+.adsim-lab-chart { margin: 0; }
+.adsim-lab-chart figcaption { font-size: .78rem; color: var(--muted, #8b949e); margin-bottom: 4px; }
+.adsim-lab-chart canvas {
+  display: block; width: 100%; height: auto;
+  border: 1px solid var(--border, #30363d); border-radius: 8px; background: #0d1117;
+}
+.adsim-lab-foot, .adsim-tool-foot {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px;
+}
+.adsim-lab-stats, .adsim-tool-stats { display: flex; flex-wrap: wrap; gap: 8px; }
+.adsim-lab-stat, .adsim-tool-stat {
+  padding: 3px 9px; background: var(--panel-2, #161b22); border: 1px solid var(--border, #30363d);
+  border-radius: 999px; font-size: .78rem; color: var(--fg, #c9d1d9);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+.adsim-lab-stat i, .adsim-tool-stat i { margin-right: 6px; color: var(--muted, #8b949e); font-style: normal; }
+.adsim-tool-body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; align-items: start; }
+.adsim-edit-canvas {
+  display: block; width: 100%; height: auto; background: #0d1117;
+  border: 1px solid var(--border, #30363d); border-radius: 10px; cursor: crosshair;
+}
+.adsim-tool-side { display: flex; flex-direction: column; gap: 10px; }
+.adsim-tool-card {
+  padding: 10px 12px; background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d); border-radius: 8px;
+}
+.adsim-tool-card h5 { margin: 0 0 8px; font-size: .86rem; }
+.adsim-tool-row {
+  display: grid; grid-template-columns: 1fr 96px; align-items: center; gap: 6px;
+  margin-bottom: 6px; font-size: .8rem; color: var(--muted, #8b949e);
+}
+.adsim-tool-row input, .adsim-tool-row select {
+  font: inherit; font-size: .8rem; padding: 3px 6px; color: var(--fg, #c9d1d9);
+  background: var(--panel, #0d1117); border: 1px solid var(--border, #30363d); border-radius: 6px;
+  width: 100%; box-sizing: border-box;
+}
+.adsim-tool-warn { color: #f0883e; font-size: .78rem; line-height: 1.6; }
+.adsim-tool-note { color: var(--muted, #8b949e); font-size: .78rem; line-height: 1.6; }
+@media (max-width: 900px) {
+  .adsim-lab-body, .adsim-tool-body { grid-template-columns: minmax(0, 1fr); }
+}

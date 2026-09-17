@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="7" name="SimpleElevated" version="1.0"
+            date="2026-09-11" north="100" south="-100" east="200" west="-100"/>
+    
+    <!-- 地面道路：x=0 到 x=100，高度 0m -->
+    <road name="GroundRoad" length="100" id="1" junction="-1">
+        <link>
+            <successor elementType="road" elementId="2" contactPoint="start"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="0.0" y="0.0" hdg="0.0" length="100.0">
+                <line/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="0" b="0" c="0" d="0"/>
+        </elevationProfile>
+        <lateralProfile/>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0" c="0" d="0"/></lane></left>
+                <center><lane id="0" type="border" level="true"><roadMark sOffset="0.0" type="solid" weight="standard" color="standard" width="0.12" laneChange="none"/></lane></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0" c="0" d="0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- 上坡匝道：x=100 到 x=200，高度从 0m 平滑升至 10m -->
+    <road name="Ramp" length="100" id="2" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="3" contactPoint="start"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="100.0" y="0.0" hdg="0.0" length="100.0">
+                <line/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <!-- 高度从 0 升到 10，初始和末尾坡度为 0，采用三次多项式平滑过渡 -->
+            <!-- z(s) = a + b*s + c*s^2 + d*s^3，在 s=0 时 z=0, 斜率=0；在 s=100 时 z=10, 斜率=0 -->
+            <!-- 解得：a=0, b=0, c=0.003, d=-0.00002 -->
+            <elevation s="0.0" a="0" b="0" c="0.003" d="-0.00002"/>
+        </elevationProfile>
+        <lateralProfile/>
+        <lanes>
+            <laneSection s="0.0">
+                <center><lane id="0" type="border" level="true"><roadMark sOffset="0.0" type="solid" weight="standard" color="standard" width="0.12" laneChange="none"/></lane></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0" c="0" d="0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- 高架道路：x=200 到 x=300，高度 10m -->
+    <road name="ElevatedRoad" length="100" id="3" junction="-1">
+        <link>
+            <predecessor elementType="road" elementId="2" contactPoint="end"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="200.0" y="0.0" hdg="0.0" length="100.0">
+                <line/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="10" b="0" c="0" d="0"/>
+        </elevationProfile>
+        <lateralProfile/>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0" c="0" d="0"/></lane></left>
+                <center><lane id="0" type="border" level="true"><roadMark sOffset="0.0" type="solid" weight="standard" color="standard" width="0.12" laneChange="none"/></lane></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0" c="0" d="0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+</OpenDRIVE>
