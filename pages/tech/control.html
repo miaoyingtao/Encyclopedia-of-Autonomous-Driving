@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html" class="active">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 专题三</span>
+    <span class="kicker">技术 · 专题三</span>
     <h1>控制执行 Control</h1>
     <p class="lead">大脑想好了“怎么开”，最后必须由“手脚”精确执行：方向盘打多少、制动踩多深、电门给多大。控制执行决定了一辆自动驾驶车是“开得顺”还是“开得毛”，也是“停得住”的最后防线。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>控制执行</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/tech.html">技术</a><span class="sep">/</span><span>控制执行</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,21 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#position">1. 控制层的位置</a>
-      <a href="#xbywire">2. 线控底盘</a>
-      <a href="#algo">3. 控制算法</a>
-      <a href="#track">4. 轨迹跟踪</a>
-      <a href="#redundancy">5. 冗余与降级</a>
-      <a href="#platform">6. 不同车型的差异</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#position">1. ★ 控制层的位置</a>
+      <a href="#xbywire">2. ★ 线控底盘</a>
+      <a href="#algo">3. ★ 控制算法</a>
+      <a href="#model">4. ◆ 车辆模型：运动学与动力学</a>
+      <a href="#track">5. ◆ 轨迹跟踪</a>
+      <a href="#redundancy">6. ◆ 冗余与降级</a>
+      <a href="#platform">7. ◆ 不同车型的差异</a>
+      <a href="#params">8. ▪ 标定参数与性能指标</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/03-planning-control.html">第 2 章 · 决策规划与控制</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a>（时延预算与执行器延迟）。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么把决策变成动作”</b>：读 ★ 三节（控制层的位置、线控底盘、控制算法）。<b>做车辆工程</b>：◆ 讲车辆模型、轨迹跟踪与冗余降级，▪ 标定参数供查阅。</p></div>
       <section class="sec scroll-target" id="position">
         <div class="sec-head"><span class="no">01</span><h2>控制层在整个链条中的位置</h2></div>
         <p>完整链路是：<b>感知 → 决策与规划 →（轨迹）→ 控制 →（指令）→ 执行器 → 车辆运动</b>。其中：</p>
@@ -94,8 +98,14 @@
         <p>纵向控制（速度/车距）则常拆成两层：上层根据前车距离与目标车速计算“期望加速度”（类似 ACC 的逻辑），下层由驱动/制动协调器决定油门与刹车如何分配，避免“又踩油门又踩刹车”的抖动。</p>
       </section>
 
+      <section class="sec scroll-target" id="model">
+        <div class="sec-head"><span class="no">04</span><h2>车辆模型：从运动学到动力学</h2></div>
+        <p>控制器必须内置“车辆会怎么动”的模型。低速场景（泊车、末端配送）可用运动学自行车模型：状态为后轴中心 (x, y)、航向 θ、速度 v，控制量为前轮转角 δ 与纵向加速度 a；高速时轮胎侧偏不可忽略，必须用含横摆角速度与侧偏刚度的动力学模型。经验准则是横向加速度 |a_y| &lt; 0.3·g 时可近似用运动学模型。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>自行车模型的完整方程、线性轮胎模型与 Pacejka 魔术公式见 <a href="../tutorial/03-planning-control.html#ctrl">第 2 章 · 控制</a>。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="track">
-        <div class="sec-head"><span class="no">04</span><h2>轨迹跟踪：让车沿着“看不见的轨道”走</h2></div>
+        <div class="sec-head"><span class="no">05</span><h2>轨迹跟踪：让车沿着“看不见的轨道”走</h2></div>
         <p>规划轨迹是一条虚拟轨道，控制要解决的典型问题包括：</p>
         <ul>
           <li><b>横向跟踪</b>：车与参考线的横向偏差、航向偏差如何通过转向角消除（弯道需要根据曲率预打方向，即前馈项）；</li>
@@ -107,7 +117,7 @@
       </section>
 
       <section class="sec scroll-target" id="redundancy">
-        <div class="sec-head"><span class="no">05</span><h2>执行层的冗余与故障降级</h2></div>
+        <div class="sec-head"><span class="no">06</span><h2>执行层的冗余与故障降级</h2></div>
         <p>对 L3+ 而言，执行器是安全关键部件，必须遵循功能安全（ISO 26262，最高 ASIL-D 等级）设计：</p>
         <div class="grid g2">
           <div class="card reveal"><h3>🔁 双通道冗余</h3><p>转向有主/备份电机，制动有双回路液压或“电子制动 + 机械驻车”后备，电源与通信总线也做冗余，做到“单点失效不影响安全”。</p></div>
@@ -117,7 +127,7 @@
       </section>
 
       <section class="sec scroll-target" id="platform">
-        <div class="sec-head"><span class="no">06</span><h2>不同车型的差异</h2></div>
+        <div class="sec-head"><span class="no">07</span><h2>不同车型的差异</h2></div>
         <div class="tbl-wrap">
           <table>
             <thead><tr><th>车型</th><th>控制难点</th></tr></thead>
@@ -131,13 +141,39 @@
         </div>
       </section>
 
+      <section class="sec scroll-target" id="params">
+        <div class="sec-head"><span class="no">08</span><h2>标定参数与性能指标</h2></div>
+        <p>控制效果最终体现为一组可测量的指标。下表给出乘用车常见工程参考区间（不同品牌标定差异很大，仅作量级参照）：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>指标</th><th>典型目标</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>横向跟踪误差</td><td>稳态 &lt; 10–30 cm</td><td>弯道与曲率突变处允许更大瞬态误差</td></tr>
+              <tr><td>横向加速度 a<sub>y</sub></td><td>≤ 1–2 m/s²（舒适）</td><td>紧急避障可短时超过，需与舒适性权衡</td></tr>
+              <tr><td>纵向加速度</td><td>日常 ≤ 2–3 m/s²</td><td>紧急制动可达 6–9 m/s²</td></tr>
+              <tr><td>jerk（加速度变化率）</td><td>&lt; 2–5 m/s³</td><td>决定乘客是否感到“顿挫”，是舒适性核心指标</td></tr>
+              <tr><td>转向执行延迟</td><td>100–300 ms</td><td>需在控制律中补偿，否则高速下振荡</td></tr>
+              <tr><td>控制周期</td><td>50–100 Hz</td><td>低于 20 Hz 会明显影响跟踪品质</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>标定通常在“仿真回归 → 封闭场地（ISO 3888 双移线、ISO 4138 稳态回转）→ 公开道路”三级完成，并用统一的数据采集与指标计算脚本保证可复现。</p>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>线控转向失效了怎么办？</summary><p>量产方案保留“机械冗余”：正常时电控转向，故障时通过离合器恢复机械连接，让驾驶员（或冗余电机）接管。L4 无人车没有驾驶员，则必须配置双套转向驱动，或保证失效时能安全停车并等待远程介入。</p></details>
           <details><summary>为什么刹车要分“舒适”和“紧急”两套？</summary><p>全力制动会带来 1g 以上减速度，既不舒适也可能引发后车追尾。日常减速用能量回收+缓刹；紧急情况则由 AEB/安全监控独立触发全力制动——两套逻辑互不干扰，避免“该缓时急刹、该急时犹豫”。</p></details>
           <details><summary>自动驾驶怎么处理爆胎、制动衰退这类极端故障？</summary><p>通过底盘状态监测（胎压、制动温度、横摆角速度对比）识别异常，然后：限制车速 → 请求接管或驶向安全区 → 必要时用“差动制动”维持方向（如爆胎时单侧制动纠偏）。这是功能安全里典型的“失效可控制”场景。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>车辆动力学与控制</h4><p>Rajamani, <i>Vehicle Dynamics and Control</i>（第 2 章运动学/动力学自行车模型、第 3 章侧偏与稳定性）；Pacejka, <i>Tyre and Vehicle Dynamics</i>（轮胎模型）。</p></div>
+        <div class="paper"><h4>轨迹跟踪</h4><p>Coulter, “Implementation of the Pure Pursuit Path Tracking Algorithm” (1992)；Hoffmann et al., “Autonomous Automobile Trajectory Tracking for Off-Road Driving” (2007，Stanley 控制器)。</p></div>
+        <div class="paper"><h4>标准与测试</h4><p>ISO 3888-2（双移线）、ISO 4138（稳态回转）、ISO 21994（制动距离）；ISO 26262 对执行器 ASIL 等级的要求。</p></div>
       </section>
 
       <section class="related">
@@ -148,7 +184,7 @@
           <a href="perception.html">环境感知</a>
           <a href="../challenges/safety.html">功能安全 ISO 26262</a>
           <a href="../scenarios/port-mining.html">重载场景的底盘改造</a>
-          <a href="../tech.html">返回核心技术总览</a>
+          <a href="../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -160,21 +196,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 控制执行</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -188,7 +223,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

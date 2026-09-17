@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html" class="active">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">应用场景 · 专题二</span>
+    <span class="kicker">落地与产业 · 专题二</span>
     <h1>干线物流：高速上的无人车队</h1>
     <p class="lead">中国物流成本占 GDP 的比重长期高于发达国家，而重卡司机“招不到、留不住、易疲劳”是行业最痛的结。高速公路的规则化路况，让干线物流成为仅次于封闭场景的自动驾驶落地“第二战场”。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../scenarios.html">应用场景</a><span class="sep">/</span><span>干线物流</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/scenarios.html">落地与产业</a><span class="sep">/</span><span>干线物流</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#pain">1. 行业痛点</a>
-      <a href="#why">2. 为什么高速公路适合</a>
-      <a href="#route">3. 三条落地路线</a>
-      <a href="#platoon">4. 编队行驶</a>
-      <a href="#players">5. 玩家与合作模式</a>
-      <a href="#hard">6. 真实挑战</a>
-      <a href="#future">7. 演进方向</a>
+      <a href="#pain">1. ★ 行业痛点</a>
+      <a href="#why">2. ★ 为什么高速公路适合</a>
+      <a href="#route">3. ◆ 三条落地路线</a>
+      <a href="#platoon">4. ★ 编队行驶</a>
+      <a href="#players">5. ◆ 玩家与合作模式</a>
+      <a href="#hard">6. ★ 真实挑战</a>
+      <a href="#future">7. ◆ 演进方向</a>
+      <a href="#eco">8. ◆ 量化成本账</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“无人卡车靠谱吗”</b>：读 ★ 四节（行业痛点、为什么高速适合、编队行驶、真实挑战）。<b>关注成本与商业路径</b>：◆ 四节讲三条落地路线、玩家合作模式、演进方向与量化成本账。四个场景的成本账对照见 <a href="business.html">商业化与单位经济</a>。</p></div>
       <section class="sec scroll-target" id="pain">
         <div class="sec-head"><span class="no">01</span><h2>先说清楚行业为什么痛</h2></div>
         <div class="grid g3">
@@ -113,7 +116,7 @@
         <div class="sec-head"><span class="no">06</span><h2>真实的挑战</h2></div>
         <ul>
           <li><b>成本账</b>：一套 L4 系统的成本需对比“两名长途司机的工资”——单车成本必须降到特定门槛以下才有意义；</li>
-          <li><b>法规</b>：货运车辆跨省运营，涉及多省许可；L3/L4 重卡准入与“无人驾驶下事故责任”仍在试点立法，见 <a href="../challenges/regulation.html">法规与伦理</a>；</li>
+          <li><b>法规</b>：货运车辆跨省运营，涉及多省许可；L3/L4 重卡准入与“无人驾驶下事故责任”仍在试点立法，见 <a href="../regulation.html">法规与伦理</a>；</li>
           <li><b>混行交通</b>：高速上有大量非网联的有人驾驶车辆，自动驾驶重卡必须“与不守规矩的邻车共存”；</li>
           <li><b>天气与地形</b>：冬季冰雪路面、山区长下坡是重卡安全的两大难关，ODD 需要严格限制并配备专用策略；</li>
           <li><b>保险</b>：重卡单车货值高、事故损失大，无人化后的保险定价与责任划分仍在探索。</li>
@@ -130,15 +133,39 @@
         </ul>
       </section>
 
-      <section class="related">
+      <section class="sec scroll-target" id="eco">
+        <div class="sec-head"><span class="no">08</span><h2>干线物流的量化账</h2></div>
+        <p>干线物流的核心成本是燃油、司机与车辆折旧，自动驾驶的价值可用一个简化模型衡量：</p>
+        <div class="math math-left">每公里成本 = 燃油 + 司机 + 折旧 + 保险 + 维护<br>自动驾驶收益 ≈ 省下的司机成本 + 编队节油 + 更高周转率</div>
+        <p>重卡司机成本在长途干线中占比可达 20%–40%，且面临招工难；编队行驶通过减小车距降低风阻，公开研究显示可节油约 5%–10%。但传感器与冗余成本、以及仍需远程 / 安全员，会抵消部分收益——这也是行业先做“高速 + 固定线路 + 有安全员”的原因。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>无人卡车真的上路了吗？车里还有安全员吗？</summary><p>已有“有人监督”的商业试运营：安全员在车内或远程待命，车辆在固定高速线路（枢纽到枢纽、夜间时段）运行。真正的“车内无人”仍在试点，且通常限定线路与时段，见 <a href="#route">三条落地路线</a>。</p></details>
+          <details><summary>编队行驶到底能省多少油？</summary><p>公开实测普遍在 <b>5%–10%</b> 区间：后车紧跟可减小风阻，车距越近收益越大，但受安全距离、法规与路面条件限制。因此编队通常先在同车队、同线路的封闭或专用通道验证，见 <a href="#platoon">编队行驶</a>。</p></details>
+          <details><summary>高速上出事后果更严重，怎么保证安全？</summary><p>三条腿：<b>冗余</b>（双制动回路、双转向、双电源与双计算通道，单点失效仍能完成最小风险机动）；<b>感知冗余</b>（毫米波雷达看远、激光雷达看准、相机看语义，互为补盲）；<b>可验证的安全策略</b>（拉大跟车距离、限速、恶劣天气降级），见 <a href="../tech/control.html#redundancy">冗余与降级</a>。</p></details>
+          <details><summary>重卡的传感器方案和乘用车一样吗？</summary><p>思路相同、参数不同：重卡制动距离更长（质量大），所以更强调<b>远距离探测</b>与提前预判；同时车身长、盲区大，需要额外的侧向与挂车视角覆盖。传感器数量通常更多，冗余要求也更高。</p></details>
+          <details><summary>司机会失业吗？</summary><p>短期是“缺人”与“替代”并存：行业本身面临司机荒与老龄化，无人化首先填补的是“没人愿意跑”的夜间长途；但长期看，长途干线司机岗位会被显著压缩，转型方向包括远程监控、车队运维与调度，见 <a href="../future.html#society">对社会与个人的影响</a>。</p></details>
+          <details><summary>为什么说“枢纽到枢纽”是主流路径？</summary><p>因为它把最难的“城区末端配送”剥离出去：高速路段规则清晰、参与者单一，适合自动驾驶；两端由人工或低速无人车完成。这样既能先跑通经济账，也让安全论证的范围可控，见 <a href="#future">演进方向</a>。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>行业资料</h4><p>各国干线物流自动驾驶试点报告；编队行驶（platooning）的节油实测研究；头部自动驾驶卡车公司的技术与运营披露。</p></div>
+      </section>
+
+      <section class="related scroll-target" id="next">
         <h3>关联阅读</h3>
         <p style="margin-bottom:10px">干线物流与港口矿区同属“先落地”梯队，但高速场景对控制与法规要求更高。</p>
         <div class="rel-links">
           <a href="port-mining.html">港口与矿区（更早落地）</a>
           <a href="../tech/control.html">重卡的控制难点</a>
           <a href="../tech/v2x.html">编队与车路协同</a>
-          <a href="../challenges/regulation.html">货运自动驾驶法规</a>
-          <a href="../scenarios.html">返回应用场景总览</a>
+          <a href="../regulation.html">货运自动驾驶法规</a>
+          <a href="../scenarios.html">返回落地与产业总览</a>
         </div>
       </section>
     </div>
@@ -150,21 +177,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 干线物流</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -178,7 +204,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<title>讲义 02 · 感知与状态估计 · 驶向未来</title>
+<title>第 1 章 · 感知与状态估计 · 驶向未来</title>
 <meta name='description' content='自动驾驶系统教程第 1 章：2D/3D 目标检测、BEV 与占用网络、多传感器融合、多目标跟踪与评价指标。'>
 <link rel='stylesheet' href='../../assets/style.css'>
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
@@ -15,14 +15,13 @@
     <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
     <nav class='main-nav'>
       <a href='../../index.html'>首页</a>
-      <a href='../overview.html'>认识自动驾驶</a>
-      <a href='../levels.html'>分级标准 L0–L5</a>
-      <a href='../tech.html'>核心技术</a>
-      <a href='../scenarios.html'>应用场景</a>
-      <a href='../challenges.html'>安全与挑战</a>
-      <a href='../future.html'>未来展望</a>
-      <a href='index.html'>系统教程</a>
-      <a href='../news.html'>领域动态</a>
+      <a href='../../pages/overview.html'>入门</a>
+      <a href='../../pages/tech.html'>技术</a>
+      <a href='../../pages/challenges.html'>安全与验证</a>
+      <a href='../../pages/scenarios.html'>落地与产业</a>
+      <a href='../../pages/frontier.html'>AI 前沿</a>
+      <a href='../../pages/tutorial/index.html' class='active'>系统教程</a>
+      <a href='../../pages/news.html'>领域动态</a>
     </nav>
   </div>
 </header>
@@ -33,7 +32,7 @@
     <h1>感知：检测、融合、跟踪与占用</h1>
     <p class='lead'>感知的任务是把传感器原始数据变成“结构化世界描述”：哪里有什么、以什么速度动、以及哪些空间被占用。本章覆盖 2D/3D 检测、BEV 与占用网络、传感器融合和多目标跟踪的数学模型。</p>
     <nav class='crumb'>
-      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>第 1 章</span>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='../../pages/tutorial/index.html'>系统教程</a><span class='sep'>/</span><span>第 1 章</span>
     </nav>
   </div>
 </section>
@@ -49,11 +48,20 @@
       <a href='#bev'>1.5 BEV 与占用网络</a>
       <a href='#fusion'>1.6 多传感器融合</a>
       <a href='#track'>1.7 多目标跟踪</a>
-      <a href='#eval'>1.8 评价指标</a>
-      <a href='#quiz'>1.9 自测题</a>
+<a href='#eval'>1.8 评价指标</a>
+<a href='#adv'>1.9 进阶：损失函数与标签分配</a>
+<a href='#dataset'>1.10 数据集与评测细节</a>
+<a href='#timesync'>1.11 标定与时间同步实操</a>
+<a href='#impl'>1.12 从零实现：IoU / NMS / 匈牙利匹配</a>
+<a href='#evo'>1.13 算法演进与横向对比</a>
+<a href='#fail'>1.14 失败模式与安全兜底</a>
+<a href='#res'>1.15 学习资源地图</a>
+<a href='#refs'>1.16 参考文献</a>
+<a href='#quiz'>1.17 自测题</a>
     </aside>
 
     <div>
+      <div class='panel info'><span class='pt'>配套阅读</span><p>想先建立直觉？可先看科普版 <a href='../../pages/tech/perception.html'>环境感知</a>，再回来读公式与推导。</p></div>
       <section class='sec scroll-target' id='obj'>
         <div class='sec-head'><span class='no'>1.1</span><h2>学习目标</h2></div>
         <div class='lesson-meta'><span>难度：进阶</span><span>预计：4–5 小时</span><span>前置：第 0 章</span></div>
@@ -161,8 +169,230 @@
         <div class='panel warn'><span class='pt'>工程提醒</span><p>离线指标高不等于路上可靠：要按场景分层看长尾（夜间、逆光、雨雾、异形车、遮挡起步），并关注“指标高但恰好漏掉罕见危险”的情况。量产团队常同时维护一套“安全关键场景回归集”，任何模型迭代必须先过它。</p></div>
       </section>
 
+      <section class='sec scroll-target' id='adv'>
+        <div class='sec-head'><span class='no'>1.9</span><h2>进阶：检测的损失函数与标签分配</h2></div>
+        <p>“模型学得好不好”很大程度上由损失函数与正负样本分配决定，这是工程中最容易被忽视的部分。</p>
+        <h3>① 分类 + 回归的联合损失</h3>
+        <div class='math math-left'>L = λ_cls·L_cls + λ_box·L_box + λ_obj·L_obj<br>L_cls 常用交叉熵 / Focal Loss，L_box 常用 L1 + GIoU</div>
+        <p>Focal Loss 通过 (1−p)^γ 降低易分样本权重，缓解正负样本极度不平衡；GIoU / DIoU 在 IoU 为零时仍提供梯度，改善小目标与远距离框的回归。</p>
+        <h3>② 标签分配：谁算正样本</h3>
+        <p>Anchor-based 方法用 IoU 阈值划分正负；Anchor-free 方法（FCOS）用中心度加权；DETR 用<b>匈牙利匹配</b>做一对一分配，从而避免 NMS：</p>
+        <div class='math math-left'>σ̂ = argmin_σ Σ_i L_match(y_i, ŷ_{σ(i)})<br>一对一匹配保证每个真值只对应一个预测，天然去重</div>
+        <h3>③ 3D 检测的特殊损失</h3>
+        <p>3D 框需要回归中心、尺寸、朝向与速度。朝向 θ 存在周期性（θ 与 θ+2π 等价），直接回归会不连续，通常用 sin/cos 双通道编码，或用 bin 分类 + 残差回归。</p>
+      </section>
+
+      <section class='sec scroll-target' id='dataset'>
+        <div class='sec-head'><span class='no'>1.10</span><h2>数据集与评测细节：指标到底在量什么</h2></div>
+        <p>1.8 节给了指标的名字，这一节把它们落到具体数据集上。选错数据集或指标口径，是“论文指标很高、实车表现很差”的头号原因。</p>
+        <h3>三大公开数据集</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>数据集</th><th>传感器</th><th>规模</th><th>标注</th><th>主要指标</th></tr></thead>
+            <tbody>
+              <tr><td>KITTI</td><td>双目 + 激光 + GPS/IMU</td><td>约 15k 帧</td><td>2D/3D 框、里程计、光流</td><td>3D AP（IoU 0.7）、里程计误差</td></tr>
+              <tr><td>nuScenes</td><td>6 相机 + 5 雷达 + 1 激光</td><td>1000 段 × 20 s，约 40 万帧</td><td>23 类 3D 框、跟踪 ID、占用</td><td>mAP + 5 项误差 → NDS</td></tr>
+              <tr><td>Waymo Open</td><td>5 相机 + 1 激光</td><td>1150 段，约 20 万帧</td><td>3D 框、跟踪、运动预测</td><td>mAP（按距离分层）、minADE/minFDE</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>为什么 nuScenes 用“中心距离”而不是 IoU 判定 TP</h3>
+        <p>3D 框的尺寸与朝向标注本身带误差，用 IoU 判定会把“位置对、尺寸略偏”的正检错判为误检。nuScenes 改用二维中心距离阈值，并按类别给不同阈值：</p>
+        <div class='math math-left'>TP 判定：‖c_pred − c_gt‖₂ ≤ d_th，d_th ∈ {0.5, 1.0, 2.0, 4.0} m（按类别）<br>mAP = 对 4 个阈值分别算 AP，再对所有类别求平均<br>NDS = (1/10)·[5·mAP + Σ(1 − min(1, mTP))]，TP ∈ {ATE, ASE, AOE, AVE, AAE}</div>
+        <p>其中 ATE/ASE/AOE/AVE/AAE 分别是平移、尺度、朝向、速度、属性误差。注意 NDS 里 mAP 被放大了 5 倍权重——这意味着“检出来”比“检得准”对分数影响更大，读榜单时不要只看 NDS 排名。</p>
+        <h3>跟踪指标：AMOTA 与 MOTA 的区别</h3>
+        <p>MOTA 把漏检、误检与 ID 切换都算作错误，但它在召回率很低时反而可能“好看”（少检少错）。nuScenes 采用 AMOTA：对召回率从 0 到 1 逐点计算 MOTA 再平均，同时用 AMOTP 衡量定位精度。ID switch（IDSW）单独看：它直接对应“目标是否被稳定跟踪”，是规划最在意的量。</p>
+        <div class='panel warn'><span class='pt'>四个评测陷阱</span><p>① 类别不均衡：卡车、拖车样本极少，总体 mAP 会被小汽车主导，必须看分类别指标；② 距离分层缺失：只看 0–50 m 全场景指标，会掩盖远距（&gt; 50 m）性能崩塌；③ 阈值偷跑：在测试集上调置信度阈值等于变相过拟合；④ 工具版本：同一模型换一版评测脚本结果可能差 1–2 个点，论文对比必须注明版本与提交哈希。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='timesync'>
+        <div class='sec-head'><span class='no'>1.11</span><h2>标定与时间同步实操：融合的隐形前提</h2></div>
+        <p>1.6 节说“融合前必须先对齐时空”，这一节给出工程落地做法。空间对齐靠外参链，时间对齐靠硬件触发或插值，两者任一出错，融合都会退化成“两个各自为战的传感器”。</p>
+        <h3>坐标约定先统一</h3>
+        <div class='math math-left'>车体系（ISO 8855 风格）：x 向前、y 向左、z 向上；原点通常取后轴中心<br>传感器外参：T_body_sensor = [R | t]，任何两传感器之间 T_A_B = T_A_body · T_body_B</div>
+        <h3>时间同步的四条路线</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>方案</th><th>精度</th><th>代价</th><th>适用</th></tr></thead>
+            <tbody>
+              <tr><td>硬件触发 + 共同时钟（PPS/GPRMC、gPTP）</td><td>微秒级</td><td>需专用同步线与支持 PTP 的交换机</td><td>量产传感器方案</td></tr>
+              <tr><td>PTP（IEEE 1588）</td><td>亚微秒–微秒</td><td>交换机与网卡需支持</td><td>以太网相机/雷达</td></tr>
+              <tr><td>NTP</td><td>毫秒–数十毫秒</td><td>零成本</td><td>仅对“非实时数据”（日志、地图更新）可接受</td></tr>
+              <tr><td>软件时间戳（收到时刻）</td><td>几十毫秒抖动</td><td>零成本</td><td>原型验证，不可用于运动补偿</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>运动补偿：把各时刻数据外推到同一时刻</h3>
+        <p>即使硬件同步，点云仍是在约 100 ms 内扫完的（旋转式激光雷达），帧内每个点的时间戳不同。做法是用位姿插值把每点都变换到帧参考时刻：</p>
+        <div class='math math-left'>对每个点 pᵢ（时间戳 tᵢ）：p_ref = T_ref_body(t_ref) · T_body_sensor(tᵢ) · pᵢ<br>T_body(tᵢ) ≈ 由 IMU/轮速插值（线性插值 + 四元数 slerp）得到</div>
+        <div class='codeblock'># 点云去畸变（motion compensation）伪代码
+poses = load_interpolated_poses(start_ts, end_ts)   # 用 IMU/轮速插值到每点时间戳
+ref = poses.at(frame_ts)
+for pt in cloud.points:
+    T = poses.at(pt.t)                 # 该点曝光/测距时刻的车体位姿
+    pt.xyz = (ref.inverse() @ T).transform(pt.xyz)
+
+# 相机与激光对齐（不同时刻）：
+# 已知目标速度 v、时间差 dt（毫秒级）时，可做一阶近似补偿
+# p_cam(t0) ≈ p_cam(t1) - R * v * dt   ；航向 θ(t0) ≈ θ(t1) - ω * dt</div>
+        <div class='panel tip'><span class='pt'>验收方法</span><p>① 在直线匀速行驶时，把点云投影到图像上，检查灯柱、路肩边缘是否重影（重影宽度 ≈ 速度 × 时间误差）；② 打方向盘绕圈，检查地面点云是否被“抹开”；③ 记录各传感器时间戳差的标准差，超过半个点云扫描周期就必须修同步链路。</p></div>
+      </section>
+      <section class='sec scroll-target' id='impl'>
+        <div class='sec-head'><span class='no'>1.12</span><h2>从零实现：IoU / NMS / 匈牙利匹配 / 最小跟踪器</h2></div>
+        <p>这四个小函数是感知后处理的全部家当。把它们手写一遍，比读十篇论文更能理解后处理对最终指标的影响。</p>
+        <h3>① 3D 旋转框的 IoU</h3>
+        <p>两个俯视旋转矩形的交并比没有像轴对齐框那样一行公式的闭式解，工程上有三种做法：多边形裁剪（Sutherland–Hodgman）算精确交面积、把旋转框离散成 BEV 栅格近似、或按“中心距 + 尺寸比”做快速近似。前两种精度足够，第三种只用于候选筛选。</p>
+        <div class='codeblock'>import numpy as np
+
+def corners_bev(cx, cy, w, l, yaw):
+    """把 3D 框投影到 BEV，返回 4 个角点（逆时针）"""
+    c, s = np.cos(yaw), np.sin(yaw)
+    dx = np.array([ l/2, -l/2, -l/2,  l/2])
+    dy = np.array([ w/2,  w/2, -w/2, -w/2])
+    return np.stack([cx + c*dx - s*dy, cy + s*dx + c*dy], axis=1)
+
+def poly_area(poly):                     # 鞋带公式
+    x, y = poly[:, 0], poly[:, 1]
+    return 0.5 * abs(np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1)))
+
+def clip_poly(subject, clip):            # Sutherland-Hodgman
+    def inside(p, a, b):
+        return (b[0]-a[0])*(p[1]-a[1]) - (b[1]-a[1])*(p[0]-a[0]) >= 0
+    def inter(p, q, a, b):
+        t = ((a[0]-p[0])*(a[1]-b[1]) - (a[1]-p[1])*(a[0]-b[0])) / \
+            ((a[0]-b[0])*(p[1]-q[1]) - (a[1]-b[1])*(p[0]-q[0]))
+        return p + t * (q - p)
+    out = list(subject)
+    for i in range(len(clip)):
+        a, b = clip[i], clip[(i+1) % len(clip)]
+        inp, out = out, []
+        for j in range(len(inp)):
+            p, q = inp[j-1], inp[j]
+            if inside(q, a, b):
+                if not inside(p, a, b): out.append(inter(p, q, a, b))
+                out.append(q)
+            elif inside(p, a, b):
+                out.append(inter(p, q, a, b))
+        if not out: return np.zeros((0, 2))
+    return np.array(out)
+
+def iou_bev(box_a, box_b):
+    pa = corners_bev(*box_a); pb = corners_bev(*box_b)
+    inter = poly_area(clip_poly(pa, pb))
+    return inter / (poly_area(pa) + poly_area(pb) - inter + 1e-9)</div>
+        <h3>② NMS 与它的变体</h3>
+        <div class='codeblock'>def nms(boxes, scores, iou_thr=0.4):
+    order = scores.argsort()[::-1]
+    keep = []
+    while order.size &gt; 0:
+        i = order[0]; keep.append(i)
+        if order.size == 1: break
+        ious = np.array([iou_bev(boxes[i], boxes[j]) for j in order[1:]])
+        order = order[1:][ious &lt;= iou_thr]        # 抑制重叠框
+    return keep
+# 变体：类别相关阈值（行人 0.3、车辆 0.5）；soft-NMS（按 IoU 衰减分数而非直接删除）
+# 注意：NMS 在拥堵场景容易把相邻两辆车压成一个，闭环评测里表现为漏检</div>
+        <h3>③ 匈牙利匹配（数据关联）</h3>
+        <p>跟踪的核心是“上一帧的 M 个目标与这一帧的 N 个检测怎么配对代价最小”，这是标准的指派问题，用匈牙利算法（scipy 里一行）即可：</p>
+        <div class='codeblock'>from scipy.optimize import linear_sum_assignment
+import numpy as np
+
+def associate(tracks, dets, iou_thr=0.2, feat_w=0.3):
+    C = np.full((len(tracks), len(dets)), 1e6)
+    for i, tr in enumerate(tracks):
+        for j, de in enumerate(dets):
+            iou = iou_bev(tr.last_box, de.box)
+            d_feat = 1.0 - np.dot(tr.feat, de.feat) / (np.linalg.norm(tr.feat)*np.linalg.norm(de.feat) + 1e-9)
+            # 代价 = 位置代价 + 外观代价；类别不同直接禁止匹配
+            if tr.cls != de.cls: continue
+            C[i, j] = (1 - iou) + feat_w * d_feat
+    rows, cols = linear_sum_assignment(C)
+    matches = [(r, c) for r, c in zip(rows, cols) if C[r, c] &lt; 1e6 and
+               iou_bev(tracks[r].last_box, dets[c].box) &gt; iou_thr]
+    return matches</div>
+        <h3>④ 最小可用跟踪器（常速度卡尔曼）</h3>
+        <p>状态取 x = [px, py, vx, vy]ᵀ，观测 z = [px, py]ᵀ，系数矩阵如下。跟踪里 90% 的问题出在“新目标何时确认、丢失多久删除”这两个计数阈值上，而不是滤波公式本身。</p>
+        <div class='math math-left'>F = [[1, 0, dt, 0], [0, 1, 0, dt], [0, 0, 1, 0], [0, 0, 0, 1]]，H = [[1, 0, 0, 0], [0, 1, 0, 0]]<br>Q = q·GᵀG（G 为噪声增益矩阵，q 控制“信模型”程度）<br>生命周期：连续 M 帧匹配 → 升级为 confirmed；连续 N 帧失配 → 删除（M≈3、N≈3–5 是常见起点）</div>
+      </section>
+
+      <section class='sec scroll-target' id='evo'>
+        <div class='sec-head'><span class='no'>1.13</span><h2>算法演进与横向对比：三条技术主线</h2></div>
+        <p>感知的论文数量极多，但工程上真正被反复使用的思路只有三条：点云的稀疏化处理、图像到 BEV 的视图变换、以及“不依赖框”的占用表征。下表按主线梳理代表工作。</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>阶段</th><th>代表方法</th><th>输入</th><th>关键思想</th></tr></thead>
+            <tbody>
+              <tr><td>点云直接处理</td><td>PointNet/PointNet++、PointRCNN、VoteNet</td><td>激光点云</td><td>点集对称函数、点级提议、霍夫投票</td></tr>
+              <tr><td>体素/柱体化</td><td>VoxelNet、SECOND、PointPillars</td><td>激光点云</td><td>稀疏卷积与柱体编码，把检测变成 2D 卷积问题（实时性突破）</td></tr>
+              <tr><td>中心化与无锚框</td><td>CenterPoint、SFA3D</td><td>激光点云</td><td>预测热力图中心 + 回归尺寸/朝向，省掉锚框调参</td></tr>
+              <tr><td>图像转 BEV（Lift-Splat）</td><td>LSS、BEVDet、Fast-BEV</td><td>多相机</td><td>显式预测每像素深度分布，把特征“抬”到 3D 再压平</td></tr>
+              <tr><td>图像转 BEV（Query）</td><td>DETR3D、PETR、BEVFormer</td><td>多相机（可加时序）</td><td>用 BEV/3D query 通过注意力反查图像特征，无需深度监督</td></tr>
+              <tr><td>多模态融合</td><td>BEVFusion</td><td>相机 + 激光</td><td>统一到 BEV 特征空间做特征级融合，兼顾几何与语义</td></tr>
+              <tr><td>占用预测</td><td>MonoScene、OccNet、SurroundOcc、TPVFormer</td><td>多相机（+ 激光）</td><td>直接预测体素占用与语义，覆盖“不是任何已知类别”的障碍</td></tr>
+              <tr><td>稀疏与端到端</td><td>SparseDrive、UniAD、VAD</td><td>多相机（+ 激光）</td><td>稀疏 query 取代稠密 BEV，感知与规划联合优化</td></tr>
+              <tr><td>世界模型与生成</td><td>OccWorld、DriveDreamer 等</td><td>多相机</td><td>预测未来占用/视频，用于规划预演与数据生成（见第 5 章）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>怎么读这张表</h3>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📈 精度维度</h3><p>从点云直接处理 → 柱体/体素 → 中心化 → 稀疏 query，检测精度每两三年上一个台阶，但算力需求同样在涨。</p></div>
+          <div class='card reveal'><h3>⚡ 实时维度</h3><p>量产真正关心在固定算力下的帧率与延迟。PointPillars、Fast-BEV、SparseDrive 这类“够准且够快”的路线往往比榜单第一名更有工程价值。</p></div>
+          <div class='card reveal'><h3>🛡️ 安全维度</h3><p>从“输出框”走向“输出占用 + 不确定度”，才能覆盖异形障碍与分类失败，这也是占用网络迅速成为主流的根本原因。</p></div>
+        </div>
+      </section>
+      <section class='sec scroll-target' id='fail'>
+        <div class='sec-head'><span class='no'>1.14</span><h2>失败模式与安全兜底：感知最真实的那部分</h2></div>
+        <p>感知的评测指标衡量“平均表现”，而安全取决于“最坏情况”。下表是量产中最常被记录、也最需要针对性设计的失效模式。</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>场景</th><th>典型失效</th><th>工程对策</th></tr></thead>
+            <tbody>
+              <tr><td>逆光 / 隧道出入口</td><td>相机过曝或欠曝，目标整体丢失</td><td>多曝光融合、HDR、隧道口短时降级为雷达/激光主用</td></tr>
+              <tr><td>雨雪雾 / 溅水</td><td>激光点云衰减与被遮挡，雷达多径</td><td>点云质量自评估、雷达与视觉冗余、天气下的限速与 ODD 收缩</td></tr>
+              <tr><td>大车遮挡（鬼探头）</td><td>被遮挡目标在出现前完全没有观测</td><td>遮蔽区域推理、减速策略、V2X 协同（见第 3 章）</td></tr>
+              <tr><td>异形障碍（散落货物、施工水马）</td><td>不属于任何训练类别，检测器直接忽略</td><td>占用网络兜底 + 未知障碍的保守绕行策略</td></tr>
+              <tr><td>拖车 / 挂车 / 长货</td><td>框尺寸与朝向回归失败，跟踪 ID 频繁跳变</td><td>多帧形状估计、铰接目标专用模型或规则约束</td></tr>
+              <tr><td>地面反光 / 水面 / 井盖</td><td>激光产生虚假近距离点，误检为障碍</td><td>地面分割、时序一致性过滤（连续 N 帧才上报）</td></tr>
+              <tr><td>夜间无路灯 + 深色行人</td><td>低对比度导致漏检</td><td>红外/热成像融合、低照度增强、夜间限速</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>四条通用兜底原则</h3>
+        <div class='steps'>
+          <ol>
+            <li><h3>不确定就上报，别静默丢弃</h3><p>目标因置信度低被过滤时，应把“某处可能有东西”作为低置信度条目传给规划，让规划用保守策略处理，而不是当作没有。</p></li>
+            <li><h3>时序一致性校验</h3><p>真实目标会连续出现且运动连续。只在一帧出现的检出，先不进入目标列表；连续 2–3 帧确认后再上报，可消掉大量虚警。</p></li>
+            <li><h3>多传感器交叉验证</h3><p>相机检出但激光没有对应回波（或反之）时，降低置信度而不是直接采信，同时触发传感器健康度检查。</p></li>
+            <li><h3>传感器健康度监控</h3><p>统计点云点数、有效回波比例、图像清晰度/曝光、时间戳抖动。任一指标越界即进入降级流程（限速、请求接管），这也是 SOTIF 要求的运行监控（见第 3 章）。</p></li>
+          </ol>
+        </div>
+        <div class='panel info'><span class='pt'>接口设计建议</span><p>感知输出给规划的每条目标最好都带“不确定度与来源”：位置协方差、类别置信度、被遮挡比例、来自哪个传感器。规划才能据此调整安全距离，而不是把一个点估计当作确定事实。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='res'>
+        <div class='sec-head'><span class='no'>1.15</span><h2>学习资源地图</h2></div>
+        <div class='paper'><h4>综述（先读这三篇）</h4><p><a href='https://arxiv.org/abs/2209.05324'>BEV 感知综述（Delving into the Devils of BEV Perception）</a>：把多相机 BEV 的方法、评测与配方讲得最全；<a href='https://arxiv.org/abs/2405.02595'>基于视觉的 3D 占用预测综述</a>：占用网络的方法族与指标；<a href='https://arxiv.org/abs/1912.12033'>深度学习点云处理综述</a>：点云表征的基础脉络。</p></div>
+        <div class='paper'><h4>数据集与评测</h4><p><a href='https://www.nuscenes.org/nuscenes'>nuScenes</a> 与 <a href='https://github.com/nutonomy/nuscenes-devkit'>nuscenes-devkit</a>（mAP/NDS/AMOTA 的官方实现，读代码胜过读定义）；<a href='https://waymo.com/open/'>Waymo Open Dataset</a>（大规模激光与运动预测）；<a href='http://www.cvlibs.net/datasets/kitti/'>KITTI</a>（经典基准与里程计）。</p></div>
+        <div class='paper'><h4>代码与工具箱</h4><p><a href='https://github.com/open-mmlab/OpenPCDet'>OpenPCDet</a>、<a href='https://github.com/open-mmlab/mmdetection3d'>MMDetection3D</a>（3D 检测一站式复现与训练）；<a href='https://github.com/fundamentalvision/BEVFormer'>BEVFormer</a> 与 <a href='https://github.com/OpenDriveLab/Birds-eye-view-Perception'>BEV 感知 cookbook</a>；占用预测看 <a href='https://github.com/weiyithu/SurroundOcc'>SurroundOcc</a>、<a href='https://github.com/astra-vision/MonoScene'>MonoScene</a>；跟踪看 <a href='https://github.com/FoundationVision/ByteTrack'>ByteTrack</a>、<a href='https://github.com/xinshuoweng/AB3DMOT'>AB3DMOT</a>、<a href='https://github.com/mikel-brostrom/boxmot'>BoxMOT</a>。</p></div>
+        <div class='paper'><h4>标定与融合</h4><p><a href='https://github.com/ankitdhall/lidar_camera_calibration'>lidar_camera_calibration</a>（目标法）、<a href='https://github.com/koide3/direct_visual_lidar_calibration'>direct_visual_lidar_calibration</a>（无目标法）、<a href='https://arxiv.org/abs/2205.13542'>BEVFusion</a>（特征级融合代表工作）。</p></div>
+        <div class='panel info'><span class='pt'>延伸</span><p>完整外部资源清单见 <a href='resources.html'>教程资源库</a>；本章的占用与预测输出会在第 2 章的规划约束中使用。</p></div>
+      </section>
+      <section class='sec scroll-target' id='refs'>
+        <div class='sec-head'><span class='no'>1.16</span><h2>参考文献与延伸阅读</h2></div>
+        <div class='paper'><h4>检测</h4><p>Lin et al., “Focal Loss for Dense Object Detection” (2017)；Tian et al., “FCOS” (2019)；Carion et al., “DETR” (2020)；Rezatofighi et al., “Generalized IoU” (2019)。</p></div>
+        <div class='paper'><h4>3D 与 BEV</h4><p>Lang et al., “PointPillars” (2019)；Yin et al., “CenterPoint” (2021)；Li et al., “BEVFormer” (2022)；Philion &amp; Fidler, “Lift, Splat, Shoot” (2020)。</p></div>
+      </section>
+
       <section class='sec scroll-target' id='quiz'>
-        <div class='sec-head'><span class='no'>1.9</span><h2>自测题</h2></div>
+        <div class='sec-head'><span class='no'>1.17</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q6：nuScenes 的 NDS 里为什么把 mAP 乘 5？</summary><p>NDS 用 10 项加权平均：mAP 权重 5、其余 5 项误差（ATE/ASE/AOE/AVE/AAE）各权重 1。设计意图是强调“检出来”比“检得准”更重要，但也意味着 NDS 高不完全等于定位精度高。</p></details>
+          <details><summary>Q7：同一辆车在相邻两帧被检成两个不同 ID，属于哪个指标的问题？</summary><p>ID switch（IDSW），也是 AMOTA/MOTA 的扣分项之一。它通常由数据关联失败（IoU 骤降、遮挡）或生命周期阈值不合理引起，规划层最怕这个量。</p></details>
+          <details><summary>Q8：为什么“软件时间戳”不能用于运动补偿？</summary><p>软件时间戳记录的是数据到达时刻，包含驱动、传输与调度抖动（几十毫秒）。以 20 m/s 行驶时 30 ms 误差对应约 0.6 m 位移，融合会直接错位。</p></details>
+          <details><summary>Q9：NMS 阈值调高会有什么副作用？</summary><p>阈值过高（过于严格）会把相邻的两个真实目标压成一个，表现为拥堵场景漏检；阈值过低则同类重叠框残留，误检增加。工程上常按类别设不同阈值并做时序确认。</p></details>
+          <details><summary>Q10：为什么说占用网络比检测框更适合安全兜底？</summary><p>检测框依赖预定类别与形状假设，遇到散落货物、异形施工物会失效；占用网络直接回答“这个体素能不能走”，对未知类别同样给出几何占用，是规划碰撞检查的通用接口。</p></details>
+        </div>
         <div class='faq'>
           <details><summary>Q1：BEV 分辨率 0.1 m、范围 x∈[−50, 50]，某目标中心 x=3.45，它落在哪列？</summary><p>令 x_min = −50、r = 0.1，则 i = floor((3.45+50)/0.1) = floor(534.5) = 534。</p></details>
           <details><summary>Q2：为什么单目 3D 检测普遍比激光 3D 检测难？</summary><p>单目只有二维投影，深度信息需要从几何线索与先验推断；激光直接测距，几何无歧义。</p></details>
@@ -206,21 +436,20 @@
     <div class='footer-grid'>
       <div>
         <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
-        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style='max-width:520px'>聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class='footer-links'>
         <a href='../../index.html'>首页</a>
-        <a href='../overview.html'>认识自动驾驶</a>
-        <a href='../levels.html'>分级标准</a>
-        <a href='../tech.html'>核心技术</a>
-        <a href='../scenarios.html'>应用场景</a>
-        <a href='../challenges.html'>安全与挑战</a>
-        <a href='../future.html'>未来展望</a>
-        <a href='index.html'>系统教程</a>
-        <a href='../news.html'>领域动态</a>
+        <a href='../../pages/overview.html'>入门</a>
+        <a href='../../pages/tech.html'>技术</a>
+        <a href='../../pages/challenges.html'>安全与验证</a>
+        <a href='../../pages/scenarios.html'>落地与产业</a>
+        <a href='../../pages/frontier.html'>AI 前沿</a>
+        <a href='../../pages/tutorial/index.html'>系统教程</a>
+        <a href='../../pages/news.html'>领域动态</a>
       </nav>
     </div>
-    <div class='footer-bar'><span>© 2026 本地静态站点 · 讲义 02</span>
+    <div class='footer-bar'><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

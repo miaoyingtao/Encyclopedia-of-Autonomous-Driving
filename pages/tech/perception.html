@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html" class="active">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 专题一</span>
+    <span class="kicker">技术 · 专题一</span>
     <h1>环境感知 Perception</h1>
     <p class="lead">环境感知是自动驾驶的“眼睛与耳朵”：用多种传感器采集数据，用算法把数据翻译成“路上有什么、它们要去哪”。本页可从“传感器”继续下钻到四级细节页。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>环境感知</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/tech.html">技术</a><span class="sep">/</span><span>环境感知</span>
     </nav>
   </div>
 </section>
@@ -42,17 +41,23 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#q">1. 感知要回答的问题</a>
-      <a href="#sensors">2. 传感器方案</a>
-      <a href="#sensor-pages" class="lv2-child">继续下钻：传感器专题</a>
-      <a href="#algo">3. 感知算法流水线</a>
-      <a href="#understand">4. BEV 与占用网络</a>
-      <a href="#fusion">5. 多传感器融合</a>
-      <a href="#compute">6. 算力需求</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#q">1. ★ 感知要回答的问题</a>
+      <a href="#sensors">2. ★ 传感器方案</a>
+      <a href="#sensor-pages" class="lv2-child">3. 继续下钻：传感器专题</a>
+      <a href="#algo">4. ★ 感知算法流水线</a>
+      <a href="#understand">5. ★ BEV 与占用网络</a>
+      <a href="#fusion">6. ◆ 多传感器融合</a>
+      <a href="#compute">7. ◆ 算力需求</a>
+      <a href="#detection">8. ◆ 检测与跟踪算法</a>
+      <a href="#calib">9. ◆ 标定与时间同步</a>
+      <a href="#metrics">10. ▪ 评价指标</a>
+      <a href="#faq">11. 常见疑问</a>
+      <a href="#refs">12. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/02-perception.html">第 1 章 · 感知与状态估计</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么看见世界”</b>：读 ★ 四节（感知要回答什么、传感器方案、算法流水线、BEV 与占用网络）。<b>做工程或做选型</b>：◆ 四节讲融合、算力、检测跟踪与标定同步，是量产落地的关键。▪ 评价指标供对照。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>。</p></div>
       <section class="sec scroll-target" id="q">
         <div class="sec-head"><span class="no">01</span><h2>感知层要回答哪些问题</h2></div>
         <p>如果把驾驶比作写作，感知就是“读题”。一台自动驾驶车每秒都要回答：</p>
@@ -103,17 +108,14 @@
         </ol>
         <div class="panel info">
           <span class="pt">深度学习改变了什么</span>
-          <p>2015 年前后，基于深度学习的检测器（如 YOLO、Faster R-CNN）取代了手工特征方法；如今 Transformer、大模型与“端到端”网络进一步模糊了检测、跟踪、预测的边界——许多能力在同一个网络里联合学习，见 <a href="../future.html">未来展望</a>；想系统看懂大模型与世界模型，见 <a href="foundation.html">AI 前沿专题</a>。</p>
+          <p>2015 年前后，基于深度学习的检测器（如 YOLO、Faster R-CNN）取代了手工特征方法；如今 Transformer、大模型与“端到端”网络进一步模糊了检测、跟踪、预测的边界——许多能力在同一个网络里联合学习，见 <a href="../future.html">未来展望</a>；想系统看懂大模型与世界模型，见 <a href="../frontier.html">AI 前沿专题</a>。</p>
         </div>
       </section>
 
       <section class="sec scroll-target" id="understand">
         <div class="sec-head"><span class="no">05</span><h2>从“看见”到“理解”：BEV 与占用网络</h2></div>
-        <div class="grid g2">
-          <div class="card reveal"><h3>🗺️ BEV 鸟瞰视角</h3><p>把多个摄像头的图像统一“投影”到车辆为中心的俯视坐标系（Bird’s Eye View），再在此空间做检测。好处：多摄像头共享视野、与地图/规划坐标系天然一致、便于处理遮挡——这正是当前量产感知的主流架构。</p></div>
-          <div class="card reveal"><h3>🧱 占用网络 Occupancy Network</h3><p>不纠结“它是什么”，而是把周围空间切成体素网格，直接预测每个格子“是否被占据”。好处：能表达规则之外的东西——翻倒的卡车、垂落的树枝、异形障碍物，即使没训练过也能“知道那里有东西”。</p></div>
-        </div>
-        <p>这两项技术让感知从“识别已知目标”走向“理解未知空间”，是应对 <a href="../challenges.html#longtail">长尾场景</a> 的重要武器。</p>
+        <p>BEV（鸟瞰视角）把多相机图像统一投影到以自车为中心的俯视坐标系，占用网络则直接预测每个体素“是否被占据”。两者让感知从“识别已知目标”走向“理解未知空间”，是应对长尾障碍物的关键。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>BEV 特征如何构建、占用网络的损失函数与标签分配、算力开销等实现细节，见 <a href="../tutorial/02-perception.html#bev">第 1 章 · BEV 与占用网络</a>。</p></div>
       </section>
 
       <section class="sec scroll-target" id="fusion">
@@ -152,14 +154,64 @@
         </div>
       </section>
 
+      <section class="sec scroll-target" id="detection">
+        <div class="sec-head"><span class="no">08</span><h2>检测与跟踪：从 2D 框到 3D 轨迹</h2></div>
+        <p>检测回答“这一帧有什么”，跟踪回答“它还是刚才那辆车吗”。2D 检测从 Anchor-based 演进到 Anchor-free / Query-based；3D 检测主流分体素化、柱状化与点直接处理三派；跟踪用“预测—关联—更新”给目标稳定 ID，ID 跳变是下游规划误判的重要来源。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>检测网络结构、损失函数与数据关联（匈牙利匹配、卡尔曼预测）见 <a href="../tutorial/02-perception.html#det2d">第 1 章 · 2D 检测</a> 与 <a href="../tutorial/02-perception.html#track">多目标跟踪</a>。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="calib">
+        <div class="sec-head"><span class="no">09</span><h2>标定与时间同步：感知的“隐形地基”</h2></div>
+        <p>多传感器系统里，标定误差会直接变成检测误差。标定通常分三类：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>类型</th><th>标定什么</th><th>常用方法</th></tr></thead>
+            <tbody>
+              <tr><td>内参标定</td><td>相机焦距、主点、畸变系数</td><td>棋盘格 / 圆点靶标 + 张正友标定法</td></tr>
+              <tr><td>外参标定</td><td>各传感器相对车身的位姿（旋转 + 平移）</td><td>联合标定场、手眼标定、基于特征或运动的方法</td></tr>
+              <tr><td>在线标定</td><td>行驶中监测外参是否漂移（颠簸、碰撞、老化）</td><td>用车道线 / 地面点 / 里程计约束做在线优化</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>时间同步同样关键：摄像头曝光、激光雷达扫描、雷达采样、IMU 采样必须统一到同一时间基准。工程上给每个数据包打<b>硬件时间戳</b>，用 PTP / gPTP 同步到微秒级，软件层按时间戳插值对齐。若同步误差 50 ms，72 km/h 下就是约 1 m 的空间错位。</p>
+        <div class="panel info"><span class="pt">工程经验</span><p>相机滚动快门（rolling shutter）会让高速运动物体在图像上变形，需在模型或标定中补偿；激光雷达的帧内运动畸变则用 IMU / 里程计做去畸变（deskew）。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="metrics">
+        <div class="sec-head"><span class="no">10</span><h2>感知评价指标：离线准 ≠ 路上稳</h2></div>
+        <p>不同任务用不同指标，关键是要与“行车安全”挂钩，而不是只刷数据集分数：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>任务</th><th>常用指标</th><th>含义与局限</th></tr></thead>
+            <tbody>
+              <tr><td>2D 检测</td><td>mAP（IoU 阈值 0.5 / 0.75）</td><td>不同 IoU 阈值差异大，比较时必须固定协议</td></tr>
+              <tr><td>3D 检测</td><td>NDS、mAP、ATE</td><td>NDS 综合 mAP 与属性误差；ATE 反映中心点定位精度</td></tr>
+              <tr><td>跟踪</td><td>MOTA、IDF1、ID Switch</td><td>MOTA 常被漏检主导，需结合 IDF1 看 ID 稳定性</td></tr>
+              <tr><td>预测</td><td>minADE / minFDE、Miss Rate</td><td>只看“最优候选”会掩盖多模态覆盖不足</td></tr>
+              <tr><td>端到端</td><td>推理延迟、帧率、内存占用</td><td>车端硬约束，必须与精度一起报告</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>更重要的是<b>分层评测</b>：公开数据集看通用能力，自建 ODD 场景库看“关键场景召回”，实车影子模式看“与人类驾驶的一致性”。离线指标高但长尾漏检，是量产中真实存在的陷阱，详见 <a href="../challenges/testing.html">测试与评价</a>。</p>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">08</span><h2>关于感知的高频疑问</h2></div>
+        <div class="sec-head"><span class="no">11</span><h2>关于感知的高频疑问</h2></div>
         <div class="faq">
           <details><summary>摄像头能被太阳或强光“晃瞎”吗？</summary><p>会。逆光、眩光、隧道口明暗突变是真实挑战。量产方案用 HDR、偏振片、多曝光融合与算法滤波缓解，必要时把控制权交给对光照不敏感的雷达/激光雷达或让系统降级。</p></details>
-          <details><summary>激光雷达在雨雪天会失效吗？</summary><p>会衰减但不一定失效。雨滴会造成噪点、浓雾会缩短有效探测距离，这是激光雷达的物理短板；所以 L4 车队会限制恶劣天气下的 ODD，或依靠毫米波雷达兜底。</p></details>
-          <details><summary>为什么不能只用一种传感器？</summary><p>因为每种传感器都有“致命盲区”：摄像头怕黑与眩光、激光雷达怕雨雾、雷达看不清静止小物体。多传感器互为冗余，才能覆盖“任意单一传感器失效或受限”的情况——这也是功能安全的要求。</p></details>
+          <details><summary>激光雷达在雨雪天会失效吗？</summary><p>会衰减但不一定失效。雨滴会造成噪点、浓雾会缩短有效探测距离，这是激光雷达的物理短板；所以 L4 车队会限制恶劣天气下的 ODD，或依靠毫米波雷达兜底，见 <a href="perception/radar.html">毫米波雷达</a>。</p></details>
+          <details><summary>为什么不能只用一种传感器？</summary><p>因为每种传感器都有“致命盲区”：摄像头怕黑与眩光、激光雷达怕雨雾、雷达看不清静止小物体。多传感器互为冗余，才能覆盖“任意单一传感器失效或受限”的情况——这也是功能安全的要求，见 <a href="perception/fusion.html">多传感器融合</a>。</p></details>
           <details><summary>感知系统“认错了”怎么办？</summary><p>行业有两层防线：一是置信度与冗余校验，多路证据矛盾时宁可“宁停三分”；二是安全降级——当系统无法确定前方是什么时，应减速、请求接管或靠边停车，而不是硬着头皮冲过去。相关设计见 <a href="../challenges/safety.html">预期功能安全 SOTIF</a>。</p></details>
+          <details><summary>“召回优先”是什么意思？会不会导致频繁误刹？</summary><p>召回优先指“宁可误报，不可漏检”：宁可把一个可疑物体当成障碍去避让，也不能漏掉一个真实障碍。工程上用时间一致性过滤（连续多帧命中才升级为确定目标）和分级动作（先减速、再避让）来抑制误报带来的体验损失。</p></details>
+          <details><summary>多相机之间的时间同步有多重要？</summary><p>非常关键。相机约 30 fps、激光雷达约 10 fps，若对齐误差 100 ms，在 72 km/h 下就是约 2 米的错位——足以让同一目标在不同传感器里“落在两个位置”。因此系统必须做硬件触发或时间戳对齐与运动补偿，见 <a href="#calib">标定与时间同步</a>。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">12</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>检测与 BEV</h4><p>Ren et al., “Faster R-CNN” (2015)；Redmon et al., “YOLO” (2016)；Tian et al., “FCOS” (2019)；Carion et al., “DETR” (2020)；Lang et al., “PointPillars” (2019)；Yin et al., “CenterPoint” (2021)；Li et al., “BEVFormer” (2022)。</p></div>
+        <div class="paper"><h4>跟踪与融合</h4><p>Bewley et al., “SORT” (2016)；Wojke et al., “DeepSORT” (2017)；Liu et al., “BEVFusion” (2022)。</p></div>
+        <div class="paper"><h4>标定与数据集</h4><p>Zhang, “A Flexible New Technique for Camera Calibration” (2000)；nuScenes、Waymo Open Dataset、Argoverse 2 的评测协议与指标定义。</p></div>
       </section>
 
       <section class="related">
@@ -172,7 +224,7 @@
           <a href="perception/ultrasonic.html">超声波雷达</a>
           <a href="perception/fusion.html">多传感器融合</a>
           <a href="decision.html">决策与规划</a>
-          <a href="../tech.html">返回核心技术总览</a>
+          <a href="../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -184,21 +236,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 环境感知</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -212,6 +263,5 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 

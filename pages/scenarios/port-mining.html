@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html" class="active">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">应用场景 · 专题三</span>
+    <span class="kicker">落地与产业 · 专题三</span>
     <h1>港口与矿区：自动驾驶最先“赚钱”的地方</h1>
     <p class="lead">如果想知道自动驾驶今天在哪里已经真正替代了人类司机、并且有真实订单，答案不是城市街头，而是港口码头与露天矿山——封闭、低速、路线固定，是 L4 无人化最肥沃的土壤。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../scenarios.html">应用场景</a><span class="sep">/</span><span>港口与矿区</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/scenarios.html">落地与产业</a><span class="sep">/</span><span>港口与矿区</span>
     </nav>
   </div>
 </section>
@@ -42,15 +41,19 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#why">1. 为什么是它们先落地</a>
-      <a href="#port">2. 自动化码头</a>
-      <a href="#mine">3. 无人矿卡</a>
-      <a href="#biz">4. 商业模式</a>
-      <a href="#hard">5. 挑战并不少</a>
-      <a href="#spill">6. 场景外溢</a>
+      <a href="#why">1. ★ 为什么是它们先落地</a>
+      <a href="#port">2. ★ 自动化码头</a>
+      <a href="#mine">3. ★ 无人矿卡</a>
+      <a href="#biz">4. ◆ 商业模式</a>
+      <a href="#hard">5. ★ 挑战并不少</a>
+      <a href="#spill">6. ◆ 场景外溢</a>
+      <a href="#ops">7. ◆ 调度与安全</a>
+      <a href="#faq">8. 常见疑问</a>
+      <a href="#refs">9. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“无人车为什么先在港口矿区跑起来”</b>：读 ★ 三节（为什么是它们先落地、自动化码头、无人矿卡、挑战并不少）。<b>关注商业与工程</b>：◆ 四节讲商业模式、场景外溢与多车调度安全——封闭场景的“赚钱逻辑”在这里。四个场景的成本账对照见 <a href="business.html">商业化与单位经济</a>。</p></div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么是它们先落地</h2></div>
         <div class="grid g3">
@@ -121,7 +124,40 @@
         </div>
       </section>
 
-      <section class="related">
+      <section class="sec scroll-target" id="ops">
+        <div class="sec-head"><span class="no">07</span><h2>封闭场景的调度与安全</h2></div>
+        <p>港口与矿区的技术难点不在“开车”，而在<b>多车协同与调度</b>。典型系统包含三层：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>层</th><th>职责</th><th>关键问题</th></tr></thead>
+            <tbody>
+              <tr><td>调度层</td><td>任务分配、路径冲突消解、设备协同</td><td>多车路权与死锁避免</td></tr>
+              <tr><td>车端层</td><td>定位、感知、规划、控制</td><td>粉尘、颠簸、无 GNSS 时的稳定定位</td></tr>
+              <tr><td>安全层</td><td>远程监控、急停、故障处理</td><td>通信中断时的最小风险策略</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>由于场景封闭、参与者可控，这些地方可以采用更激进的无人化策略，但“通信中断”与“异形障碍”仍是最主要的长尾风险。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>无人矿卡安全吗？出了事故怎么办？</summary><p>封闭场景的优势正在这里：人车分离（作业区禁止人员进入）、限速与调度协同、远程急停，让“撞人”概率大幅下降。主要风险转为<b>设备与车辆之间</b>的碰撞、通信中断与异形障碍，因此系统必须具备断网时的最小风险策略（原地安全停车），见 <a href="#ops">调度与安全</a>。</p></details>
+          <details><summary>矿区为什么值得上无人驾驶？</summary><p>三个刚性理由：<b>招工难</b>（环境恶劣、位置偏远）、<b>成本高</b>（司机人力占运营成本大头）、<b>安全压力</b>（疲劳驾驶与事故率高）。矿卡重载上百吨、坡陡扬尘，技术难度并不低，但收益足够大，见 <a href="#mine">无人矿卡</a>。</p></details>
+          <details><summary>港口自动化到什么程度了？</summary><p>分环节看：<b>岸桥/场桥</b>远程操控已较成熟，<b>水平运输</b>（无人集卡/AGV）在新建码头广泛使用，<b>闸口与堆场</b>基本数字化。老旧码头的改造比新建贵得多，因此“新建全自动 + 老码头逐步改造”是现实路径，见 <a href="#port">自动化码头</a>。</p></details>
+          <details><summary>封闭场景的技术能直接用到开放道路吗？</summary><p>只能部分复用：感知、定位、仿真平台与数据闭环是通用的；但开放道路缺少“物理隔离 + 统一调度”这两个前提，决策策略与安全论证几乎要重做。技术复用度是场景评估的关键维度之一，见 <a href="#spill">场景外溢</a>。</p></details>
+          <details><summary>通信中断了怎么办？</summary><p>安全设计原则是“<b>断网也必须安全</b>”：车端具备自主感知与规划能力，通信只用于调度优化与远程协助；一旦失去连接，车辆按预置策略减速并在安全位置停车，等待恢复，见 <a href="#ops">调度与安全</a>。</p></details>
+          <details><summary>改造一辆集卡或矿卡要多少钱？</summary><p>取决于是否前装。后装改造需要加装传感器套件、线控执行机构与计算平台，成本不低；新建码头或新购矿卡则采用“前装设计”，把成本摊进整车。行业普遍认为<b>规模化前装</b>是把成本降到可接受水平的关键。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">09</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>行业资料</h4><p>全球自动化码头的公开案例（如鹿特丹、青岛、上海洋山）；无人矿卡的运营数据与安全报告；多车调度与冲突消解的调度算法文献。</p></div>
+      </section>
+
+      <section class="related scroll-target" id="next">
         <h3>关联阅读</h3>
         <p style="margin-bottom:10px">想看“封闭场景”如何进阶到开放场景，Robotaxi 与干线物流是下一站。</p>
         <div class="rel-links">
@@ -129,7 +165,7 @@
           <a href="robotaxi.html">Robotaxi 出行服务</a>
           <a href="../tech/control.html">重载车辆的控制</a>
           <a href="../tech/mapping.html">矿区地图更新</a>
-          <a href="../scenarios.html">返回应用场景总览</a>
+          <a href="../scenarios.html">返回落地与产业总览</a>
         </div>
       </section>
     </div>
@@ -141,21 +177,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 港口与矿区</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -169,7 +204,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

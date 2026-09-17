@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html" class="active">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 专题二</span>
+    <span class="kicker">技术 · 专题二</span>
     <h1>决策与规划 Decision & Planning</h1>
     <p class="lead">感知告诉系统“世界长什么样”，决策与规划负责回答“我接下来怎么开”。它把驾驶员的经验——跟车、变道、让行、避险——变成可计算、可验证的算法。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>决策与规划</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/tech.html">技术</a><span class="sep">/</span><span>决策与规划</span>
     </nav>
   </div>
 </section>
@@ -42,17 +41,22 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#layers">1. 三层规划结构</a>
-      <a href="#predict">2. 预测别人会怎么做</a>
-      <a href="#route">3. 全局路径规划</a>
-      <a href="#behavior">4. 行为决策</a>
-      <a href="#motion">5. 运动规划</a>
-      <a href="#learning">6. 端到端与学习型规划</a>
-      <a href="#safety">7. 安全兜底</a>
-      <a href="#faq">8. 常见疑问</a>
+      <a href="#layers">1. ★ 三层规划结构</a>
+      <a href="#predict">2. ◆ 预测别人会怎么做</a>
+      <a href="#route">3. ◆ 全局路径规划</a>
+      <a href="#behavior">4. ★ 行为决策</a>
+      <a href="#motion">5. ★ 运动规划</a>
+      <a href="#math">6. ◆ 规划问题的数学形式</a>
+      <a href="#learning">7. ◆ 端到端与学习型规划</a>
+      <a href="#safety">8. ★ 安全兜底</a>
+      <a href="#rss">9. ▪ 安全模型：RSS 与形式化验证</a>
+      <a href="#faq">10. 常见疑问</a>
+      <a href="#refs">11. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/03-planning-control.html">第 2 章 · 决策规划与控制</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step3">环节 3 · 无保护左转</a>。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么决定往哪走”</b>：读 ★ 四节（三层结构、行为决策、运动规划、安全兜底）。<b>做规划算法</b>：◆ 讲预测、全局路径、数学形式与端到端，▪ RSS 与形式化验证供深挖。</p></div>
       <section class="sec scroll-target" id="layers">
         <div class="sec-head"><span class="no">01</span><h2>决策与规划的三层结构</h2></div>
         <p>决策规划通常按“时间尺度”分成三层，越往下刷新越快、颗粒度越细：</p>
@@ -62,7 +66,7 @@
           <li><h3>运动规划（10–100 毫秒级）</h3><p>把“我要变道”变成一条<b>平滑、安全、符合车辆动力学</b>的轨迹：几何路径 + 每一时刻的速度/加速度。这是真正的“打方向盘”之前的最关键一步。</p></li>
         </ol>
         <p>三层之间通过接口衔接：全局规划给出途经点，行为决策圈定驾驶模式，运动规划输出可执行的轨迹，最后交给 <a href="control.html">控制执行</a>
-          <a href="foundation.html">大模型与智驾前沿</a> 去跟踪。</p>
+          <a href="../frontier.html">大模型与智驾前沿</a> 去跟踪。</p>
       </section>
 
       <section class="sec scroll-target" id="predict">
@@ -124,18 +128,35 @@
         <p>实际量产系统普遍采用“<b>候选轨迹生成 + 代价函数评估</b>”框架：一次生成几十上百条候选，按安全、效率、舒适、交规的加权代价打分，选出最优并持续重规划（典型频率 10–50Hz）。</p>
       </section>
 
+      <section class="sec scroll-target" id="math">
+        <div class="sec-head"><span class="no">06</span><h2>规划问题的数学形式</h2></div>
+        <p>运动规划本质上是一个带约束的最优控制问题：在车辆动力学、道路边界与执行器限幅的约束下，最小化“安全性 + 效率 + 舒适性”的代价。工程上常用 Frenet 坐标把横向—纵向解耦，横向用五次多项式保证加速度连续（jerk 有界）。</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>代表算法</th><th>优点</th><th>局限</th></tr></thead>
+            <tbody>
+              <tr><td>采样 + 打分</td><td>状态格采样、轨迹束</td><td>直观、易并行、可解释</td><td>高维空间采样爆炸，可能漏掉最优解</td></tr>
+              <tr><td>图搜索</td><td>A*、Hybrid A*、Lattice</td><td>启发式可采纳时有最优性保证</td><td>离散化误差，动态障碍处理麻烦</td></tr>
+              <tr><td>数值优化</td><td>二次规划（QP）、非线性 MPC</td><td>能显式处理约束，轨迹平滑</td><td>非凸问题易陷局部最优，实时性压力大</td></tr>
+              <tr><td>学习型</td><td>模仿学习、强化学习、端到端</td><td>上限高、少写规则</td><td>可解释性与安全验证困难</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel info"><span class="pt">深入阅读</span><p>Frenet 轨迹生成、五次多项式边界条件与轨迹优化的完整推导见 <a href="../tutorial/03-planning-control.html#traj">第 2 章 · 局部轨迹生成</a>。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="learning">
-        <div class="sec-head"><span class="no">06</span><h2>端到端：让网络自己学会开车</h2></div>
+        <div class="sec-head"><span class="no">07</span><h2>端到端：让网络自己学会开车</h2></div>
         <p>“模块化”流水线里，感知误差会逐级放大；而“端到端”用一个神经网络直接吃传感器输入、输出控制指令或轨迹，规则写不出来的场景（复杂博弈、罕见路况）有机会靠数据学会。</p>
         <div class="grid g2">
           <div class="card reveal"><h3>📈 上限与风险</h3><p>学习型系统的上限更高、更像人类，但它是黑盒：你不知道它“为什么”这么开，出了问题难以归因。这正是它与汽车工业“可审计”传统冲突的地方。</p></div>
           <div class="card reveal"><h3>🛡️ 工业界折中</h3><p>当前主流不是“全端到端”，而是：神经网络负责感知与大部分决策，外层保留规则与安全校验层；轨迹先过碰撞检查，再交执行。也就是“<b>用端到端提上限，用规则保下限</b>”。</p></div>
         </div>
-        <p class="sec-sub">当端到端与大模型结合，就演进为 VLA（视觉-语言-动作）等形态：模型既能用语言描述“看到了什么”，也能直接把语言指令与画面翻译成行驶动作，详见 <a href="foundation.html">AI 前沿：LLM 与世界模型</a>。</p>
+        <p class="sec-sub">当端到端与大模型结合，就演进为 VLA（视觉-语言-动作）等形态：模型既能用语言描述“看到了什么”，也能直接把语言指令与画面翻译成行驶动作，详见 <a href="../frontier.html">AI 前沿：LLM 与世界模型</a>。</p>
       </section>
 
       <section class="sec scroll-target" id="safety">
-        <div class="sec-head"><span class="no">07</span><h2>规划的“安全兜底”设计</h2></div>
+        <div class="sec-head"><span class="no">08</span><h2>规划的“安全兜底”设计</h2></div>
         <p>规划层必须承认“我一定会算错”，因此需要多层保险：</p>
         <ol class="steps">
           <li><h3>实时碰撞检查</h3><p>每条候选轨迹先与所有障碍物的“预测占用”做时空碰撞检查，不合格直接淘汰。</p></li>
@@ -145,8 +166,17 @@
         </ol>
       </section>
 
+      <section class="sec scroll-target" id="rss">
+        <div class="sec-head"><span class="no">09</span><h2>安全模型：RSS 与形式化验证</h2></div>
+        <p>“不撞车”不能只靠经验调参。业界提出过一些可计算的安全模型，最著名的是 Mobileye 的 <b>RSS（Responsibility Sensitive Safety，责任敏感安全）</b>，它用一组数学规则定义“谁该负责”：</p>
+        <div class="math math-left">跟车纵向安全距离：<br>d_min = v_r·t_r + ½·a_max·t_r² + (v_r + a_max·t_r)²/(2·b_min) − v_f²/(2·b_max)<br>横向：仅在“有路权”且对方未违规时，才允许并线或通过</div>
+        <p>其中 t_r 为反应时间，a_max 为最大加速度，b_min / b_max 为双方最大减速度。RSS 把“合理谨慎”形式化为可验证的不等式，规划器只要保证不违反这些约束，就认为处于安全状态。它的价值在于<b>可证明、可审计</b>；局限在于对复杂交互（无保护左转、多车博弈）仍偏保守。</p>
+        <p>另一条路线是<b>形式化验证</b>：用可达集分析（reachability analysis）计算“未来所有可能状态”，只要可达集与障碍物占用集不相交，就证明不会碰撞。工具如 CORA、Flow* 可处理线性或简单非线性系统，但对高维感知输入仍需简化。</p>
+        <div class="panel info"><span class="pt">工程现实</span><p>量产系统通常不追求“全程形式化可证明”，而是分层：核心安全规则用可验证模型（RSS / 规则层）兜底，能力上限交给学习型规划，并用仿真与影子模式持续验证两者的一致性。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">08</span><h2>关于决策规划的高频疑问</h2></div>
+        <div class="sec-head"><span class="no">10</span><h2>关于决策规划的高频疑问</h2></div>
         <div class="faq">
           <details><summary>自动驾驶会“犹豫不决”吗？</summary><p>会。无保护左转、人车混行等场景常出现“走还是等”的两难。工程上的解法是给决策设超时与降级机制：一旦在规定时间内无法做出安全决策，就选择最保守动作（停车等待或慢速通过），而不是无限僵持。</p></details>
           <details><summary>为什么不直接照抄“老司机数据”？</summary><p>模仿学习只学到“平均行为”，学不会对罕见危险的警惕，还可能复制坏习惯。所以真实系统会叠加规则层，并用手动编写的“关键安全约束”校正数据里学不到的边界。</p></details>
@@ -155,16 +185,23 @@
         </div>
       </section>
 
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">11</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>轨迹预测</h4><p>Alahi et al., “Social LSTM” (2016)；Gupta et al., “Social GAN” (2018)；Ngiam et al., “Scene Transformer” (2021)；Zhou et al., “HiVT” (2022)。</p></div>
+        <div class="paper"><h4>运动规划</h4><p>Werling et al., “Optimal Trajectory Generation for Dynamic Street Scenarios in a Frenét Frame” (2010)；Dolgov et al., “Path Planning for Autonomous Vehicles in Unknown Semi-structured Environments” (2010，Hybrid A*)；Paden et al. 的运动规划与控制综述 (2016)。</p></div>
+        <div class="paper"><h4>安全模型</h4><p>Shalev-Shwartz et al., “On a Formal Model of Safe and Scalable Self-driving Cars” (2017，RSS)；Althoff 等关于可达集分析的工作。</p></div>
+      </section>
+
       <section class="related">
         <h3>继续深潜或横向跳转</h3>
         <p style="margin-bottom:10px">决策的前提是可靠感知，决策的落地靠精确控制——三条支线正好串起“眼脑手”。</p>
         <div class="rel-links">
           <a href="perception.html">环境感知</a>
           <a href="control.html">控制执行</a>
-          <a href="foundation.html">大模型与智驾前沿</a>
+          <a href="../frontier.html">大模型与智驾前沿</a>
           <a href="mapping.html">定位与高精地图</a>
           <a href="../challenges/testing.html">仿真如何验证规划</a>
-          <a href="../tech.html">返回核心技术总览</a>
+          <a href="../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -176,21 +213,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 决策与规划</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -204,7 +240,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

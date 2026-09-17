@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../index.html">首页</a>
-      <a href="overview.html">认识自动驾驶</a>
-      <a href="levels.html">分级标准 L0–L5</a>
-      <a href="tech.html">核心技术</a>
-      <a href="scenarios.html">应用场景</a>
-      <a href="challenges.html">安全与挑战</a>
-      <a href="future.html">未来展望</a>
-      <a href="tutorial/index.html">系统教程</a>
-      <a href="news.html">领域动态</a>
+      <a href="../pages/overview.html" class="active">入门</a>
+      <a href="../pages/tech.html">技术</a>
+      <a href="../pages/challenges.html">安全与验证</a>
+      <a href="../pages/scenarios.html">落地与产业</a>
+      <a href="../pages/frontier.html">AI 前沿</a>
+      <a href="../pages/tutorial/index.html">系统教程</a>
+      <a href="../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">主题 1 / 6 · 总览</span>
+    <span class="kicker">域 01 · 入门</span>
     <h1>认识自动驾驶</h1>
     <p class="lead">先建立正确的大框架：自动驾驶到底是什么、和辅助驾驶差在哪、为什么值得发展、一辆车如何“自己开起来”，以及它是怎样一步步走到今天的。</p>
     <nav class="crumb">
-      <a href="../index.html">首页</a><span class="sep">/</span><span>认识自动驾驶</span>
+      <a href="../index.html">首页</a><span class="sep">/</span><span>入门</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,26 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#what">1. 什么是自动驾驶</a>
-      <a href="#ad-vs-adas">2. 辅助驾驶 vs 自动驾驶</a>
-      <a href="#why">3. 为什么需要它</a>
-      <a href="#parts">4. 基本构成</a>
-      <a href="#history">5. 发展简史</a>
-      <a href="#myth">6. 常见误区</a>
+      <a href="#what">1. ★ 什么是自动驾驶</a>
+      <a href="#ad-vs-adas">2. ★ 辅助驾驶 vs 自动驾驶</a>
+      <a href="#why">3. ★ 为什么需要它</a>
+      <a href="#parts">4. ★ 基本构成</a>
+      <a href="#history">5. ◆ 发展简史</a>
+      <a href="#arch">6. ◆ 系统分层与数据流</a>
+      <a href="#metrics">7. ◆ 如何量化能力</a>
+      <a href="#faq">8. 常见误区</a>
+      <a href="#refs">9. 延伸阅读</a>
       <a href="#next" class="lv2-child">下一步怎么读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想快速建立概念</b>：读 ★ 四节（什么是自动驾驶、辅助驾驶 ≠ 自动驾驶、为什么需要它、基本构成）约 8 分钟。<b>想理解系统怎么运转</b>：◆ 三节讲发展简史、系统分层与量化指标，是进入技术域前的必备。<b>读完建议接</b> <a href="levels.html">分级标准</a> 与 <a href="one-trip.html">一次行程的完整拆解</a>。</p></div>
+      <div class="panel info">
+        <span class="pt">本域地图 · 怎么读最快</span>
+        <p><b>★ 只求了解（约 12 分钟）</b>：本页「什么是自动驾驶」→「辅助驾驶 ≠ 自动驾驶」→ <a href="levels.html">分级标准</a>。</p>
+        <p><b>◆ 想建立体系（约 35 分钟）</b>：基本构成 → 系统分层与量化能力 → <a href="levels.html">分级标准</a> → <a href="one-trip.html">一次行程的完整拆解</a> → 进入技术域。</p>
+        <p><b>逐页难度与用时</b>：本页（入门 · 12 分钟 · 概念框架 ★）｜<a href="levels.html">分级标准 L0–L5</a>（入门 · 15 分钟 · 等级与责任划分 ★）｜<a href="one-trip.html">一次行程的完整拆解</a>（入门 · 20 分钟 · 全链路如何接力 ★）｜<a href="glossary.html">概念·指标·标准 索引</a>（查阅 · 按需 · 统一口径 ▪）。</p>
+      </div>
       <section class="sec scroll-target" id="what">
         <div class="sec-head"><span class="no">01</span><h2>什么是自动驾驶</h2></div>
         <p>自动驾驶（Autonomous Driving / Self-Driving）的通俗定义是：<b>车辆依靠传感器、计算平台、控制算法与通信等手段，部分或完全替代人类驾驶员，完成观察、判断与操作</b>的一项技术。用行业术语说，它要接管人类的“动态驾驶任务”（DDT），包括横向控制（转向）、纵向控制（加速、制动），以及在驾驶中持续“探测与响应目标与事件”（OEDR）。</p>
@@ -122,15 +131,61 @@
         </ul>
       </section>
 
-      <section class="sec scroll-target" id="myth">
-        <div class="sec-head"><span class="no">06</span><h2>关于自动驾驶的常见误区</h2></div>
+      <section class="sec scroll-target" id="arch">
+        <div class="sec-head"><span class="no">06</span><h2>系统分层：从传感器到车轮的数据流</h2></div>
+        <p>一辆自动驾驶车可以抽象成五层，每层有明确的输入输出与时间尺度：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>层</th><th>输入 → 输出</th><th>典型频率</th></tr></thead>
+            <tbody>
+              <tr><td>传感层</td><td>物理世界 → 原始数据（图像、点云、回波）</td><td>10–30 Hz</td></tr>
+              <tr><td>感知与定位层</td><td>原始数据 → 目标列表、可行驶区域、自车位姿</td><td>10–30 Hz</td></tr>
+              <tr><td>预测与规划层</td><td>世界描述 → 带时间的轨迹</td><td>10–50 Hz</td></tr>
+              <tr><td>控制层</td><td>轨迹 → 转向角、驱动力、制动力</td><td>50–100 Hz</td></tr>
+              <tr><td>执行层</td><td>指令 → 车辆运动</td><td>物理响应 100–300 ms</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>这条链路的每一层都向下游提供<b>带不确定性的结果</b>，而不是绝对真值。因此真正的系统设计问题不是“如何做到 100% 正确”，而是“某一层出错时，下游如何安全降级”。这条思路贯穿本站全部技术页。</p>
+        <p>这套分层将在 <a href="one-trip.html">一次行程的完整拆解</a> 里逐环展开：同一个场景从上车到抵达，看每一层如何接力、又在哪里兜底。</p>
+      </section>
+
+      <section class="sec scroll-target" id="metrics">
+        <div class="sec-head"><span class="no">07</span><h2>如何量化一辆车的自动驾驶能力</h2></div>
+        <p>“很智能”不是指标。工程与监管常用下面几类可测量的量：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>指标</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>安全性</td><td>每百万公里事故 / 严重事故率</td><td>需要极大里程才有统计意义，常与人类驾驶基线对比</td></tr>
+              <tr><td>可靠性</td><td>MTBF、接管率 MPK</td><td>接管率需说明 ODD 与是否含安全员</td></tr>
+              <tr><td>舒适性</td><td>加速度、jerk、急刹频率</td><td>直接影响乘客接受度</td></tr>
+              <tr><td>效率</td><td>平均车速、通行时间、能耗</td><td>与“保守驾驶”存在权衡</td></tr>
+              <tr><td>覆盖度</td><td>ODD 范围、场景通过率</td><td>比单一里程更能反映真实能力</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>比较不同系统时，必须同时看“指标 + ODD + 测试方法”。只报里程不报 ODD，或只报通过率不报场景分布，都无法判断真实水平，详见 <a href="challenges/testing.html">测试与评价</a>。</p>
+        <p>上面这五类指标只是框架。全站所有指标（含 TTC、MPK、MTBF、完好性等）的<b>统一定义与口径</b>汇在 <a href="glossary.html#metrics">概念 · 指标 · 标准 索引 · 指标字典</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">08</span><h2>关于自动驾驶的常见误区</h2></div>
         <div class="faq">
-          <details><summary>“自动驾驶”就是“无人驾驶”吗？</summary><p>不是。自动驾驶是 L0–L5 的连续谱：L2 仍需要人随时接管，L3 需要人在必要时接管，只有 L4/L5 才谈得上“无人”。中文语境里常把两者混用，造成误解。</p></details>
+          <details><summary>“自动驾驶”就是“无人驾驶”吗？</summary><p>不是。自动驾驶是 L0–L5 的连续谱：L2 仍需要人随时接管，L3 需要人在必要时接管，只有 L4/L5 才谈得上“无人”。中文语境里常把两者混用，造成误解，见 <a href="levels.html">分级标准 L0–L5</a>。</p></details>
           <details><summary>开启辅助驾驶后，可以玩手机、睡觉吗？</summary><p>不可以。目前量产车的“智驾”绝大多数属于 L2，系统随时需要人类驾驶员监督并接管。在行驶中脱离监管不仅是安全的，在很多地区也违法。</p></details>
-          <details><summary>自动驾驶能做到“零事故”吗？</summary><p>不能承诺零事故。现实目标不是“永不撞车”，而是<b>显著优于人类平均驾驶水平</b>，并且在碰到未知情况时能安全降级、可控停车。绝对安全在开放道路上不存在。</p></details>
+          <details><summary>自动驾驶能做到“零事故”吗？</summary><p>不能承诺零事故。现实目标不是“永不撞车”，而是<b>显著优于人类平均驾驶水平</b>，并且在碰到未知情况时能安全降级、可控停车。绝对安全在开放道路上不存在，见 <a href="challenges.html">安全与验证</a>。</p></details>
           <details><summary>无人驾驶汽车是不是都没有方向盘？</summary><p>不一定。L4/L5 在技术上可以去掉方向盘与踏板（Waymo 早期原型、部分 Robotaxi 如此），但许多面向量产的设计仍保留人工接口，以便远程接管或满足法规要求。</p></details>
           <details><summary>纯视觉和激光雷达，到底谁是对的？</summary><p>两者是“成本-能力”的取舍，不是对错问题。视觉信息丰富但受光照影响、测距需估算；激光雷达测距准但成本与点云稀疏度各有取舍。主流趋势是多传感器融合 + 逐步提升纯视觉能力，详见 <a href="tech/perception.html">环境感知</a>。</p></details>
+          <details><summary>现在普通人能体验到哪些自动驾驶？</summary><p>三类最容易接触：<b>Robotaxi</b>（部分城市的收费无人出租车）、<b>无人配送车</b>（校园、园区、驿站到小区）、<b>自动泊车/代客泊车</b>（AVP）。它们的共同点是 ODD 明确、场景受限，见 <a href="scenarios.html">落地与产业</a>。</p></details>
+          <details><summary>智能驾驶的车，保险费会变贵吗？</summary><p>定价正在重构：传统车险按“驾驶员风险”定价，自动驾驶则引入“产品责任险”与新的定价因子（接管率、ODD 范围、数据安全等级）。总体趋势是<b>责任从人转向产品</b>，保费随安全数据动态调整，见 <a href="regulation.html#insurance">保险体系的重构</a>。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">09</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>入门</h4><p>SAE J3016 与 GB/T 40429 的分级定义；NHTSA、RAND 关于自动驾驶安全与政策的公开报告。</p></div>
+        <div class="paper"><h4>系统视角</h4><p>想建立工程直觉可读「技术」域，想要公式推导与代码可进入「系统教程」。</p></div>
       </section>
 
       <section class="related scroll-target" id="next">
@@ -138,8 +193,9 @@
         <p style="margin-bottom:10px">你已经搭好框架，接下来有两个方向：想知道“车到底怎么分级、责任怎么划分”，进入分级标准；想知道“眼脑手如何工作”，直接深入核心技术。</p>
         <div class="rel-links">
           <a href="levels.html">分级标准 L0–L5</a>
-          <a href="tech.html">核心技术</a>
-          <a href="scenarios.html">应用场景</a>
+          <a href="one-trip.html">一次行程的完整拆解</a>
+          <a href="tech.html">技术总览</a>
+          <a href="scenarios.html">落地与产业</a>
           <a href="../index.html">返回首页</a>
         </div>
       </section>
@@ -153,21 +209,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../index.html">首页</a>
-        <a href="overview.html">认识自动驾驶</a>
-        <a href="levels.html">分级标准</a>
-        <a href="tech.html">核心技术</a>
-        <a href="scenarios.html">应用场景</a>
-        <a href="challenges.html">安全与挑战</a>
-        <a href="future.html">未来展望</a>
-        <a href="tutorial/index.html">系统教程</a>
-        <a href="news.html">领域动态</a>
+        <a href="../pages/overview.html">入门</a>
+        <a href="../pages/tech.html">技术</a>
+        <a href="../pages/challenges.html">安全与验证</a>
+        <a href="../pages/scenarios.html">落地与产业</a>
+        <a href="../pages/frontier.html">AI 前沿</a>
+        <a href="../pages/tutorial/index.html">系统教程</a>
+        <a href="../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 认识自动驾驶</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

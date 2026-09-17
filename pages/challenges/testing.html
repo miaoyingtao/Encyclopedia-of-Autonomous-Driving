@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html" class="active">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">安全与挑战 · 专题四</span>
+    <span class="kicker">安全与验证 · 专题三</span>
     <h1>测试、验证与评价</h1>
     <p class="lead">“自动驾驶开够多少公里才算安全？”答案是：<b>这个问题本身无法只用真实里程回答</b>。行业用“仿真 + 封闭场地 + 开放道路 + 运营监控”四层金字塔构建证据链，再配合数据闭环持续进化。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../challenges.html">安全与挑战</a><span class="sep">/</span><span>测试、验证与评价</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/challenges.html">安全与验证</a><span class="sep">/</span><span>测试与验证</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#mile">1. 为什么路测里程不够</a>
-      <a href="#pyramid">2. 测试金字塔</a>
-      <a href="#sim">3. 仿真：无限场景的工厂</a>
-      <a href="#field">4. 封闭场地与开放道路</a>
-      <a href="#metric">5. 安全评价指标</a>
-      <a href="#loop">6. 数据闭环</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#mile">1. ★ 为什么路测里程不够</a>
+      <a href="#pyramid">2. ★ 测试金字塔</a>
+      <a href="#sim">3. ◆ 仿真：无限场景的工厂</a>
+      <a href="#field">4. ◆ 封闭场地与开放道路</a>
+      <a href="#metric">5. ▪ 安全评价指标</a>
+      <a href="#loop">6. ◆ 数据闭环</a>
+      <a href="#stat">7. ★ 统计验证：多少里程才够</a>
+      <a href="#scenario">8. ◆ 场景库与覆盖率</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 标准与延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“凭什么说它安全”</b>：读 ★ 三节（里程为什么不够、测试金字塔、统计验证），它们是本域的核心论证。<b>做测试或仿真工程</b>：◆ 四节讲仿真工厂、场地与路测、数据闭环、场景覆盖率，是可落地的做法。▪ 安全指标供对照。</p></div>
       <section class="sec scroll-target" id="mile">
         <div class="sec-head"><span class="no">01</span><h2>为什么“多跑路”证明不了安全</h2></div>
         <p>直觉上，路测越多越安全。但算一笔账就会发现此路不通：</p>
@@ -129,14 +132,46 @@
         <p>谁的数据闭环转得快，谁的自动驾驶进化就快——这也是“<b>运营规模本身就是竞争力</b>”的原因，详见 <a href="../future.html">未来展望</a>。</p>
       </section>
 
+      <section class="sec scroll-target" id="stat">
+        <div class="sec-head"><span class="no">07</span><h2>统计验证：需要多少里程才够</h2></div>
+        <p>“路测里程”之所以不能直接证明安全，是因为事故是稀有事件。若把事故建模为泊松过程，在置信水平 1−α 下观察 N 公里无事故，可推断的事故率上界为：</p>
+        <div class="math math-left">λ_upper = −ln(α) / N<br>例：95% 置信度、N = 1×10⁸ km，则 λ_upper ≈ 3×10⁻⁸ 次 / km</div>
+        <p>要在统计上证明“比人类司机更安全”（约 10⁻⁶ 次 / km 量级），往往需要数十亿甚至上百亿公里——远超任何车队的实际路测能力。因此行业转向<b>基于场景的验证</b>：用仿真放大危险场景的采样比例，再用少量实车验证仿真可信度。</p>
+      </section>
+
+      <section class="sec scroll-target" id="scenario">
+        <div class="sec-head"><span class="no">08</span><h2>场景库与覆盖率</h2></div>
+        <p>场景是测试的基本单位。一个可执行的场景通常包含五要素：道路、静态环境、动态参与者、环境条件、初始状态与目标行为。工程上按“抽象层级”组织：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>层级</th><th>描述</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td>功能场景</td><td>自然语言描述，如“无保护左转遇到对向直行车”</td><td>需求与风险分析</td></tr>
+              <tr><td>逻辑场景</td><td>参数化，如车距 ∈ [5, 50] m、车速 ∈ [20, 60] km/h</td><td>参数化仿真采样</td></tr>
+              <tr><td>具体场景</td><td>确定参数的一组具体值</td><td>仿真与实车复现</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>覆盖率不能只看“跑了多少条场景”，还要看参数空间是否被充分探索、危险边界是否被逼近。常用方法包括重要性采样、对抗场景生成与基于风险的优先级排序，相关标准见 ISO 34502。</p>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>仿真测试能完全替代真实路测吗？</summary><p>不能。仿真再逼真也是“模型”，无法替代真实硬件、真实电磁环境与真实人类行为。正确的关系是：仿真负责“广度”（海量覆盖），实车负责“精度”（校准与验证），两者互为补充。</p></details>
-          <details><summary>为什么有些公司把“自动驾驶里程”当宣传？</summary><p>里程是必要不充分条件：它证明系统“在真实世界跑得久”，但不证明“跑得安全”。聪明的读者应同时看它的接管率、事故率与场景定义，而不是只看里程数字。</p></details>
-          <details><summary>AI 模型升级后，需要全部重测吗？</summary><p>现代做法是“回归测试 + 重点补测”：对与本次改动相关的场景重点测试，对全量历史场景库做自动化回归。海量仿真让这种“每版全考”成为可能。</p></details>
-          <details><summary>如何证明系统在“没见过的场景”里也安全？</summary><p>无法绝对证明，但可以逼近：一是通过泛化能力测试（随机合成海量新场景看失败率）；二是设计“安全默认值”——系统遇到任何不确定都倾向保守。后者是真正的安全底线。</p></details>
+          <details><summary>为什么有些公司把“自动驾驶里程”当宣传？</summary><p>里程是必要不充分条件：它证明系统“在真实世界跑得久”，但不证明“跑得安全”。聪明的读者应同时看它的接管率、事故率与场景定义，而不是只看里程数字，见 <a href="../overview.html#metrics">如何量化能力</a>。</p></details>
+          <details><summary>AI 模型升级后，需要全部重测吗？</summary><p>现代做法是“回归测试 + 重点补测”：对与本次改动相关的场景重点测试，对全量历史场景库做自动化回归。海量仿真让这种“每版全考”成为可能，见 <a href="#stat">统计验证</a>。</p></details>
+          <details><summary>如何证明系统在“没见过的场景”里也安全？</summary><p>无法绝对证明，但可以逼近：一是通过泛化能力测试（随机合成海量新场景看失败率）；二是设计“安全默认值”——系统遇到任何不确定都倾向保守。后者是真正的安全底线，也是 <a href="safety.html#sotifproc">SOTIF 流程</a> 的落脚点。</p></details>
+          <details><summary>接管率（MPK）怎么比才公平？</summary><p>必须同时看三件事：<b>ODD 范围</b>（只跑高速与跑城区不可比）、<b>是否含安全员</b>（有人兜底的接管率天然更好看）、<b>接管的定义</b>（是安全风险还是体验优化）。只报一个“每 X 万公里接管一次”没有意义，见 <a href="#metric">安全评价指标</a>。</p></details>
+          <details><summary>车企自己测的数据可信吗？</summary><p>监管思路是“自证 + 他证”：企业需提交安全自评报告与运营数据（自证），同时接受第三方测试机构、独立事故调查与监管部门的数据核查（他证）。数据留痕（DSSAD 类记录）就是为了让“他证”成为可能。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>标准与延伸阅读</h2></div>
+        <p class="sec-sub">本页相关标准见下方；<b>全站所有标准与法规</b>（含“管什么、谁必须做”）汇总在 <a href="../glossary.html#standards">概念 · 指标 · 标准 索引</a>。</p>
+        <div class="paper"><h4>标准</h4><p>ISO 34501（场景术语）、ISO 34502（基于场景的安全评估）、ISO 21448（SOTIF）、UL 4600。</p></div>
+        <div class="paper"><h4>方法</h4><p>Kalra &amp; Paddock, “Driving to Safety: How Many Miles of Driving Would It Take to Demonstrate Autonomous Vehicle Reliability?” (RAND, 2016)；关于重要性采样与对抗场景生成的研究。</p></div>
       </section>
 
       <section class="related">
@@ -144,10 +179,11 @@
         <p style="margin-bottom:10px">测试提供证据，功能安全定义要求，法规决定门槛——三者构成完整的“安全三角”。</p>
         <div class="rel-links">
           <a href="safety.html">功能安全与 SOTIF</a>
-          <a href="regulation.html">法规、伦理与责任</a>
+          <a href="../regulation.html">法规与政策</a>
           <a href="cybersecurity.html">网络安全测试</a>
           <a href="../tech/decision.html">决策规划如何被测试</a>
-          <a href="../challenges.html">返回安全与挑战总览</a>
+          <a href="../one-trip.html#step5">一次行程之后的数据闭环</a>
+          <a href="../challenges.html">返回安全与验证总览</a>
         </div>
       </section>
     </div>
@@ -159,21 +195,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 测试、验证与评价</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -187,7 +222,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../index.html">首页</a>
-      <a href="overview.html">认识自动驾驶</a>
-      <a href="levels.html">分级标准 L0–L5</a>
-      <a href="tech.html">核心技术</a>
-      <a href="scenarios.html">应用场景</a>
-      <a href="challenges.html">安全与挑战</a>
-      <a href="future.html">未来展望</a>
-      <a href="tutorial/index.html">系统教程</a>
-      <a href="news.html">领域动态</a>
+      <a href="../pages/overview.html" class="active">入门</a>
+      <a href="../pages/tech.html">技术</a>
+      <a href="../pages/challenges.html">安全与验证</a>
+      <a href="../pages/scenarios.html">落地与产业</a>
+      <a href="../pages/frontier.html">AI 前沿</a>
+      <a href="../pages/tutorial/index.html">系统教程</a>
+      <a href="../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">主题 2 / 6 · 分级标准</span>
+    <span class="kicker">入门 · 分级标准</span>
     <h1>自动驾驶分级 L0–L5</h1>
     <p class="lead">“自动驾驶”是一个连续的光谱。全球通行做法是把人机职责按自动化程度切成六档（L0–L5）。看懂这一页，你就掌握了讨论自动驾驶最通用的语言。</p>
     <nav class="crumb">
-      <a href="../index.html">首页</a><span class="sep">/</span><span>分级标准 L0–L5</span>
+      <a href="../index.html">首页</a><span class="sep">/</span><a href="../pages/overview.html">入门</a><span class="sep">/</span><span>分级标准 L0–L5</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#why">1. 为什么需要分级</a>
-      <a href="#map">2. L0–L5 一张图看懂</a>
-      <a href="#table">3. 六级详解表</a>
-      <a href="#l2-l3">4. L2→L3 分水岭</a>
-      <a href="#standards">5. 中国与 SAE 标准</a>
-      <a href="#terms">6. 术语速查</a>
-      <a href="#myth">7. 常见疑问</a>
+      <a href="#why">1. ★ 为什么需要分级</a>
+      <a href="#map">2. ★ L0–L5 一张图看懂</a>
+      <a href="#table">3. ★ 六级详解表</a>
+      <a href="#l2-l3">4. ★ L2→L3 分水岭</a>
+      <a href="#standards">5. ◆ 中国与 SAE 标准</a>
+      <a href="#terms">6. ▪ 术语速查</a>
+      <a href="#odd">7. ◆ ODD 运行设计域</a>
+      <a href="#resp">8. ◆ 责任转移与接管</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 标准原文</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想知道“L2 和 L3 差在哪”</b>：读 ★ 四节（为什么分级、一图看懂、六级详解表、L2→L3 分水岭）即可。<b>关注责任与边界</b>：◆ 三节讲标准体系、ODD 与责任转移，是理解法规与保险的前提。▪ 术语速查可当词典用，不必顺序读。</p></div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么需要给自动驾驶分级</h2></div>
         <p>如果没有统一分级，消费者、工程师、监管部门与保险公司将无法对话：车企宣传“自动驾驶”，车主误以为可以睡觉，出了事故责任却说不清。分级把<b>“人在驾驶中的角色”和“系统承担的责任”</b>标准化，从而支撑三件事：</p>
@@ -186,14 +189,53 @@
         </div>
       </section>
 
-      <section class="sec scroll-target" id="myth">
-        <div class="sec-head"><span class="no">07</span><h2>关于分级的高频疑问</h2></div>
-        <div class="faq">
-          <details><summary>“L2.5 / L2.9 / L2+”这些说法合法吗？</summary><p>它们不是标准等级，只是厂商用来强调“比普通 L2 强一点”的宣传口径。判断真实水平，应看它支持的 ODD、是否需人监督以及事故责任的归属。</p></details>
-          <details><summary>是不是等级越高就越安全？</summary><p>不一定。等级描述的是“自动化程度”与职责分配，不是“安全评级”。一个验证充分、边界清晰的 L2，可能比验证不足的 L3 更可靠；L4 的安全性来自系统设计、测试里程与冗余架构。</p></details>
-          <details><summary>L3 出了事故，责任算谁的？</summary><p>按主流监管思路：若事故发生在系统激活且处于 ODD 内，责任通常转向车企/系统方（车企需配合调查取证）；若是用户未按要求接管或超出 ODD 使用，则责任可能归用户。具体规则各国仍在立法细化中，详见 <a href="challenges/regulation.html">法规与伦理</a>。</p></details>
-          <details><summary>为什么很多公司说“不做 L3，直接做 L4”？</summary><p>因为 L3 要求人与机器在毫秒级交接，而人在分心后很难瞬间接管，这个“交接风险”难以证明安全。跳过 L3 等于把兜底责任全部交给系统自己，逻辑更自洽，但技术难度更高。</p></details>
+      <section class="sec scroll-target" id="odd">
+        <div class="sec-head"><span class="no">07</span><h2>ODD：分级的真正边界</h2></div>
+        <p>级别只是“能力标签”，真正决定一个系统能否上路的是 <b>ODD（Operational Design Domain，运行设计域）</b>——系统被设计为可以安全运行的条件集合。ODD 通常包含多个维度：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>典型约束示例</th></tr></thead>
+            <tbody>
+              <tr><td>地理</td><td>城市 / 高速 / 园区；是否含隧道、收费站、施工区</td></tr>
+              <tr><td>道路</td><td>车道数、是否物理分隔、限速范围、路口类型</td></tr>
+              <tr><td>交通</td><td>车流密度、是否有行人 / 非机动车混行</td></tr>
+              <tr><td>环境</td><td>白天 / 夜间、雨雪雾、能见度、光照</td></tr>
+              <tr><td>速度</td><td>最高运行车速（如 ≤ 60 km/h）</td></tr>
+              <tr><td>自身状态</td><td>传感器健康、地图版本、是否满载</td></tr>
+            </tbody>
+          </table>
         </div>
+        <p>一旦超出 ODD，系统必须能识别并执行最小风险策略（MRM）。因此两个都叫“L4”的系统，实际能力可能相差极大——比较自动驾驶能力时，<b>“L几 + ODD 是什么”才是完整描述</b>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="resp">
+        <div class="sec-head"><span class="no">08</span><h2>责任转移与接管：L3 的真正难点</h2></div>
+        <p>L2 与 L3 的分界线不是“能力”，而是<b>责任</b>：L2 时驾驶员始终是驾驶主体；L3 在 ODD 内由系统承担驾驶任务，但系统请求接管时驾驶员必须响应。这带来几个可量化的工程问题：</p>
+        <ul>
+          <li><b>接管时间预算</b>：从系统发出请求到驾驶员有效接管需要多长？研究显示分心状态下可能需要数秒，因此法规对“提前预警时间”有要求。</li>
+          <li><b>最小风险状态</b>：如果驾驶员不接管，系统必须自行进入安全状态（减速、靠边、停车），这要求执行器与规划都有冗余。</li>
+          <li><b>注意力管理</b>：L3 车辆需要监测驾驶员是否处于可接管状态（DMS），否则无法合法运行。</li>
+        </ul>
+        <p>UN R157（ALKS）是目前最具体的 L3 法规之一，限定了车速、道路类型与接管流程；中国的 L3 试点也在逐步明确类似边界。相关安全论证见 <a href="challenges/safety.html">功能安全与 SOTIF</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">09</span><h2>关于分级的高频疑问</h2></div>
+        <div class="faq">
+          <details><summary>“L2.5 / L2.9 / L2+”这些说法合法吗？</summary><p>它们不是标准等级，只是厂商用来强调“比普通 L2 强一点”的宣传口径。判断真实水平，应看它支持的 ODD、是否需人监督以及事故责任的归属，见 <a href="#odd">ODD 运行设计域</a>。</p></details>
+          <details><summary>是不是等级越高就越安全？</summary><p>不一定。等级描述的是“自动化程度”与职责分配，不是“安全评级”。一个验证充分、边界清晰的 L2，可能比验证不足的 L3 更可靠；L4 的安全性来自系统设计、测试里程与冗余架构。</p></details>
+          <details><summary>L3 出了事故，责任算谁的？</summary><p>按主流监管思路：若事故发生在系统激活且处于 ODD 内，责任通常转向车企/系统方（车企需配合调查取证）；若是用户未按要求接管或超出 ODD 使用，则责任可能归用户。具体规则各国仍在立法细化中，详见 <a href="regulation.html#liability">事故责任怎么分</a>。</p></details>
+          <details><summary>为什么很多公司说“不做 L3，直接做 L4”？</summary><p>因为 L3 要求人与机器在毫秒级交接，而人在分心后很难瞬间接管，这个“交接风险”难以证明安全。跳过 L3 等于把兜底责任全部交给系统自己，逻辑更自洽，但技术难度更高。</p></details>
+          <details><summary>现在的车都带“城市 NOA / 端到端”，是不是已经 L3 了？</summary><p>绝大多数不是。判定标准不是“功能多强”，而是<b>责任归属</b>：只要仍要求驾驶员全程监督并随时接管，它就是 L2/L2+。“端到端”“大模型上车”描述的是技术路线，与“责任转移给系统”是两件事，见 <a href="overview.html#ad-vs-adas">辅助驾驶 ≠ 自动驾驶</a>。</p></details>
+          <details><summary>系统发出接管请求后，一般给驾驶员多少时间？</summary><p>没有统一的秒数，取决于车速、车流与场景：高速上必须留出足够的过渡时间，且要配合驾驶员监控（DMS）确认人确实处于可接管状态，否则系统不允许激活。若在窗口内无人接管，系统需自行执行最小风险状态（MRM），见 <a href="challenges/safety.html#sotifproc">SOTIF 的工程流程</a>。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读与标准原文</h2></div>
+        <p class="sec-sub">本页相关标准见下方；<b>全站所有标准与法规</b>（含“管什么、谁必须做”）汇总在 <a href="glossary.html#standards">概念 · 指标 · 标准 索引</a>。</p>
+        <div class="paper"><h4>分级标准</h4><p>SAE J3016:2021《Taxonomy and Definitions for Terms Related to Driving Automation Systems》；GB/T 40429-2021《汽车驾驶自动化分级》。</p></div>
+        <div class="paper"><h4>L3 法规</h4><p>UN Regulation No. 157 (ALKS)；中国《智能网联汽车道路测试与示范应用管理规范》相关文件。</p></div>
       </section>
 
       <section class="related">
@@ -203,6 +245,7 @@
           <a href="tech.html">实现分级的核心技术</a>
           <a href="scenarios.html">各场景落在哪个等级</a>
           <a href="challenges/safety.html">L3+ 如何证明安全</a>
+          <a href="one-trip.html#step4">看责任转移在真实行程里怎么发生</a>
           <a href="overview.html">回到总览</a>
         </div>
       </section>
@@ -215,21 +258,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../index.html">首页</a>
-        <a href="overview.html">认识自动驾驶</a>
-        <a href="levels.html">分级标准</a>
-        <a href="tech.html">核心技术</a>
-        <a href="scenarios.html">应用场景</a>
-        <a href="challenges.html">安全与挑战</a>
-        <a href="future.html">未来展望</a>
-        <a href="tutorial/index.html">系统教程</a>
-        <a href="news.html">领域动态</a>
+        <a href="../pages/overview.html">入门</a>
+        <a href="../pages/tech.html">技术</a>
+        <a href="../pages/challenges.html">安全与验证</a>
+        <a href="../pages/scenarios.html">落地与产业</a>
+        <a href="../pages/frontier.html">AI 前沿</a>
+        <a href="../pages/tutorial/index.html">系统教程</a>
+        <a href="../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 分级标准 L0–L5</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

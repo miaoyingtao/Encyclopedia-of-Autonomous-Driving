@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../index.html">首页</a>
-      <a href="overview.html">认识自动驾驶</a>
-      <a href="levels.html">分级标准 L0–L5</a>
-      <a href="tech.html">核心技术</a>
-      <a href="scenarios.html">应用场景</a>
-      <a href="challenges.html">安全与挑战</a>
-      <a href="future.html">未来展望</a>
-      <a href="tutorial/index.html">系统教程</a>
-      <a href="news.html">领域动态</a>
+      <a href="../pages/overview.html">入门</a>
+      <a href="../pages/tech.html" class="active">技术</a>
+      <a href="../pages/challenges.html">安全与验证</a>
+      <a href="../pages/scenarios.html">落地与产业</a>
+      <a href="../pages/frontier.html">AI 前沿</a>
+      <a href="../pages/tutorial/index.html">系统教程</a>
+      <a href="../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">主题 3 / 6 · 核心技术</span>
+    <span class="kicker">域 02 · 技术</span>
     <h1>自动驾驶的核心技术</h1>
     <p class="lead">自动驾驶本质上是把“会开车的人”拆解成可工程化的能力：看清世界、想好动作、精准执行，并用地图、通信与安全机制兜底。本主题可继续下钻到各子技术。</p>
     <nav class="crumb">
-      <a href="../index.html">首页</a><span class="sep">/</span><a href="tech.html">核心技术</a><span class="sep">/</span><span>总览</span>
+      <a href="../index.html">首页</a><span class="sep">/</span><span>技术</span>
     </nav>
   </div>
 </section>
@@ -42,14 +41,29 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#pipeline">1. 技术栈总览</a>
-      <a href="#topics">2. 五大技术专题</a>
-      <a href="#base">3. 算力与软件底座</a>
-      <a href="#schools">4. 技术流派之争</a>
+      <a href="#pipeline">1. ★ 技术栈总览</a>
+      <a href="#topics">2. ★ 技术专题</a>
+      <a href="#base">3. ◆ 算力平台</a>
+      <a href="#latency">4. ◆ 实时性与时延预算</a>
+      <a href="#software">5. ◆ 车载软件与中间件</a>
+      <a href="#safety-arch">6. ◆ 安全架构与降级</a>
+      <a href="#data-loop">7. ◆ 数据闭环</a>
+      <a href="#standards">8. ▪ 标准与法规索引</a>
+      <a href="#schools">9. ★ 技术流派之争</a>
+      <a href="#faq">10. 常见疑问</a>
+      <a href="#refs">11. 延伸阅读</a>
       <a href="#next" class="lv2-child">下一步怎么读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="tutorial/index.html">系统教程</a> 一起读。想先看这些模块在真实行程里如何协同，见 <a href="one-trip.html">一次行程的完整拆解</a>。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“一辆智能车由哪些部分构成”</b>：读 ★ 两节（技术栈总览、技术流派之争）即可建立框架。<b>要理解车规工程的真实约束</b>：◆ 五节（算力、时延、软件、安全降级、数据闭环）才是这一页的价值所在，建议逐节读。<b>▪ 标准与法规索引</b>供随时查阅，不必顺序阅读。</p></div>
+      <div class="panel info">
+        <span class="pt">本域地图 · 怎么读最快</span>
+        <p><b>★ 只求了解（约 15 分钟）</b>：本页技术栈总览 → 技术流派之争 → <a href="tech/sensors.html">传感器横评</a>。</p>
+        <p><b>◆ 要搞工程（约 90 分钟）</b>：算力平台 → 时延预算 → 环境感知 → 传感器专题 → 决策与规划 → 控制执行 → 定位与高精地图 → 安全架构与降级 → 数据闭环。</p>
+        <p><b>逐页难度与用时</b>：技术栈总览（入门 10 分 ★）｜<a href="tech/perception.html">环境感知</a>（进阶 20 分 ★）｜<a href="tech/sensors.html">传感器横评</a>（入门 12 分 ★）｜<a href="tech/decision.html">决策与规划</a>（进阶 20 分 ★）｜<a href="tech/control.html">控制执行</a>（进阶 18 分 ◆）｜<a href="tech/mapping.html">定位与高精地图</a>（进阶 18 分 ◆）｜<a href="tech/v2x.html">车路协同</a>（进阶 15 分 ◆）｜<a href="tech/perception/camera.html">四个传感器专题</a>（进阶 · 各 12 分 · 选读 ◆）。</p>
+      </div>
       <section class="sec scroll-target" id="pipeline">
         <div class="sec-head"><span class="no">01</span><h2>一套完整的技术栈长什么样</h2></div>
         <p>一辆 L4 级自动驾驶车，内部就像一套“实时操作系统 + AI 大脑 + 精密底盘”：传感器把物理世界数字化，算法把它变成决策，执行器把决策变成车轮的每一度转向与每一次制动。整个链条以毫秒级延迟闭环运行：</p>
@@ -147,23 +161,119 @@
             <div class="ci">🧠</div><h3>AI 大模型与智驾前沿</h3>
             <p>大语言模型 LLM、多模态大模型（VLM/VLA）与世界模型如何进入汽车：从“听懂人话”“识别没见过的东西”，到让模型在脑海里预演未来几秒再开车。</p>
             <span class="tag">LLM</span><span class="tag">VLM/VLA</span><span class="tag">世界模型</span><span class="tag">端到端</span>
-            <a class="more" href="tech/foundation.html">进入 AI 前沿专题</a>
+            <a class="more" href="frontier.html">进入 AI 前沿专题</a>
           </div>
         </div>
       </section>
 
       <section class="sec scroll-target" id="base">
-        <div class="sec-head"><span class="no">03</span><h2>看不见的底座：算力、软件与数据</h2></div>
-        <p>五大专题之上还有三层“地基”，决定系统能不能实时、可靠、持续进化：</p>
+        <div class="sec-head"><span class="no">03</span><h2>算力平台：从工控机到车规域控制器</h2></div>
+        <p>算法能跑多快，取决于芯片的<b>有效算力</b>，而不只是标称 TOPS。真实可用算力还要扣除算子支持率、内存带宽与热设计功耗的折损。行业通常按算力与安全等级分成三档：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>层级</th><th>典型算力</th><th>功耗与形态</th><th>典型用途</th></tr></thead>
+            <tbody>
+              <tr><td><b>安全 MCU / 安全岛</b></td><td>&lt; 1 TOPS，甚至无 NPU</td><td>数瓦，ASIL-D，独立供电</td><td>看门狗、线控仲裁、AEB 兜底、最小风险机动</td></tr>
+              <tr><td><b>量产 ADAS SoC</b></td><td>数十至数百 TOPS</td><td>10–50 W，单板或域控</td><td>L2/L2+ 高速与泊车，追求 TOPS/W 与成本</td></tr>
+              <tr><td><b>中央计算平台</b></td><td>500–2000+ TOPS</td><td>100–300 W，需主动散热</td><td>L3/L4 多传感器 + 大模型，统一承载感知与规控</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>选型时不能只看 TOPS，要同时评估三件事：① <b>算力利用率</b>——同样 254 TOPS，能否高效跑你的 BEV/Transformer，取决于 NPU 对算子（如 deformable attention、scatter）的支持；② <b>内存带宽</b>——多路 8MP 视频与点云是带宽密集型负载，LPDDR5 的带宽常先于算力成为瓶颈；③ <b>车规与安全</b>——AEC-Q100、ISO 26262 ASIL 等级、-40~85 ℃ 工作范围与 15 年寿命。</p>
+        <div class="panel info"><span class="pt">为什么不是“算力越大越好”</span><p>算力翻倍往往伴随功耗与散热成本上升。对量产车而言，能效比（TOPS/W）、成本与供应链稳定性常比峰值算力更重要。这也是“云端训练 + 车端蒸馏/量化推理”成为主流的现实原因：训练侧追求上限，车端追求确定性。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="latency">
+        <div class="sec-head"><span class="no">04</span><h2>实时性：频率预算与端到端时延</h2></div>
+        <p>“算法正确”不等于“能上车”。自动驾驶是硬实时闭环：从传感器曝光到执行器动作，整条链路必须在车辆前进的安全距离内完成。工程上把链路拆成可度量的频率与延迟预算：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>环节</th><th>典型频率</th><th>单次时延预算</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>传感器采集</td><td>10–30 Hz</td><td>曝光 + 传输 10–30 ms</td><td>30 Hz 对应 33 ms/帧，72 km/h 时车辆已前进约 0.67 m</td></tr>
+              <tr><td>感知推理</td><td>10–30 Hz</td><td>30–100 ms</td><td>BEV/占用网络是算力大头，常用量化与算子融合压时延</td></tr>
+              <tr><td>预测</td><td>10–20 Hz</td><td>10–30 ms</td><td>多模态轨迹生成 + 打分</td></tr>
+              <tr><td>规划</td><td>10–50 Hz</td><td>20–80 ms</td><td>采样/优化 + 碰撞与边界校验</td></tr>
+              <tr><td>控制</td><td>50–100 Hz</td><td>5–20 ms</td><td>横纵向解耦，MPC 需在线求解二次规划</td></tr>
+              <tr><td>执行器响应</td><td>—</td><td>转向 100–300 ms</td><td>机械与电机/液压的物理延迟，需在轨迹中前馈补偿</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="math math-left">t_total = t_sense + t_perception + t_plan + t_control + t_actuator<br>d_stop = v · t_total + v² / (2·a_max)</div>
+        <p>以 72 km/h（20 m/s）为例，若端到端时延 200 ms、最大减速度 6 m/s²，则“发现→停住”的距离约为 20×0.2 + 20²/(2×6) ≈ 37 m。这意味着每多 100 ms 时延，就要多留约 2 m 安全余量——高速场景对时延极其敏感。</p>
+        <div class="panel warn"><span class="pt">延迟补偿</span><p>控制下发的指令作用于“几百毫秒后的车辆状态”。工业实现普遍在规划轨迹上打时间戳，控制端按当前时刻插值，并用 Smith 预估器或状态外推补偿执行器延迟；否则高速下会出现明显的“画龙”。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="software">
+        <div class="sec-head"><span class="no">05</span><h2>车载软件架构：中间件与确定性调度</h2></div>
+        <p>自动驾驶程序不是一堆独立进程，而是运行在实时操作系统上的分布式系统。算法要落地，必须先解决“谁在什么时候算、数据怎么可靠送达”的问题：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🧩 通信中间件</h3><p>ROS 2 基于 DDS 提供发布/订阅与 QoS（可靠性、历史深度、截止时间），支持零拷贝共享内存；AUTOSAR Adaptive 用 SOA + SOME/IP 承载车控服务。两者常在同一域控制器内共存，用桥接层打通。</p></div>
+          <div class="card reveal"><h3>⏱ 确定性调度</h3><p>关键任务用 SCHED_FIFO / 时间触发调度 + CPU 亲和性绑定，避免被非关键任务抢占；大模型推理走独立 NPU 队列，与安全监控进程在资源上隔离。</p></div>
+          <div class="card reveal"><h3>🕒 时间同步</h3><p>多传感器融合依赖统一时间基准，用 PTP（IEEE 1588）或 gPTP 做硬件时间戳，误差控制在微秒级。时间戳错位是“鬼影/拖影”的常见根因。</p></div>
+          <div class="card reveal"><h3>🔄 OTA 与回滚</h3><p>双分区 A/B 升级，失败自动回滚；功能安全相关软件的升级需满足 ISO 24089 与法规要求，并保留可追溯的版本与标定数据。</p></div>
+        </div>
+        <div class="codeblock"># 典型域控制器进程/线程划分（示意）
+safety_monitor   (RT, 1 kHz)   —— 看门狗、心跳、降级仲裁，ASIL-D
+sensor_driver    (RT, 100 Hz)  —— 时间戳打标、零拷贝入共享内存
+perception_gpu   (30 Hz)       —— BEV/占用网络，独立 NPU 队列
+prediction       (20 Hz)       —— 多模态轨迹 + 概率
+planning         (20–50 Hz)    —— 采样/优化 + 碰撞校验
+control          (100 Hz)      —— 横纵向 MPC/PID
+logging/upload   (尽力而为)     —— 影子模式、Corner Case 回传</div>
+      </section>
+
+      <section class="sec scroll-target" id="safety-arch">
+        <div class="sec-head"><span class="no">06</span><h2>安全架构：冗余、监控与降级</h2></div>
+        <p>安全不是某个模块的属性，而是整个系统的架构属性。ISO 26262 管“随机硬件失效”，ISO 21448（SOTIF）管“功能正常但判断错误”，两者共同决定架构：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>机制</th><th>解决的问题</th><th>典型实现</th></tr></thead>
+            <tbody>
+              <tr><td>Fail-safe（失效即安全）</td><td>单点失效后进入安全状态</td><td>L2 及以下：退出智驾、提示接管，AEB 独立兜底</td></tr>
+              <tr><td>Fail-operational（失效可运行）</td><td>单点失效后仍能完成最小风险机动</td><td>L3+：双制动回路、双转向电机、双电源、双计算通道</td></tr>
+              <tr><td>2oo2 / 2oo3 表决</td><td>识别并隔离错误通道</td><td>异构双通道结果比对，分歧时降级到保守策略</td></tr>
+              <tr><td>安全监控器</td><td>发现“算得不对 / 来不及”</td><td>独立 MCU 监控心跳、超时与输出合理性，直接触发 MRM</td></tr>
+              <tr><td>MRM（最小风险机动）</td><td>超出 ODD 或系统异常时保底</td><td>减速、打双闪、靠边停车，或维持车道直到驾驶员接管</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>架构设计的基本准则是<b>“异构冗余优先于同构冗余”</b>：两套相同软件会同时犯同一个错，而“视觉 + 激光雷达”“规则 + 学习”“A 芯片 + B 芯片”的异构组合才能覆盖共因失效。标准条款与量化指标见 <a href="challenges/safety.html">功能安全与 SOTIF</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="data-loop">
+        <div class="sec-head"><span class="no">07</span><h2>数据闭环：从里程到有效样本</h2></div>
+        <p>“跑了多少万公里”不是有效指标，真正决定能力上限的是<b>有效危险样本的密度</b>。工程上的数据闭环通常包含四个环节：</p>
         <ol class="steps">
-          <li><h3>车载算力平台</h3><p>早期智驾用一台工控机，如今走向车规级域控制器：大算力 SoC（几百到上千 TOPS）、ASIL-D 级功能安全 MCU、冗余电源与散热，组成“移动的超算中心”。</p></li>
-          <li><h3>软件与中间件</h3><p>自动驾驶操作系统之上运行感知、规划、控制等模块；需要满足确定性调度（关键任务毫秒级完成）、通信安全与 OTA 升级能力。</p></li>
-          <li><h3>数据闭环</h3><p>真实路测数据回传 → 自动筛选“罕见但危险”的 Corner Case → 标注 → 训练新模型 → 仿真回归 → OTA 推送给车队。谁能高效闭环数据，谁就进化得快，详见 <a href="challenges/testing.html">测试与评价</a>。</p></li>
+          <li><h3>影子模式与自动触发</h3><p>模型在后台“离线跑”，与人类驾驶或当前策略比对；出现分歧、接管、急刹、近距离切入时自动打标回传。触发条件必须可解释、可复现。</p></li>
+          <li><h3>场景挖掘与切片</h3><p>用感知结果 + 车辆信号把长时序数据切成场景片段（路口、加塞、鬼探头、施工区），按稀有度、危险度与模型不确定性排序，优先送标。</p></li>
+          <li><h3>主动学习与标注</h3><p>优先标注模型置信度低、预测熵高或集成模型分歧大的样本，用最少的标注量换取最大的能力提升。</p></li>
+          <li><h3>仿真回归与灰度</h3><p>新模型先在数十万条场景库上回归（不得回退既有能力），再按车队灰度 OTA，用真实数据验证后全量推送。</p></li>
         </ol>
+        <div class="panel info"><span class="pt">量级参考</span><p>行业公开信息中，头部玩家的仿真里程以“每年数十亿公里”计，真实路测以“千万公里”计，而真正触发回传的 Corner Case 往往只占万分之一量级——数据闭环的难点在“筛得准”，不在“存得多”。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="standards">
+        <div class="sec-head"><span class="no">08</span><h2>关键标准与法规索引</h2></div>
+        <p>读技术文档时，下面这些编号会反复出现。它们不是“加分项”，而是产品能否上市的前置条件。全站出现的标准与法规（含“管什么、谁必须做”）汇总在 <a href="glossary.html#standards">概念 · 指标 · 标准 索引 · 标准清单</a>：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>标准 / 法规</th><th>覆盖范围</th><th>与本站的关系</th></tr></thead>
+            <tbody>
+              <tr><td>ISO 26262</td><td>道路车辆功能安全（ASIL A–D）</td><td>硬件冗余、失效处理、安全生命周期</td></tr>
+              <tr><td>ISO 21448 (SOTIF)</td><td>预期功能安全</td><td>感知/预测/规划“没坏但判断错”的风险</td></tr>
+              <tr><td>ISO 21434</td><td>汽车网络安全</td><td>OTA、通信、攻击面与纵深防御</td></tr>
+              <tr><td>SAE J3016 / GB/T 40429</td><td>驾驶自动化分级</td><td>L0–L5 的责任边界与 ODD 定义</td></tr>
+              <tr><td>UN R157 (ALKS)</td><td>车道保持系统法规</td><td>L3 高速场景的准入与接管要求</td></tr>
+              <tr><td>ISO 34502 / UL 4600</td><td>场景测试与安全论证</td><td>仿真、路测与安全案例的评估方法</td></tr>
+              <tr><td>ISO 24089</td><td>软件更新工程</td><td>OTA 流程与回滚</td></tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section class="sec scroll-target" id="schools">
-        <div class="sec-head"><span class="no">04</span><h2>三大技术流派之争</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>三大技术流派之争</h2></div>
         <div class="tbl-wrap">
           <table>
             <thead><tr><th>流派</th><th>核心思路</th><th>优势</th><th>挑战</th></tr></thead>
@@ -174,7 +284,28 @@
             </tbody>
           </table>
         </div>
-        <p class="sec-sub">现实中厂商多采用“混合路线”：主干用端到端模型提升能力上限，同时保留模块化安全兜底与可审计接口。这条路线的演化见 <a href="future.html">未来展望</a>；与 LLM、世界模型结合的完整脉络见 <a href="tech/foundation.html">AI 前沿专题</a>。</p>
+        <p class="sec-sub">现实中厂商多采用“混合路线”：主干用端到端模型提升能力上限，同时保留模块化安全兜底与可审计接口。这条路线的演化见 <a href="future.html">未来展望</a>；与 LLM、世界模型结合的完整脉络见 <a href="frontier.html">AI 前沿专题</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">10</span><h2>关于技术栈的常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>算力是不是越大越好？</summary><p>不是。标称 TOPS 要扣除算子支持率、内存带宽与热设计功耗的折损才是“有效算力”；对量产车来说，能效比（TOPS/W）、成本与供应链稳定性通常比峰值算力更重要。这也是“云端训练 + 车端量化蒸馏”成为主流的现实原因，见 <a href="#base">算力平台</a>。</p></details>
+          <details><summary>为什么不直接用消费级 GPU 或服务器芯片？</summary><p>车规要求 AEC-Q100 认证、−40~85 ℃ 工作范围、约 15 年寿命、抗振动与电磁兼容，并要求配套的安全机制（锁步、看门狗、内存保护）。消费级芯片没有这些认证与冗余设计，无法通过整车安全论证。</p></details>
+          <details><summary>断网了自动驾驶还能开吗？</summary><p>必须能。安全设计原则是“<b>车端闭环</b>”：V2X 与云端只是增强能力（超视距信息、路况推送、远程协助），核心的感知—决策—控制都在车上完成。断网最多损失在线功能，不影响基本行驶安全，见 <a href="tech/v2x.html#faq">V2X 常见疑问</a>。</p></details>
+          <details><summary>能不能把算法都放到云端算，车上只装简单设备？</summary><p>不行。端到端时延预算是硬约束：感知推理 30–100 ms、控制 5–20 ms，而无线链路的不确定性与中断风险无法满足功能安全要求。云端的正确定位是训练、仿真、车队调度与数据闭环，不是实时驾驶决策。</p></details>
+          <details><summary>传感器越多是不是越安全？</summary><p>不必然。传感器越多，标定漂移点、失效组合与算力压力也随之增加。安全来自<b>异构冗余 + 失效检测 + 降级策略</b>（例如视觉与激光雷达互补、规则层与学习层互检），而不是数量堆叠，见 <a href="tech/perception/fusion.html#faq">融合专题</a>。</p></details>
+          <details><summary>OTA 会不会成为新的攻击入口？</summary><p>会，所以它是被管得最严的通道：固件包签名校验、双分区与回滚、传输加密、升级授权缺一不可。监管层面有 UN R156（软件更新管理体系 SUMS）与 ISO 24089 约束，见 <a href="challenges/cybersecurity.html#std">网络安全合规清单</a>。</p></details>
+          <details><summary>ISO 26262 和 SOTIF 到底谁管什么？</summary><p>一句话区分：<b>26262 管“系统坏了怎么办”</b>（硬件/软件失效），<b>21448（SOTIF）管“系统没坏但判断错了怎么办”</b>（性能局限与场景超出预期），<b>21434 管“被攻击了怎么办”</b>。三者共同决定架构，见 <a href="challenges/safety.html#two">两类安全</a>。</p></details>
+          <details><summary>AUTOSAR、ROS 2 这类中间件为什么重要？</summary><p>它们决定“模块之间怎么说话、谁先谁后、超时怎么办”。确定性调度、时间同步、进程隔离与健康监控都靠中间件实现——没有它，多传感器与多模块的毫秒级协同无法保证，功能安全也无从落地，见 <a href="#software">车载软件与中间件</a>。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">11</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>系统架构与实时性</h4><p>AUTOSAR Adaptive Platform 规范；ROS 2 官方文档与 DDS QoS 设计指南；ISO 26262:2018《道路车辆功能安全》各部分；Kopetz, <i>Real-Time Systems: Design Principles for Distributed Embedded Applications</i>。</p></div>
+        <div class="paper"><h4>感知与学习</h4><p>BEVFormer、BEVDet 系列（BEV 表征）；PointPillars、CenterPoint（点云检测）；SurroundOcc、OccNet（占用预测）；以及多传感器后融合与端到端感知的代表性工作。</p></div>
+        <div class="paper"><h4>规划与控制</h4><p>Pomerleau, “ALVINN: An Autonomous Land Vehicle in a Neural Network” (1989)；Paden et al., “A Survey of Motion Planning and Control Techniques for Self-Driving Urban Vehicles” (2016)；Mayne et al. 关于 MPC 的综述。</p></div>
       </section>
 
       <section class="related scroll-target" id="next">
@@ -186,7 +317,7 @@
           <a href="tech/control.html">控制执行</a>
           <a href="tech/mapping.html">定位与高精地图</a>
           <a href="tech/v2x.html">车路协同 V2X</a>
-          <a href="tech/foundation.html">AI 大模型与智驾前沿</a>
+          <a href="frontier.html">AI 大模型与智驾前沿</a>
           <a href="tutorial/index.html">系统教程（进阶讲义）</a>
           <a href="challenges/testing.html">仿真与测试验证</a>
         </div>
@@ -200,21 +331,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../index.html">首页</a>
-        <a href="overview.html">认识自动驾驶</a>
-        <a href="levels.html">分级标准</a>
-        <a href="tech.html">核心技术</a>
-        <a href="scenarios.html">应用场景</a>
-        <a href="challenges.html">安全与挑战</a>
-        <a href="future.html">未来展望</a>
-        <a href="tutorial/index.html">系统教程</a>
-        <a href="news.html">领域动态</a>
+        <a href="../pages/overview.html">入门</a>
+        <a href="../pages/tech.html">技术</a>
+        <a href="../pages/challenges.html">安全与验证</a>
+        <a href="../pages/scenarios.html">落地与产业</a>
+        <a href="../pages/frontier.html">AI 前沿</a>
+        <a href="../pages/tutorial/index.html">系统教程</a>
+        <a href="../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 核心技术</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

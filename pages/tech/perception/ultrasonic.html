@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../../index.html">首页</a>
-      <a href="../../overview.html">认识自动驾驶</a>
-      <a href="../../levels.html">分级标准 L0–L5</a>
-      <a href="../../tech.html">核心技术</a>
-      <a href="../../scenarios.html">应用场景</a>
-      <a href="../../challenges.html">安全与挑战</a>
-      <a href="../../future.html">未来展望</a>
-      <a href="../../tutorial/index.html">系统教程</a>
-      <a href="../../news.html">领域动态</a>
+      <a href="../../../pages/overview.html">入门</a>
+      <a href="../../../pages/tech.html" class="active">技术</a>
+      <a href="../../../pages/challenges.html">安全与验证</a>
+      <a href="../../../pages/scenarios.html">落地与产业</a>
+      <a href="../../../pages/frontier.html">AI 前沿</a>
+      <a href="../../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 传感器深潜 ④ / ⑤</span>
+    <span class="kicker">技术 · 传感器深潜 ④ / ⑤</span>
     <h1>超声波雷达：低速泊车的“贴身侍卫”</h1>
     <p class="lead">停车入位时，那些藏在保险杠里的“小黑点”就是超声波雷达。它只负责最后几米，却让自动泊车从“科幻”变成十万元级汽车的标配功能。</p>
     <nav class="crumb">
-      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../tech.html">核心技术</a><span class="sep">/</span><a href="../perception.html">环境感知</a><span class="sep">/</span><span>超声波雷达</span>
+      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../../pages/tech.html">技术</a><span class="sep">/</span><a href="../../../pages/tech/perception.html">环境感知</a><span class="sep">/</span><span>超声波雷达</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#principle">1. 原理</a>
-      <a href="#use">2. 用在哪些功能</a>
-      <a href="#layout">3. 探头怎么布局</a>
-      <a href="#spec">4. 参数与选购</a>
-      <a href="#hard">5. 局限</a>
-      <a href="#trend">6. 在智能泊车中的未来</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#principle">1. ★ 原理</a>
+      <a href="#use">2. ★ 用在哪些功能</a>
+      <a href="#layout">3. ◆ 探头怎么布局</a>
+      <a href="#spec">4. ▪ 参数与选购</a>
+      <a href="#hard">5. ★ 局限</a>
+      <a href="#trend">6. ◆ 在智能泊车中的未来</a>
+      <a href="#signal">7. ▪ 测距原理与信号处理</a>
+      <a href="#faq">8. 常见疑问</a>
+      <a href="#refs">9. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/01-math-sensors.html">第 0 章 · 数学与传感器建模</a> 一起读。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“超声波在车上干什么”</b>：读 ★ 三节（原理、用在哪些功能、局限）。<b>做泊车相关开发</b>：◆ 讲探头布局与智能泊车的演进方向，▪ 参数与信号处理细节供查阅。四种传感器的横向对照见 <a href="../sensors.html">传感器横评</a>。</p></div>
       <section class="sec scroll-target" id="principle">
         <div class="sec-head"><span class="no">01</span><h2>原理：声呐的汽车版</h2></div>
         <p>超声波雷达发射约 40–60kHz 的超声波脉冲，计算声波碰到障碍物后返回的时间，按声速（约 340m/s）换算距离：</p>
@@ -123,14 +126,28 @@
         </ol>
       </section>
 
+      <section class="sec scroll-target" id="signal">
+        <div class="sec-head"><span class="no">08</span><h2>测距原理与信号处理</h2></div>
+        <p>超声波雷达发射 40–58 kHz 脉冲、接收回波测距，原理同样是飞行时间。声速随温度变化（约 331.4 + 0.6·T m/s），不做温度补偿会带来约 6% 的测距误差；波束角大、存在 15–30 cm 盲区，因此只适合低速近距补盲。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>声速补偿与回波检测（阈值法、包络峰值、相关检测）见 <a href="../../tutorial/01-math-sensors.html#sensor">第 0 章 · 传感器几何建模</a>。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="faq">
-          <details><summary>为什么倒车雷达探测不到细小的柱子？</summary><p>细柱的反射面积小、回波弱，且探头波束是“扇形”，竖直细柱未必落在主波束内。这也是为什么倒车仍建议结合影像，不要 100% 依赖雷达。</p></details>
+          <details><summary>为什么倒车雷达探测不到细小的柱子？</summary><p>细柱的反射面积小、回波弱，且探头波束是“扇形”，竖直细柱未必落在主波束内。这也是为什么倒车仍建议结合影像，不要 100% 依赖雷达，见 <a href="camera.html">摄像头专题</a>。</p></details>
           <details><summary>雷达探头上的泥水会影响吗？</summary><p>会。探头表面脏污会衰减声波。好在多数系统带“脏污自检”——检测到回波异常时提示清洁或暂停该探头。</p></details>
           <details><summary>自动泊车为什么有时“不敢停”？</summary><p>系统对空间计算极为保守：超声波测量与车位线识别都要留安全余量，还要考虑开门空间与相邻车辆姿态。宁可放弃一个“看着能停”的车位，也不冒险刮蹭。</p></details>
           <details><summary>低速行驶时超声波也能防撞吗？</summary><p>部分车型在低速蠕行/拥堵跟车时会激活近距离超声波，防止“蹭到前车保险杠”等毫米波雷达看不清的贴脸场景，属于传感器冗余的一部分。</p></details>
+          <details><summary>超声波为什么只适合低速？</summary><p>三个物理限制：<b>声速慢</b>（约 340 m/s，回波往返本身就要时间，决定了刷新率）、<b>衰减快</b>（有效距离通常 0.15–5 m）、<b>波束宽</b>（约几十度，角分辨率差）。因此它天然是“近距补盲”传感器，而不是主感知。</p></details>
+          <details><summary>泊车到底该信超声波还是环视摄像头？</summary><p>两者互补：超声波测距准、不依赖光照，但分辨率低、看不清“是什么”；环视摄像头能识别车位线与障碍物类型，但受光照与脏污影响。现代泊车系统会把两者与轮速/转向角一起融合，并由超声波兜底最后的贴脸距离，见 <a href="#trend">在智能泊车中的未来</a>。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">09</span><h2>延伸阅读与关键标准</h2></div>
+        <div class="paper"><h4>原理与器件</h4><p>压电式与电容式（MEMS）超声换能器的对比；MaxBotix、TDK 等厂商的超声波传感器应用笔记。</p></div>
+        <div class="paper"><h4>泊车与法规</h4><p>ISO 17386（低速辅助泊车系统 MLLS）与 ISO 22839（低速障碍物检测）；各国对倒车 / 泊车辅助的法规要求。</p></div>
       </section>
 
       <section class="related">
@@ -142,7 +159,7 @@
           <a href="lidar.html">激光雷达专题</a>
           <a href="fusion.html">多传感器融合</a>
           <a href="../perception.html">返回环境感知</a>
-          <a href="../../tech.html">返回核心技术</a>
+          <a href="../../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -154,21 +171,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../../index.html">首页</a>
-        <a href="../../overview.html">认识自动驾驶</a>
-        <a href="../../levels.html">分级标准</a>
-        <a href="../../tech.html">核心技术</a>
-        <a href="../../scenarios.html">应用场景</a>
-        <a href="../../challenges.html">安全与挑战</a>
-        <a href="../../future.html">未来展望</a>
-        <a href="../../tutorial/index.html">系统教程</a>
-        <a href="../../news.html">领域动态</a>
+        <a href="../../../pages/overview.html">入门</a>
+        <a href="../../../pages/tech.html">技术</a>
+        <a href="../../../pages/challenges.html">安全与验证</a>
+        <a href="../../../pages/scenarios.html">落地与产业</a>
+        <a href="../../../pages/frontier.html">AI 前沿</a>
+        <a href="../../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 超声波雷达专题</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -182,7 +198,6 @@
   <script src="../../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

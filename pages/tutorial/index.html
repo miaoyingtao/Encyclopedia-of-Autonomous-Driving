@@ -15,14 +15,13 @@
     <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
     <nav class='main-nav'>
       <a href='../../index.html'>首页</a>
-      <a href='../overview.html'>认识自动驾驶</a>
-      <a href='../levels.html'>分级标准 L0–L5</a>
-      <a href='../tech.html'>核心技术</a>
-      <a href='../scenarios.html'>应用场景</a>
-      <a href='../challenges.html'>安全与挑战</a>
-      <a href='../future.html'>未来展望</a>
-      <a href='index.html' class='active'>系统教程</a>
-      <a href='../news.html'>领域动态</a>
+      <a href='../../pages/overview.html'>入门</a>
+      <a href='../../pages/tech.html'>技术</a>
+      <a href='../../pages/challenges.html'>安全与验证</a>
+      <a href='../../pages/scenarios.html'>落地与产业</a>
+      <a href='../../pages/frontier.html'>AI 前沿</a>
+      <a href='../../pages/tutorial/index.html' class='active'>系统教程</a>
+      <a href='../../pages/news.html'>领域动态</a>
     </nav>
   </div>
 </header>
@@ -33,7 +32,7 @@
     <h1>自动驾驶：从概念科普到算法工程</h1>
     <p class='lead'>这套教程把“科普篇”的一句话，展开成“为什么这样建模、公式是什么、工程上怎么实现、怎么验证”的完整讲义。适合想真正搞懂算法细节的工程师与学生：不需要你已经是专家，但需要你愿意动手算。</p>
     <nav class='crumb'>
-      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>课程地图</span>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><span>系统教程</span>
     </nav>
   </div>
 </section>
@@ -46,14 +45,16 @@
       <a href='#map'>2. 课程地图</a>
       <a href='#path'>3. 三条学习路径</a>
       <a href='#notation'>4. 记号与坐标约定</a>
-      <a href='#qa'>5. 常见疑问</a>
+<a href='#qa'>5. 常见疑问</a>
+<a href='#refs'>6. 参考书目与工具链</a>
       <a href='#start' class='lv2-child'>现在开始：第 0 章</a>
     </aside>
 
     <div>
+      <div class='panel info'><span class='pt'>配套阅读</span><p>想先建立直觉？可先看科普版 <a href='../../pages/tech.html'>技术域</a>，再回来读公式与推导。</p></div>
       <section class='sec scroll-target' id='method'>
         <div class='sec-head'><span class='no'>01</span><h2>这套教程怎么读</h2></div>
-        <p>本站内容分两层。<b>科普篇</b>（核心技术、应用场景等）回答“是什么、为什么”，帮你建立地图；<b>教程篇</b>（本目录以下各章）回答“公式是什么、代码怎么写、坑在哪里”。建议流程：先在 <a href='../tech.html'>核心技术</a> 花 10 分钟看全景，再按路径进入各章。</p>
+        <p>内容分两层。<b>科普篇</b>（技术、安全与验证、落地与产业等）回答“是什么、为什么”，帮你建立地图；<b>教程篇</b>（本目录以下各章）回答“公式是什么、代码怎么写、坑在哪里”。建议流程：先在 <a href='../tech.html'>核心技术</a> 花 10 分钟看全景，再按路径进入各章。</p>
         <p>每一章都遵守同一份讲义结构，方便你系统对照：</p>
         <ol class='steps'>
           <li><h3>学习目标与前置</h3><p>开头明确“学完能干什么”与“需要会什么”，缺的数学在 01 章补齐。</p></li>
@@ -71,23 +72,23 @@
           <table>
             <thead><tr><th>章节</th><th>核心内容</th><th>难度</th><th>预计用时</th><th>入口</th></tr></thead>
             <tbody>
-              <tr><td><b>第 0 章</b><br>数学与传感器建模</td><td>线性代数与刚体变换、贝叶斯与卡尔曼滤波、相机与激光雷达的几何模型、最小二乘与优化</td><td>基础</td><td>3–4 小时</td><td><a href='01-math-sensors.html'>进入讲义</a></td></tr>
-              <tr><td><b>第 1 章</b><br>感知与状态估计</td><td>2D/3D 检测、多传感器标定与融合、BEV 与占用网络、多目标跟踪与 ID 管理</td><td>进阶</td><td>4–5 小时</td><td><a href='02-perception.html'>进入讲义</a></td></tr>
-              <tr><td><b>第 2 章</b><br>决策规划与控制</td><td>轨迹预测、行为决策、A* 与 Hybrid A*、轨迹优化、自行车模型与 PID/LQR/MPC</td><td>进阶</td><td>5–6 小时</td><td><a href='03-planning-control.html'>进入讲义</a></td></tr>
-              <tr><td><b>第 3 章</b><br>定位·建图·仿真测试</td><td>GNSS/RTK 与 IMU 组合、点云配准、高精地图与 OpenDRIVE、数据闭环与 SOTIF 测试指标</td><td>进阶</td><td>4–5 小时</td><td><a href='04-loc-sim-test.html'>进入讲义</a></td></tr>
-            <tr><td><b>第 4 章</b><br>LLM/VLM/VLA 端到端</td><td>一切皆 Token 的表征统一、端到端行为克隆与强化学习、语言条件驾驶、VLA 架构与部署、开放词汇感知、评测与安全边界</td><td>高阶</td><td>6–8 小时</td><td><a href='05-llm-vla.html'>进入讲义</a></td></tr>
-            <tr><td><b>第 5 章</b><br>世界模型</td><td>视频/潜空间世界模型建模、可控反事实生成、规划预演、评测指标与工程安全边界</td><td>高阶</td><td>5–7 小时</td><td><a href='06-worldmodel.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 0 章</b><br>数学与传感器建模</td><td>线性代数与刚体变换、贝叶斯与卡尔曼滤波、相机与激光雷达的几何模型、最小二乘与优化；<b>新增</b>：旋转表示与李群、滤波家族（EKF/UKF/ESKF）、相机标定与点云配准实操、优化工程实践</td><td>基础</td><td>3–4 小时</td><td><a href='01-math-sensors.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 1 章</b><br>感知与状态估计</td><td>2D/3D 检测、多传感器标定与融合、BEV 与占用网络、多目标跟踪与 ID 管理；<b>新增</b>：数据集与指标细节、时间同步实操、IoU/NMS/匈牙利匹配手写实现、失败模式与安全兜底</td><td>进阶</td><td>4–5 小时</td><td><a href='02-perception.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 2 章</b><br>决策规划与控制</td><td>轨迹预测、行为决策、A* 与 Hybrid A*、轨迹优化、自行车模型与 PID/LQR/MPC；<b>新增</b>：Frenet 最小 jerk 闭式解、预测基准与模型谱系、QP 与求解器工程、学习式规划与 RL、车辆动力学进阶</td><td>进阶</td><td>5–6 小时</td><td><a href='03-planning-control.html'>进入讲义</a></td></tr>
+              <tr><td><b>第 3 章</b><br>定位·建图·仿真测试</td><td>GNSS/RTK 与 IMU 组合、点云配准、高精地图与 OpenDRIVE、数据闭环与 SOTIF 测试指标；<b>新增</b>：RTK/PPK 工作流与坐标系、LIO 系统对比、地图生产流程、CARLA/SUMO/OpenSCENARIO 实操、安全标准分工</td><td>进阶</td><td>4–5 小时</td><td><a href='04-loc-sim-test.html'>进入讲义</a></td></tr>
+            <tr><td><b>第 4 章</b><br>LLM/VLM/VLA 端到端</td><td>一切皆 Token 的表征统一、端到端行为克隆与强化学习、语言条件驾驶、VLA 架构与部署、开放词汇感知、评测与安全边界；<b>新增</b>：Transformer 机制细节、模型谱系对比、轨迹 Token 化与训练配方、车端推理优化、开环/闭环评测实操</td><td>高阶</td><td>6–8 小时</td><td><a href='05-llm-vla.html'>进入讲义</a></td></tr>
+            <tr><td><b>第 5 章</b><br>世界模型</td><td>视频/潜空间世界模型建模、可控反事实生成、规划预演、评测指标与工程安全边界；<b>新增</b>：VAE/VQ-VAE/扩散/流匹配数学、四条技术路线对比、闭环训练与想象 rollout 防护、算力预算</td><td>高阶</td><td>5–7 小时</td><td><a href='06-worldmodel.html'>进入讲义</a></td></tr>
             </tbody>
           </table>
         </div>
-        <p class='sec-sub'>概念背景不足时，随时退回对应科普页：<a href='../tech/perception.html'>环境感知</a>、<a href='../tech/decision.html'>决策规划</a>、<a href='../tech/control.html'>控制执行</a>、<a href='../tech/mapping.html'>定位地图</a>、<a href='../tech/v2x.html'>V2X</a>、<a href='../future.html'>未来展望</a>。</p>
+        <p class='sec-sub'>每章末尾都带有“学习资源地图”（外部课程与开源实现链接），完整清单见 <a href='resources.html'>教程资源库</a>。概念背景不足时，随时退回对应科普页：<a href='../tech/perception.html'>环境感知</a>、<a href='../tech/decision.html'>决策与规划</a>、<a href='../tech/control.html'>控制执行</a>、<a href='../tech/mapping.html'>定位地图</a>、<a href='../tech/v2x.html'>V2X</a>、<a href='../future.html'>未来展望</a>。</p>
       </section>
 
       <section class='sec scroll-target' id='path'>
         <div class='sec-head'><span class='no'>03</span><h2>三条学习路径</h2></div>
         <div class='grid g3'>
           <div class='card reveal'><h3>🧮 算法与规划方向</h3><p>想进规划控制、决策算法岗：0 → 2 章全精读，重点啃状态空间搜索、轨迹优化与 MPC 推导；1 章了解感知输出格式即可。</p></div>
-          <div class='card reveal'><h3>👁️ 感知与 AI 方向</h3><p>想进感知、端到端方向：0 → 1 章精读，之后补 AI 前沿科普（见 <a href='../tech/foundation.html'>LLM 与世界模型</a>），再回到 3 章的数据闭环。</p></div>
+          <div class='card reveal'><h3>👁️ 感知与 AI 方向</h3><p>想进感知、端到端方向：0 → 1 章精读，之后补 AI 前沿科普（见 <a href='../frontier.html'>LLM 与世界模型</a>），再回到 3 章的数据闭环。</p></div>
           <div class='card reveal'><h3>🛡️ 系统与安全方向</h3><p>想进功能安全、测试评价：先通读 3 章，再横跳 <a href='../challenges/safety.html'>安全体系</a> 与 <a href='../challenges/testing.html'>测试评价</a>，最后回头精读 2 章看安全层如何“罩住”算法。</p></div>
         </div>
       </section>
@@ -116,7 +117,7 @@
           <details><summary>数学基础一般，能跟上吗？</summary><p>可以。第 0 章把后续要用的矩阵、概率、优化全部过一遍并标注用途；若遇到完全陌生的概念，先跳过符号、抓住“这个公式在解决什么问题”，回头再补推导。</p></details>
           <details><summary>只有公式没有代码，怎么算教程？</summary><p>每章给出可运行思路的伪代码与参数表；算法类题目强烈建议对照伪代码用 Python + NumPy 复现一次——多数自动驾驶算法的最小原型只需要几十行。</p></details>
           <details><summary>教程与科普页会重复吗？</summary><p>不重复：科普页管“概念与语境”，教程页管“建模与实现”，两者互链。想快速了解某个词，看科普；想弄懂某个算法，进教程。</p></details>
-          <details><summary>更新到“大模型/世界模型”了吗？</summary><p>最新方向先由 <a href='../tech/foundation.html'>AI 前沿专题</a> 承担概念部分；教程第 1、3 章已预留与其衔接的训练数据、评测与安全章节，可在读完 0–3 章后综合理解。</p></details>
+          <details><summary>更新到“大模型/世界模型”了吗？</summary><p>已经补齐：第 4 章（LLM/VLA）与第 5 章（世界模型）覆盖表征统一、行为克隆与 RL、VLA 架构与车端部署、扩散/流匹配生成、闭环训练与评测；概念背景仍可先看 <a href='../frontier.html'>AI 前沿专题</a>，再回教程看实现与评测细节。</p></details>
         </div>
       </section>
 
@@ -130,9 +131,17 @@
           <a href='04-loc-sim-test.html'>第 3 章 定位·仿真·测试</a>
           <a href='05-llm-vla.html'>第 4 章 LLM 与 VLA</a>
           <a href='06-worldmodel.html'>第 5 章 世界模型</a>
-          <a href='../tech.html'>回到核心技术科普</a>
+          <a href='resources.html'>教程资源库（外部课程与开源项目）</a>
+          <a href='../tech.html'>回到技术域</a>
           <a href='../../index.html'>返回首页</a>
         </div>
+      </section>
+
+      <section class='sec scroll-target' id='refs'>
+        <div class='sec-head'><span class='no'>06</span><h2>参考书目与工具链</h2></div>
+        <div class='paper'><h4>核心教材</h4><p>Thrun et al., <i>Probabilistic Robotics</i>；Siciliano &amp; Khatib, <i>Springer Handbook of Robotics</i>；Rajamani, <i>Vehicle Dynamics and Control</i>；Hartley &amp; Zisserman, <i>Multiple View Geometry</i>。</p></div>
+        <div class='paper'><h4>开源工具</h4><p>Autoware / Apollo（完整栈）、ROS 2（中间件）、PCL / Open3D（点云）、Ceres / GTSAM / g2o（优化）、CARLA / SUMO（仿真）。</p></div>
+        <div class='paper'><h4>外部资源总览</h4><p>公开课程（Coursera/Udacity）、教材、开源栈（Autoware/Apollo/CARLA/BEVFormer/LIO-SAM/UniAD/DreamerV3 等）、数据集与基准（nuScenes/Waymo/KITTI/NAVSIM/nuPlan/Bench2Drive）、工具链与安全标准（Ceres/GTSAM/OSQP/acados/ASAM/ISO 26262/21448）已整理成 <a href='resources.html'>教程资源库</a>，共 80 余条经可访问性验证的外部链接。</p></div>
       </section>
     </div>
   </div>
@@ -143,21 +152,20 @@
     <div class='footer-grid'>
       <div>
         <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
-        <p style='max-width:520px'>面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style='max-width:520px'>聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class='footer-links'>
         <a href='../../index.html'>首页</a>
-        <a href='../overview.html'>认识自动驾驶</a>
-        <a href='../levels.html'>分级标准</a>
-        <a href='../tech.html'>核心技术</a>
-        <a href='../scenarios.html'>应用场景</a>
-        <a href='../challenges.html'>安全与挑战</a>
-        <a href='../future.html'>未来展望</a>
-        <a href='index.html'>系统教程</a>
-        <a href='../news.html'>领域动态</a>
+        <a href='../../pages/overview.html'>入门</a>
+        <a href='../../pages/tech.html'>技术</a>
+        <a href='../../pages/challenges.html'>安全与验证</a>
+        <a href='../../pages/scenarios.html'>落地与产业</a>
+        <a href='../../pages/frontier.html'>AI 前沿</a>
+        <a href='../../pages/tutorial/index.html'>系统教程</a>
+        <a href='../../pages/news.html'>领域动态</a>
       </nav>
     </div>
-    <div class='footer-bar'><span>© 2026 本地静态站点 · 系统教程</span>
+    <div class='footer-bar'><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

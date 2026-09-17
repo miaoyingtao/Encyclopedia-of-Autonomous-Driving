@@ -14,13 +14,12 @@
     <a class="brand" href="index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
-      <a href="index.html">首页</a>
-      <a href="pages/overview.html">认识自动驾驶</a>
-      <a href="pages/levels.html">分级标准 L0–L5</a>
-      <a href="pages/tech.html">核心技术</a>
-      <a href="pages/scenarios.html">应用场景</a>
-      <a href="pages/challenges.html">安全与挑战</a>
-      <a href="pages/future.html">未来展望</a>
+      <a href="index.html" class="active">首页</a>
+      <a href="pages/overview.html">入门</a>
+      <a href="pages/tech.html">技术</a>
+      <a href="pages/challenges.html">安全与验证</a>
+      <a href="pages/scenarios.html">落地与产业</a>
+      <a href="pages/frontier.html">AI 前沿</a>
       <a href="pages/tutorial/index.html">系统教程</a>
       <a href="pages/news.html">领域动态</a>
     </nav>
@@ -31,14 +30,12 @@
   <div class="wrap">
     <span class="kicker">AUTONOMOUS DRIVING · 科普站</span>
     <h1>驶向未来：自动驾驶全景指南</h1>
-    <p class="lead">自动驾驶不是一个开关，而是一整套“感知—决策—执行”的技术体系，也是一场正在重塑出行、物流与城市的社会变革。本站用<b>多层跳转</b>的方式组织内容：从总览出发，逐级深入，直到传感器原理这样的细节，带你系统看懂自动驾驶。</p>
+    <p class="lead">自动驾驶不是一个开关，而是一整套“感知—决策—执行”的技术体系，也是一场正在重塑出行、物流与城市的社会变革。从分级标准到传感器原理，从功能安全到商业落地，这里有一条从科普到工程实践的完整路径。</p>
     <div class="hero-actions">
       <a class="btn btn-light" href="pages/overview.html">开始阅读：认识自动驾驶</a>
-      <a class="btn btn-ghost" href="pages/levels.html">先搞懂分级 L0–L5</a>
-      <a class="btn btn-ghost" href="pages/tech.html">深入核心技术</a>
-      <a class="btn btn-ghost" href="pages/tech/foundation.html">追热点：LLM 与世界模型</a>
-      <a class="btn btn-ghost" href="pages/news.html">跟踪领域动态</a>
-      <a class="btn btn-ghost" href="pages/tutorial/index.html">进阶：系统化技术教程</a>
+      <a class="btn btn-ghost" href="pages/tech.html">核心技术</a>
+      <a class="btn btn-ghost" href="pages/tutorial/index.html">系统教程</a>
+      <a class="btn btn-ghost" href="pages/news.html">领域动态</a>
     </div>
   </div>
 </section>
@@ -50,86 +47,98 @@
     <section class="sec" id="latest-news">
       <div class="sec-head">
         <span class="no">动态</span><h2>领域动态 · 最新要闻</h2>
-        <p>数据文件驱动 · 支持 tools/news_fetcher.py 自动抓取</p>
+        <p>聚合行业最新进展</p>
       </div>
       <p class="sec-sub">LLM / VLA、世界模型、L3 量产与 Robotaxi 的最新进展。以下为最近 4 条，点击标题可查看原始报道；<a href="pages/news.html">领域动态页</a>支持分类筛选与搜索。</p>
       <div class="grid g2" id="home-news-grid" data-count="4"></div>
-      <div class="news-empty" id="home-news-empty" hidden>暂无动态数据：请在 assets/news-data.js 中添加条目。</div>
+      <div class="news-empty" id="home-news-empty" hidden>暂无动态数据。</div>
       <p style="margin-top:16px"><a class="news-cta" href="pages/news.html">进入领域动态页 · 查看全部 →</a></p>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><span class="no">怎么读</span><h2>本网站的“分层跳转”结构</h2></div>
-      <p class="sec-sub">因为自动驾驶的内容又宽又深，单页放不下，本网站把知识组织成四层结构。每一页都给出“往下钻取”与“横向关联”的入口，你可以按自己的兴趣随时改变阅读路径。</p>
-      <div class="grid g2">
+      <div class="sec-head"><span class="no">路线</span><h2>三条阅读路线</h2></div>
+      <p class="sec-sub">全站按“入门 → 技术 → 安全与验证 → 落地与产业”组织，另设“AI 前沿”与“系统教程”两条纵深轨道。按你的目的选一条路线即可。</p>
+      <div class="grid g3">
         <div class="card reveal">
           <div class="ci">🧭</div>
-          <h3>第一层 · 首页与主题总览</h3>
-          <p>首页汇总六个主题：认识自动驾驶、分级标准、核心技术、应用场景、安全与挑战、未来展望。每个主题都先讲“是什么、为什么、包括什么”，再给出子页入口。</p>
+          <h3>科普线：先建立直觉</h3>
+          <p>入门 → 技术 → 安全与验证 → 落地与产业。每页讲清“是什么、为什么、怎么权衡”，不堆公式。</p>
+          <a class="more" href="pages/overview.html">从入门开始</a>
         </div>
         <div class="card reveal">
-          <div class="ci">📚</div>
-          <h3>第二至四层 · 专题与细节</h3>
-          <p>例如：核心技术 → 环境感知 → 激光雷达；应用场景 → 出行服务 Robotaxi；安全与挑战 → 网络安全。多跳几层，就能从宏观概念一直读到具体原理。</p>
+          <div class="ci">📐</div>
+          <h3>工程线：要公式与代码</h3>
+          <p>系统教程 0–5 章，从数学基础、感知、规划控制到定位仿真与大模型，给出推导、伪代码与工程要点。</p>
+          <a class="more" href="pages/tutorial/index.html">进入系统教程</a>
+        </div>
+        <div class="card reveal">
+          <div class="ci">📈</div>
+          <h3>产业线：关注落地与竞争</h3>
+          <p>落地与产业 + 领域动态，追踪场景商业化、法规准入与最新行业事件。</p>
+          <a class="more" href="pages/scenarios.html">看落地与产业</a>
         </div>
       </div>
-      <div class="panel info">
-        <span class="pt">一条示例“钻取”路径</span>
-        <p><b>首页</b> <span style="color:#0b57c4">→</span> <a href="pages/tech.html">核心技术</a> <span style="color:#0b57c4">→</span> <a href="pages/tech/perception.html">环境感知</a> <span style="color:#0b57c4">→</span> <a href="pages/tech/perception/lidar.html">激光雷达专题</a>，从“自动驾驶靠什么‘看’”一路读到“激光雷达如何测距、为什么越来越便宜”。</p>
+      <div class="panel tip">
+        <span class="pt">想先看整体？</span>
+        <p>用一段 11 分钟的真实行程，把定位、感知、决策、控制、安全降级与数据闭环串成一条线：<a href="pages/one-trip.html">一次行程的完整拆解：从上车到抵达</a>。</p>
       </div>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><span class="no">导览</span><h2>六大主题入口</h2></div>
+      <div class="sec-head"><span class="no">导览</span><h2>按域浏览</h2></div>
       <div class="grid g3">
         <div class="card reveal">
-          <div class="ci">🚘</div>
-          <h3>认识自动驾驶</h3>
-          <p>定义与辨析、它能带来什么价值、基本构成与发展简史。</p>
-          <span class="tag">自动驾驶 vs 辅助驾驶</span><span class="tag">价值</span><span class="tag">发展史</span>
-          <a class="more" href="pages/overview.html">进入主题</a>
-          <a class="card-cover" href="pages/overview.html" aria-label="认识自动驾驶"></a>
-        </div>
-        <div class="card reveal">
-          <div class="ci">🪜</div>
-          <h3>分级标准 L0–L5</h3>
-          <p>SAE 与中国《汽车驾驶自动化分级》如何定义 0 到 5 级，每一级谁在开车、谁负责安全。</p>
-          <span class="tag lv0">L0</span><span class="tag lv1">L1</span><span class="tag lv2">L2</span><span class="tag lv3">L3</span><span class="tag lv4">L4</span><span class="tag lv5">L5</span>
-          <a class="more" href="pages/levels.html">进入主题</a>
-          <a class="card-cover" href="pages/levels.html" aria-label="分级标准"></a>
+          <div class="ci">🧭</div>
+          <h3>入门</h3>
+          <p>认识自动驾驶是什么、自动驾驶分级 L0–L5 如何定义，建立最基本的概念框架。</p>
+          <span class="tag">定义</span><span class="tag">价值</span><span class="tag">分级</span>
+          <a class="more" href="pages/overview.html">进入入门</a>
+          <a class="card-cover" href="pages/overview.html" aria-label="入门"></a>
         </div>
         <div class="card reveal">
           <div class="ci">🧠</div>
-          <h3>核心技术</h3>
-          <p>环境感知、决策规划、控制执行、高精地图与定位、车路协同——拆解一辆智能车的“眼、脑、手”。</p>
-          <span class="tag">感知</span><span class="tag">决策规划</span><span class="tag">控制</span><span class="tag">定位</span><span class="tag">V2X</span>
-          <a class="more" href="pages/tech.html">进入主题</a>
-          <a class="card-cover" href="pages/tech.html" aria-label="核心技术"></a>
-        </div>
-        <div class="card reveal">
-          <div class="ci">🗺️</div>
-          <h3>应用场景</h3>
-          <p>为什么自动驾驶先在 Robotaxi、干线物流、港口矿区、末端配送落地？封闭与开放场景的节奏差异。</p>
-          <span class="tag">Robotaxi</span><span class="tag">干线物流</span><span class="tag">港口矿区</span><span class="tag">配送泊车</span>
-          <a class="more" href="pages/scenarios.html">进入主题</a>
-          <a class="card-cover" href="pages/scenarios.html" aria-label="应用场景"></a>
+          <h3>技术</h3>
+          <p>环境感知、定位与高精地图、决策与规划、控制执行、车路协同——拆解一辆智能车的“眼、脑、手”。</p>
+          <span class="tag">感知</span><span class="tag">决策与规划</span><span class="tag">控制</span><span class="tag">V2X</span>
+          <a class="more" href="pages/tech.html">进入技术</a>
+          <a class="card-cover" href="pages/tech.html" aria-label="技术"></a>
         </div>
         <div class="card reveal">
           <div class="ci">🛡️</div>
-          <h3>安全与挑战</h3>
-          <p>功能安全、预期功能安全、网络安全、法规伦理与测试评价——自动驾驶最难的不是“会开”，而是“开得放心”。</p>
-          <span class="tag">ISO 26262</span><span class="tag">SOTIF</span><span class="tag">网络攻击</span><span class="tag">法规</span>
-          <a class="more" href="pages/challenges.html">进入主题</a>
-          <a class="card-cover" href="pages/challenges.html" aria-label="安全与挑战"></a>
+          <h3>安全与验证</h3>
+          <p>功能安全、预期功能安全、网络安全与测试验证——回答“凭什么相信它是安全的”。</p>
+          <span class="tag">ISO 26262</span><span class="tag">SOTIF</span><span class="tag">网络安全</span>
+          <a class="more" href="pages/challenges.html">进入安全与验证</a>
+          <a class="card-cover" href="pages/challenges.html" aria-label="安全与验证"></a>
         </div>
         <div class="card reveal">
-          <div class="ci">🔭</div>
-          <h3>未来展望</h3>
-          <p>LLM 与多模态大模型、世界模型、端到端大模型、车路云一体化、商业闭环与产业竞争——未来几年最值得关注的方向。</p>
-          <span class="tag">LLM/世界模型</span><span class="tag">端到端大模型</span><span class="tag">车路云一体化</span><span class="tag">产业格局</span><span class="tag">时间表</span>
-          <a class="more" href="pages/future.html">进入主题</a>
-          <a class="card-cover" href="pages/future.html" aria-label="未来展望"></a>
+          <div class="ci">🗺️</div>
+          <h3>落地与产业</h3>
+          <p>Robotaxi、干线物流、港口矿区、末端配送，以及法规准入、商业模式与未来展望。</p>
+          <span class="tag">Robotaxi</span><span class="tag">法规</span><span class="tag">商业闭环</span>
+          <a class="more" href="pages/scenarios.html">进入落地与产业</a>
+          <a class="card-cover" href="pages/scenarios.html" aria-label="落地与产业"></a>
         </div>
+        <div class="card reveal">
+          <div class="ci">🤖</div>
+          <h3>AI 前沿</h3>
+          <p>LLM、VLM/VLA、世界模型如何上车，以及它们带来的安全命题与产业时间线。</p>
+          <span class="tag">LLM</span><span class="tag">VLA</span><span class="tag">世界模型</span>
+          <a class="more" href="pages/frontier.html">进入 AI 前沿</a>
+          <a class="card-cover" href="pages/frontier.html" aria-label="AI 前沿"></a>
+        </div>
+        <div class="card reveal">
+          <div class="ci">📚</div>
+          <h3>系统教程</h3>
+          <p>从数学基础到感知、规划控制、定位仿真与大模型，给出公式推导、伪代码与工程要点。</p>
+          <span class="tag">公式推导</span><span class="tag">伪代码</span><span class="tag">工程实践</span>
+          <a class="more" href="pages/tutorial/index.html">进入系统教程</a>
+          <a class="card-cover" href="pages/tutorial/index.html" aria-label="系统教程"></a>
+        </div>
+      </div>
+      <div class="panel tip">
+        <span class="pt">三个工具页</span>
+        <p>不参与线性阅读、但随时会用到：<a href="pages/glossary.html">概念 · 指标 · 标准 索引</a>（查术语与统一口径）、<a href="pages/tech/sensors.html">传感器横评</a>（四种传感器 10 个维度对照）、<a href="pages/scenarios/business.html">商业化与单位经济</a>（四个场景的成本账）。</p>
       </div>
     </section>
 
@@ -137,7 +146,7 @@
       <div class="sec-head"><span class="no">总览</span><h2>一分钟建立框架</h2></div>
       <div class="panel tip">
         <span class="pt">核心公式：自动驾驶 = 感知 + 决策 + 执行 + 安全</span>
-        <p><b>感知</b>回答“我在哪、周围有什么”；<b>决策规划</b>回答“接下来怎么走、走哪条路”；<b>执行</b>负责把指令变成转向与加减速；而<b>安全体系</b>（功能安全、预期功能安全、网络安全、测试验证）保证这一切在异常时仍然可控。详见 <a href="pages/tech.html">核心技术</a> 与 <a href="pages/challenges.html">安全与挑战</a>。</p>
+        <p><b>感知</b>回答“我在哪、周围有什么”；<b>决策与规划</b>回答“接下来怎么走、走哪条路”；<b>执行</b>负责把指令变成转向与加减速；而<b>安全体系</b>（功能安全、预期功能安全、网络安全、测试验证）保证这一切在异常时仍然可控。详见 <a href="pages/tech.html">技术</a> 与 <a href="pages/challenges.html">安全与验证</a>。</p>
       </div>
       <div class="grid g3">
         <div class="card reveal">
@@ -162,15 +171,15 @@
     </section>
 
     <section class="related">
-      <h3>给你的建议阅读路线</h3>
-      <p style="margin:0 0 8px">如果只想大致了解，走 <b>首页 → 认识自动驾驶 → 分级标准</b> 即可；如果想追技术热点，按 <b>核心技术 → 环境感知 / 决策规划</b> 深入，最新热点可直达 <b>核心技术 → AI 前沿：LLM 与世界模型</b>；如果关注行业，可直奔 <b>应用场景</b> 与 <b>未来展望</b>。每一页都支持继续向下钻取或横向跳转。</p>
+      <h3>推荐阅读路线</h3>
+      <p style="margin:0 0 8px">只想大致了解，走 <b>入门 → 技术</b> 即可；想真正搞懂算法，配合 <b>系统教程</b> 读；关注行业，直奔 <b>落地与产业</b> 与 <b>领域动态</b>。每一页都支持继续下钻或横向跳转。</p>
       <div class="rel-links">
-        <a href="pages/overview.html">① 认识自动驾驶</a>
-        <a href="pages/levels.html">② 分级标准</a>
-        <a href="pages/tech.html">③ 核心技术</a>
-        <a href="pages/scenarios.html">④ 应用场景</a>
-        <a href="pages/challenges.html">⑤ 安全与挑战</a>
-        <a href="pages/future.html">⑥ 未来展望</a>
+        <a href="pages/overview.html">① 入门</a>
+        <a href="pages/tech.html">② 技术</a>
+        <a href="pages/challenges.html">③ 安全与验证</a>
+        <a href="pages/scenarios.html">④ 落地与产业</a>
+        <a href="pages/frontier.html">⑤ AI 前沿</a>
+        <a href="pages/tutorial/index.html">⑥ 系统教程</a>
       </div>
     </section>
 
@@ -182,25 +191,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流，不构成任何投资或决策建议。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="index.html">首页</a>
-        <a href="pages/overview.html">认识自动驾驶</a>
-        <a href="pages/levels.html">分级标准</a>
-        <a href="pages/tech.html">核心技术</a>
-        <a href="pages/scenarios.html">应用场景</a>
-        <a href="pages/challenges.html">安全与挑战</a>
-        <a href="pages/future.html">未来展望</a>
+        <a href="pages/overview.html">入门</a>
+        <a href="pages/tech.html">技术</a>
+        <a href="pages/challenges.html">安全与验证</a>
+        <a href="pages/scenarios.html">落地与产业</a>
+        <a href="pages/frontier.html">AI 前沿</a>
         <a href="pages/tutorial/index.html">系统教程</a>
         <a href="pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar">
-      <span>© 2026 本地静态站点 · 无需联网即可打开</span>
-      <span>·</span>
-      <span>建议用现代浏览器浏览</span>
-    
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>

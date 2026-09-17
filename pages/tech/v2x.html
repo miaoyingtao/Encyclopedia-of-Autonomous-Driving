@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html" class="active">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 专题五</span>
+    <span class="kicker">技术 · 专题五</span>
     <h1>车路协同 V2X</h1>
     <p class="lead">单车智能的传感器只能“看见拐角之内”；V2X 让车“看见拐角之外”——红绿灯的倒计时、前方 1 公里的事故、被楼宇遮挡的行人。聪明的车，正在与智慧的路联网。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>车路协同 V2X</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/tech.html">技术</a><span class="sep">/</span><span>车路协同 V2X</span>
     </nav>
   </div>
 </section>
@@ -42,15 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#what">1. V2X 是什么</a>
-      <a href="#routes">2. 两条技术路线</a>
-      <a href="#help">3. V2X 能帮自动驾驶什么</a>
-      <a href="#cloud">4. 车路云一体化</a>
-      <a href="#status">5. 进展与难点</a>
-      <a href="#faq">6. 常见疑问</a>
+      <a href="#what">1. ★ V2X 是什么</a>
+      <a href="#routes">2. ★ 两条技术路线</a>
+      <a href="#help">3. ★ V2X 能帮自动驾驶什么</a>
+      <a href="#cloud">4. ◆ 车路云一体化</a>
+      <a href="#status">5. ★ 进展与难点</a>
+      <a href="#phys">6. ▪ 协议栈与物理层</a>
+      <a href="#sec">7. ◆ 安全与信任</a>
+      <a href="#faq">8. 常见疑问</a>
+      <a href="#refs">9. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/04-loc-sim-test.html">第 3 章 · 定位建图与仿真测试</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step3">环节 3 · 无保护左转</a>（倒计时与路口告警）。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想知道“车路协同到底有什么用”</b>：读 ★ 四节（V2X 是什么、两条技术路线、能帮自动驾驶什么、进展与难点）。<b>关注工程落地</b>：◆ 讲车路云一体化与安全信任体系。▪ 协议栈与物理层供需要时深挖。它在主线中的位置：<a href="../one-trip.html#step3">环节 3 · 无保护左转</a>。</p></div>
       <section class="sec scroll-target" id="what">
         <div class="sec-head"><span class="no">01</span><h2>V2X：Vehicle to Everything</h2></div>
         <p>V2X 指车辆与外界万物通信，按对象分为四类：</p>
@@ -119,14 +123,51 @@
         </ul>
       </section>
 
+      <section class="sec scroll-target" id="phys">
+        <div class="sec-head"><span class="no">06</span><h2>协议栈与物理层：V2X 怎么“说话”</h2></div>
+        <p>V2X 不是单一技术，而是一套分层协议。以 C-V2X 为例，直连通信（PC5 / sidelink）工作在 5.9 GHz ITS 频段，不依赖蜂窝基站，车与车、车与路侧单元可直接对话：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>层级</th><th>作用</th><th>关键点</th></tr></thead>
+            <tbody>
+              <tr><td>物理层</td><td>调制解调与资源调度</td><td>LTE-V2X（3GPP R14）支持基础安全消息；NR-V2X（R16+）支持更低时延与更高可靠性</td></tr>
+              <tr><td>接入层</td><td>消息广播与拥塞控制</td><td>直连模式无需基站，覆盖约数百米，受遮挡与车辆密度影响</td></tr>
+              <tr><td>消息层</td><td>定义“说什么”</td><td>BSM（基本安全消息）、CAM/DENM（欧洲）、SPAT（信号灯相位）、MAP（路口拓扑）、RSI/RSM（路侧信息）</td></tr>
+              <tr><td>应用层</td><td>场景与业务</td><td>前向碰撞预警、盲区预警、红绿灯车速引导、弱势交通参与者保护</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>性能目标是“毫秒级 + 高可靠”：典型要求端到端时延 &lt; 100 ms（部分安全场景 &lt; 20 ms），可靠性 &gt; 99%。广播式通信天然存在“消息风暴”风险，需通过发送频率、功率与拥塞控制（如 DCC）限制信道负载。</p>
+      </section>
+
+      <section class="sec scroll-target" id="sec">
+        <div class="sec-head"><span class="no">07</span><h2>安全与信任：别让 V2X 变成攻击面</h2></div>
+        <p>V2X 让车辆接收“外部输入”，也引入新的信任问题：如果一条消息谎报“前方畅通”，而实际有事故，后果可能很严重。工程上的防线包括：</p>
+        <ul>
+          <li><b>身份认证</b>：每条消息用数字签名，接收方验证其来自合法车辆 / 路侧单元；</li>
+          <li><b>匿名与隐私</b>：用短期假名证书（pseudonym certificate）轮换，避免被长期追踪；</li>
+          <li><b>异常检测</b>：用位置一致性与传感器交叉验证识别“幽灵车”与伪造消息（misbehavior detection）；</li>
+          <li><b>不盲信</b>：V2X 信息作为感知的补充证据，与自身传感器结果融合；冲突时以本地观测为准并降级。</li>
+        </ul>
+        <p>这些要求对应 ISO 21434（汽车网络安全）与各国 V2X 安全证书体系（美国 SCMS、欧洲 C-ITS 信任模型、中国的车联网身份认证体系）。</p>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">06</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>V2X 需要 5G 全覆盖才能用吗？</summary><p>不需要。车与车、车与路的“直连通信（PC5）”不依赖基站，覆盖范围几百米，低时延是它的核心能力；5G 主要用于 V2N 云端服务与远程驾驶等高带宽场景。</p></details>
           <details><summary>我的车没有 V2X，能享受车路协同吗？</summary><p>部分应用可以通过手机 App 或后装设备体验（如红绿灯倒计时），但要让路侧信息直接参与驾驶决策，通常需要车载 OBU 与前装系统打通。这也是老车“享受不到”新基建红利的原因。</p></details>
           <details><summary>路侧摄像头拍的画面会泄露隐私吗？</summary><p>合规的路侧感知会做“去标识化”处理：识别的是物体的位置、速度、类型，而不是人脸或车牌原始图像，存储与调用受数据安全法规约束，详见 <a href="../challenges/cybersecurity.html">数据安全</a>。</p></details>
           <details><summary>车路协同什么时候能大规模落地？</summary><p>短期以“重点区域成网”为主（示范区、城市主干道、高速示范段），大规模全域覆盖取决于投资、标准与商业模式的成熟，属于 5–10 年尺度的工程。</p></details>
+          <details><summary>如果 V2X 发来的信息和我的传感器冲突，信谁？</summary><p>以<b>本地观测为准</b>，V2X 只作为补充证据。原因有两层：一是路侧与远端信息存在时延与时钟偏差；二是消息可能被伪造（“幽灵车”）。工程做法是做位置一致性校验与异常检测（misbehavior detection），冲突时降级并保守处理，见 <a href="#sec">安全与信任</a>。</p></details>
+          <details><summary>中国为什么把车路云一体化作为主路线？</summary><p>因为单车智能在超视距感知、单车成本与长尾场景上都有天花板，而中国具备集中建设基础设施的能力。把感知与部分计算放到路侧和云端，可以用“系统能力”换取“单车成本”，同时服务交通治理，见 <a href="#cloud">车路云一体化</a>。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">09</span><h2>延伸阅读与关键标准</h2></div>
+        <div class="paper"><h4>标准与规范</h4><p>3GPP TS 22.185 / 23.285 / 36.300（LTE-V2X）与 TS 38 系列（NR-V2X）；ETSI ITS-G5 与 CAM/DENM 规范；中国《车联网（智能网联汽车）直连通信使用 5905–5925 MHz 频段管理规定》；ISO 21434。</p></div>
+        <div class="paper"><h4>综述</h4><p>Chen et al., “Vehicular Networking: A Survey and Tutorial” (2015)；Abboud et al., “Interworking of DSRC and Cellular Network Technologies for V2X Communications” (2016)。</p></div>
       </section>
 
       <section class="related">
@@ -137,7 +178,7 @@
           <a href="decision.html">决策与规划</a>
           <a href="../scenarios/robotaxi.html">Robotaxi 如何利用路侧信息</a>
           <a href="../challenges/cybersecurity.html">V2X 网络安全</a>
-          <a href="../tech.html">返回核心技术总览</a>
+          <a href="../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -149,21 +190,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 车路协同 V2X</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -177,7 +217,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

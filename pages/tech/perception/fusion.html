@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../../index.html">首页</a>
-      <a href="../../overview.html">认识自动驾驶</a>
-      <a href="../../levels.html">分级标准 L0–L5</a>
-      <a href="../../tech.html">核心技术</a>
-      <a href="../../scenarios.html">应用场景</a>
-      <a href="../../challenges.html">安全与挑战</a>
-      <a href="../../future.html">未来展望</a>
-      <a href="../../tutorial/index.html">系统教程</a>
-      <a href="../../news.html">领域动态</a>
+      <a href="../../../pages/overview.html">入门</a>
+      <a href="../../../pages/tech.html" class="active">技术</a>
+      <a href="../../../pages/challenges.html">安全与验证</a>
+      <a href="../../../pages/scenarios.html">落地与产业</a>
+      <a href="../../../pages/frontier.html">AI 前沿</a>
+      <a href="../../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 传感器深潜 ⑤ / ⑤</span>
+    <span class="kicker">技术 · 传感器深潜 ⑤ / ⑤</span>
     <h1>多传感器融合</h1>
     <p class="lead">摄像头、激光雷达、毫米波雷达各自“会一种武功”，融合系统则把它们编排成一支球队：谁的状态好谁主攻，谁失灵了其他人立刻补位——这是 L4 安全感的来源。</p>
     <nav class="crumb">
-      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../tech.html">核心技术</a><span class="sep">/</span><a href="../perception.html">环境感知</a><span class="sep">/</span><span>多传感器融合</span>
+      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../../pages/tech.html">技术</a><span class="sep">/</span><a href="../../../pages/tech/perception.html">环境感知</a><span class="sep">/</span><span>多传感器融合</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,21 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#why">1. 为什么必须融合</a>
-      <a href="#levels">2. 融合的三个层级</a>
-      <a href="#steps">3. 工程四步走</a>
-      <a href="#conflict">4. 当传感器“吵架”时</a>
-      <a href="#hard">5. 融合的工程挑战</a>
-      <a href="#future">6. 未来：从“融合”到“统一”</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#why">1. ★ 为什么必须融合</a>
+      <a href="#levels">2. ★ 融合的三个层级</a>
+      <a href="#steps">3. ◆ 工程四步走</a>
+      <a href="#conflict">4. ★ 当传感器“吵架”时</a>
+      <a href="#hard">5. ◆ 融合的工程挑战</a>
+      <a href="#future">6. ◆ 未来：从“融合”到“统一”</a>
+      <a href="#math">7. ▪ 数学基础：贝叶斯与卡尔曼</a>
+      <a href="#association">8. ▪ 数据关联与航迹管理</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/02-perception.html">第 1 章 · 感知与状态估计</a> 一起读。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“为什么一颗传感器不够”</b>：读 ★ 三节（为什么必须融合、三个层级、传感器吵架时听谁的）。<b>做工程</b>：◆ 讲四步走流程、工程挑战与未来方向，▪ 两节贝叶斯/卡尔曼与数据关联供深挖。</p></div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么必须做融合</h2></div>
         <p>回顾前四个专题，每种传感器都有“一票否决”的盲区：</p>
@@ -127,17 +131,37 @@
           <li><b>传感器 Token 化</b>：摄像头图像、点云、雷达各自变成“Token 序列”，让 Transformer 大模型自主决定如何交叉引用（类似多模态大模型）；</li>
           <li><b>端到端联合优化</b>：感知融合结果直接参与规划损失的反向传播，让融合“为驾驶目标服务”，而不是孤立地追求“检测更准”。</li>
         </ul>
-        <p>这意味着“融合”将不再是一个独立的工程模块，而成为整个智能驾驶模型的内生能力。相关的端到端趋势见 <a href="../../future.html">未来展望</a>，系统的前沿科普见 <a href="../foundation.html">AI 前沿：LLM 与世界模型</a>。</p>
+        <p>这意味着“融合”将不再是一个独立的工程模块，而成为整个智能驾驶模型的内生能力。相关的端到端趋势见 <a href="../../future.html">未来展望</a>，系统的前沿科普见 <a href="../../frontier.html">AI 前沿：LLM 与世界模型</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="math">
+        <div class="sec-head"><span class="no">07</span><h2>数学基础：贝叶斯与卡尔曼滤波</h2></div>
+        <p>融合的本质是“用多路带噪观测估计同一状态”。贝叶斯公式给出统一框架：后验 ∝ 似然 × 先验；当系统线性、噪声高斯时，它退化为卡尔曼滤波——只需维护均值与协方差，R 越小表示越信任该传感器。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>卡尔曼滤波的预测 / 更新方程，以及 EKF、UKF 与粒子滤波的适用条件，见 <a href="../../tutorial/01-math-sensors.html#kf">第 0 章 · 卡尔曼滤波</a>。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="association">
+        <div class="sec-head"><span class="no">08</span><h2>数据关联与航迹管理</h2></div>
+        <p>多传感器融合必须回答“哪个观测对应哪条航迹”，这就是数据关联：目标稀疏时用最近邻，工程主流是全局最近邻（匈牙利算法），密集模糊场景可用 JPDA 或多假设跟踪（MHT）。关联之外还要做航迹管理，避免虚假目标与 ID 闪烁。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>数据关联算法与多目标跟踪的完整流程见 <a href="../../tutorial/02-perception.html#track">第 1 章 · 多目标跟踪</a>。</p></div>
       </section>
 
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>传感器越多就越安全吗？</summary><p>不必然。传感器越多，系统越复杂：标定漂移点越多、失效组合越多、算力压力越大。安全性取决于<b>体系设计</b>（冗余架构、失效检测、降级策略），而不是传感器数量本身。</p></details>
           <details><summary>纯视觉和“多传感器”谁更安全？</summary><p>没有简单答案。纯视觉靠更强的算法与海量数据弥补“少一只眼”；多传感器靠异构冗余降低单点失效概率。关键指标是各自在真实运营中的“每公里安全事件率”与接管数据，见 <a href="../../challenges/testing.html">安全评价</a>。</p></details>
-          <details><summary>融合系统怎么验证可靠性？</summary><p>多管齐下：仿真注入各类传感器故障与标定漂移、封闭场地做真车失效测试、开放道路跑随机对照里程，再配合功能安全的过程审计。</p></details>
+          <details><summary>融合系统怎么验证可靠性？</summary><p>多管齐下：仿真注入各类传感器故障与标定漂移、封闭场地做真车失效测试、开放道路跑随机对照里程，再配合功能安全的过程审计，见 <a href="../../challenges/testing.html#pyramid">测试金字塔</a>。</p></details>
           <details><summary>为什么事故调查时要查“时间同步”？</summary><p>因为融合结果的正确性依赖时间对齐。调查 L4 事故时，取证系统会回放每个传感器的原始时间戳，核查融合层是否把不同时刻的数据错配成了“同一时刻”——时间不同步本身就是一种系统性缺陷。</p></details>
+          <details><summary>前融合和后融合到底怎么选？</summary><p>看目标：<b>后融合</b>实现简单、可解释、便于单路升级，适合快速量产；<b>前/特征级融合</b>精度上限更高，但对标定精度、时间同步与算力要求都更严。量产常见做法是“分层混合”：安全相关目标用后融合保证可解释，性能相关目标用特征级融合提上限，见 <a href="#levels">融合的三个层级</a>。</p></details>
+          <details><summary>标定漂移会带来什么后果？</summary><p>外参一旦偏了，两个传感器的观测会在空间上错位：摄像头看到的目标投影到点云上就会“落在旁边”，导致关联失败、目标 ID 闪烁甚至误判（把 A 车与 B 车合并）。因此工程上要做在线标定监测与定期校准，并把它纳入失效检测与降级策略。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>状态估计</h4><p>Thrun et al., <i>Probabilistic Robotics</i>；Bar-Shalom et al., <i>Estimation with Applications to Tracking and Navigation</i>；Kalman, “A New Approach to Linear Filtering and Prediction Problems” (1960)。</p></div>
+        <div class="paper"><h4>数据关联与融合</h4><p>Fortmann et al., “Sonar Tracking of Multiple Targets Using Joint Probabilistic Data Association” (1983)；Reid, “An Algorithm for Tracking Multiple Targets” (1979，MHT)；Liu et al., “BEVFusion” (2022)。</p></div>
       </section>
 
       <section class="related">
@@ -149,7 +173,7 @@
           <a href="lidar.html">激光雷达</a>
           <a href="radar.html">毫米波雷达</a>
           <a href="../decision.html">决策与规划</a>
-          <a href="../../tech.html">返回核心技术</a>
+          <a href="../../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -161,21 +185,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../../index.html">首页</a>
-        <a href="../../overview.html">认识自动驾驶</a>
-        <a href="../../levels.html">分级标准</a>
-        <a href="../../tech.html">核心技术</a>
-        <a href="../../scenarios.html">应用场景</a>
-        <a href="../../challenges.html">安全与挑战</a>
-        <a href="../../future.html">未来展望</a>
-        <a href="../../tutorial/index.html">系统教程</a>
-        <a href="../../news.html">领域动态</a>
+        <a href="../../../pages/overview.html">入门</a>
+        <a href="../../../pages/tech.html">技术</a>
+        <a href="../../../pages/challenges.html">安全与验证</a>
+        <a href="../../../pages/scenarios.html">落地与产业</a>
+        <a href="../../../pages/frontier.html">AI 前沿</a>
+        <a href="../../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 多传感器融合专题</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -189,7 +212,6 @@
   <script src="../../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html" class="active">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">应用场景 · 专题四</span>
+    <span class="kicker">落地与产业 · 专题四</span>
     <h1>末端配送与自动泊车：身边的自动驾驶</h1>
     <p class="lead">对多数普通人而言，第一辆“自动驾驶车”可能不是出租车，而是小区门口慢悠悠的无人配送车；第一次“无人驾驶”体验也可能是商场里自己开去停车位的车。小而美的场景，正在悄悄进入日常。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../scenarios.html">应用场景</a><span class="sep">/</span><span>末端配送与自动泊车</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/scenarios.html">落地与产业</a><span class="sep">/</span><span>末端配送与自动泊车</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#why">1. 为什么是“最后一公里”</a>
-      <a href="#delivery">2. 无人配送车</a>
-      <a href="#tech-d">3. 配送车的技术栈</a>
-      <a href="#avp">4. 自动代客泊车 AVP</a>
-      <a href="#routes-a">5. AVP 的两条技术路线</a>
-      <a href="#hard">6. 共同的拦路虎</a>
-      <a href="#future">7. 演进方向</a>
+      <a href="#why">1. ★ 为什么是“最后一公里”</a>
+      <a href="#delivery">2. ★ 无人配送车</a>
+      <a href="#tech-d">3. ◆ 配送车的技术栈</a>
+      <a href="#avp">4. ★ 自动代客泊车 AVP</a>
+      <a href="#routes-a">5. ◆ AVP 的两条技术路线</a>
+      <a href="#hard">6. ★ 共同的拦路虎</a>
+      <a href="#future">7. ◆ 演进方向</a>
+      <a href="#eco">8. ◆ 单位经济</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“配送车和自动泊车靠不靠谱”</b>：读 ★ 四节（为什么是最后一公里、无人配送车、AVP、共同的拦路虎）。<b>关注商业模式</b>：◆ 四节讲技术栈、两条 AVP 路线、演进方向与单位经济——这一页的“能不能赚钱”在后半部分。四个场景的成本账对照见 <a href="business.html">商业化与单位经济</a>。</p></div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>“最后一公里”为什么最贵</h2></div>
         <p>物流行业有个经验法则：<b>一件快递从分拨中心到用户手中的“最后一公里”，成本可占全程的三到四成</b>。原因是末端高度依赖人力——分拣、装车、爬楼、打电话，效率上不去。快递员与外卖骑手也长期面临高强度、高流动性的问题。无人化如果能替代其中一部分“跑腿”，商业价值立竿见影。</p>
@@ -68,7 +71,7 @@
           <div class="card reveal"><h3>🛺 车体形态</h3><p>通常是无驾驶舱的小型车辆：载重几十到几百公斤，时速 15–25km/h，走非机动车道与人行道；传感器以摄像头 + 激光雷达/毫米波雷达为主，成本控制在“能替代一个配送员年薪”的量级内。</p></div>
           <div class="card reveal"><h3>🎛️ 运营形态</h3><p>“快递驿站 → 小区自提柜/楼栋”或“门店 → 用户楼下”。用户收到取件码，到车旁扫码开柜取件。车由云端调度与远程监控员值守，每天按固定线路循环。</p></div>
         </div>
-        <p>在国内，无人配送车需要按地方规定申请上路权限（如限定区域、限定时段、限定车道），头部企业在北京、深圳、杭州等地获得了常态化运营资质。它当前的法律身份介于“机动车”与“非机动车”之间，路权问题仍在探索，见 <a href="../challenges/regulation.html">法规与伦理</a>。</p>
+        <p>在国内，无人配送车需要按地方规定申请上路权限（如限定区域、限定时段、限定车道），头部企业在北京、深圳、杭州等地获得了常态化运营资质。它当前的法律身份介于“机动车”与“非机动车”之间，路权问题仍在探索，见 <a href="../regulation.html">法规与伦理</a>。</p>
       </section>
 
       <section class="sec scroll-target" id="tech-d">
@@ -130,14 +133,38 @@
         </ul>
       </section>
 
-      <section class="related">
+      <section class="sec scroll-target" id="eco">
+        <div class="sec-head"><span class="no">08</span><h2>末端配送的单位经济</h2></div>
+        <p>末端配送的成本大头是“最后一公里”的人力。无人配送车的账可以这样算：</p>
+        <div class="math">单件成本 = (车辆折旧 + 电费 + 运维 + 远程支持) / 日均单量</div>
+        <p>关键变量是日均单量与远程支持比。低速车单车成本低，但载货量小、需要频繁往返；若日均单量上不去，单位成本可能高于人工。这也是无人配送长期停留在“园区 / 校园试点”的原因——只有在订单密度足够高的封闭区域，模型才成立。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>无人配送车能在人行道、非机动车道上跑吗？</summary><p>需要当地许可，且路权是最大变量：多数城市要求它走非机动车道或指定路径、限速、避让行人。目前规模化运营都发生在“路权明确”的封闭或半封闭区域（园区、校园、社区），见 <a href="#hard">共同的拦路虎</a>。</p></details>
+          <details><summary>为什么无人配送一直停留在园区和校园？</summary><p>核心是<b>订单密度</b>。单件成本 = 固定成本 ÷ 日均单量，社会化道路的订单分散、往返距离长，容易算不过人工；而园区里包裹集中、路线固定，模型才成立，见 <a href="#eco">末端配送的单位经济</a>。</p></details>
+          <details><summary>自动代客泊车（AVP）现在真的能用吗？</summary><p>分两种：<b>车端 AVP</b>（车自己在停车场找位泊入，已随部分量产车型交付）和<b>场端 AVP</b>（停车场改造为“智能车库”，车与场协同）。前者受限更少、落地更快；后者体验更好但需要场端投资，见 <a href="#routes-a">AVP 的两条技术路线</a>。</p></details>
+          <details><summary>无人配送车会撞到行人吗？</summary><p>低速是天然优势（15–25 km/h），且车辆设计上通常有“碰不到人”的兜底：接触式防撞条、急停按钮、远程接管与限速策略。真正难的是<b>预测突然窜出的儿童、宠物与推车</b>，因此这类车普遍采取“不冒险、宁可停”的策略。</p></details>
+          <details><summary>一辆无人配送车要多少钱？</summary><p>主流目标是把整车成本压到“约等于一名配送员一年的综合人力成本”量级，这也是行业反复强调降本的原因。传感器方案通常以摄像头 + 少量激光雷达/毫米波雷达为主，而不是 L4 乘用车那样的全套配置，见 <a href="#tech-d">配送车的技术栈</a>。</p></details>
+          <details><summary>普通人现在能在哪里体验到？</summary><p>三条路径：<b>园区/校园</b>（无人配送车与接驳车，最容易碰到）；<b>商场与写字楼</b>（自动泊车/代客泊车）；<b>部分城市的 Robotaxi</b>（限定区域收费运营）。三者共同点是 ODD 明确、场景受限，见 <a href="../scenarios.html">落地与产业总览</a>。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>行业资料</h4><p>末端配送与 AVP 的公开试点报告；ISO 23374（自动代客泊车系统）与相关泊车标准；园区低速无人车的运营数据披露。</p></div>
+      </section>
+
+      <section class="related scroll-target" id="next">
         <h3>关联阅读</h3>
         <p style="margin-bottom:10px">配送与泊车是低速无人驾驶的代表，也是普通人最容易体验的入口。</p>
         <div class="rel-links">
           <a href="robotaxi.html">Robotaxi：更高速的兄弟场景</a>
           <a href="../tech/perception.html">低速场景的感知挑战</a>
-          <a href="../challenges/regulation.html">配送车路权与法规</a>
-          <a href="../scenarios.html">返回应用场景总览</a>
+          <a href="../regulation.html">配送车路权与法规</a>
+          <a href="../scenarios.html">返回落地与产业总览</a>
         </div>
       </section>
     </div>
@@ -149,21 +176,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 末端配送与自动泊车</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -177,7 +203,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

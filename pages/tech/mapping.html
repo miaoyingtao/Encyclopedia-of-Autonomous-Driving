@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html" class="active">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 专题四</span>
+    <span class="kicker">技术 · 专题四</span>
     <h1>定位与高精地图</h1>
     <p class="lead">手机导航只需要知道“你在哪条路上”；自动驾驶却需要知道“你在哪个车道、离车道线几厘米”。这背后是组合定位与高精地图两套系统的精密配合。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../tech.html">核心技术</a><span class="sep">/</span><span>定位与高精地图</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/tech.html">技术</a><span class="sep">/</span><span>定位与高精地图</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,21 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#why">1. 为什么需要车道级定位</a>
-      <a href="#hdmap">2. 高精地图里有什么</a>
-      <a href="#techs">3. 定位技术全家桶</a>
-      <a href="#fusion">4. 组合定位原理</a>
-      <a href="#fresh">5. 地图的“鲜度”</a>
-      <a href="#trend">6. 轻地图/无图化之争</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#why">1. ★ 为什么需要车道级定位</a>
+      <a href="#hdmap">2. ★ 高精地图里有什么</a>
+      <a href="#techs">3. ★ 定位技术全家桶</a>
+      <a href="#fusion">4. ◆ 组合定位原理</a>
+      <a href="#fresh">5. ★ 地图的“鲜度”</a>
+      <a href="#trend">6. ◆ 轻地图/无图化之争</a>
+      <a href="#gnss">7. ▪ GNSS 与 RTK</a>
+      <a href="#slam">8. ▪ 点云配准与 SLAM</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/04-loc-sim-test.html">第 3 章 · 定位建图与仿真测试</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step0">环节 0 · 上车出发</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>（地图鲜度）。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么知道自己在哪”</b>：读 ★ 三节（为什么需要车道级定位、高精地图里有什么、定位技术全家桶）。<b>关注工程权衡</b>：◆ 讲组合定位与“轻地图/无图化”之争，是路线选型的核心。▪ 两节定位技术细节（GNSS/RTK、点云配准与 SLAM）供需要时深挖。</p></div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>自动驾驶为什么需要“知道自己在哪”</h2></div>
         <p>规划的轨迹、感知的目标、高精地图的车道，全部要转换到同一坐标系才能使用。如果车把自己定位偏了 30 厘米，就可能：把相邻车道的车当成自己车道的障碍、提前或压线变道、在错误的道口转弯。因此：</p>
@@ -128,14 +132,35 @@
         <p>行业共识逐渐偏向“<b>场景决定方案</b>”：Robotaxi 与干线重卡仍重度依赖高精地图，量产乘用车则向“轻地图”演进，两者短期内不会互相取代。</p>
       </section>
 
+      <div class="panel tip"><span class="pt">进阶区 · 两类定位技术深挖</span><p>下面两节是第 03、04 节的展开：先看 GNSS/RTK 如何从米级做到厘米级，再看无 GNSS 时靠点云配准如何定位。只想掌握结论的读者可直接跳到 <a href="#faq">常见疑问</a>。</p></div>
+      <section class="sec scroll-target" id="gnss">
+        <div class="sec-head"><span class="no">07</span><h2>GNSS 与 RTK：从米级到厘米级</h2></div>
+        <p>GNSS 用“信号传播时间 × 光速”算距离，但接收机测到的是含钟差、电离层 / 对流层延迟与多径的伪距，单点定位精度约 5–10 m。要上车道级，需要差分（DGNSS）、载波相位 RTK 或 PPP-RTK；城市峡谷、隧道、地下车库是天然盲区，必须与 IMU、轮速计、视觉 / 激光里程计融合。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>伪距方程、双差整周模糊度与组合导航的推导见 <a href="../tutorial/04-loc-sim-test.html#gnss">第 3 章 · GNSS 与 RTK</a>。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="slam">
+        <div class="sec-head"><span class="no">08</span><h2>点云配准与 SLAM：无 GNSS 时的定位</h2></div>
+        <p>GNSS 不可用时，车辆靠“把当前观测与已有地图对齐”来定位，核心是点云配准：ICP 迭代“找最近点—求最优刚体变换”，工程上更常用收敛域更宽的 NDT；“先建图、后定位”是 L4 的常见做法，地图同时提供车道拓扑与语义。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>ICP / NDT、激光 SLAM 与位姿图优化的实现见 <a href="../tutorial/04-loc-sim-test.html#map">第 3 章 · 高精地图与点云匹配</a>。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>为什么手机定位在隧道里会“飘”？</summary><p>因为 GNSS 信号被遮挡后，手机只能靠 IMU/基站估算，误差快速累积。自动驾驶车在隧道里则切换视觉/激光特征定位，并且通常提前让地图与感知接管，而不是依赖卫星。</p></details>
-          <details><summary>车道级定位真的能到“厘米级”吗？</summary><p>在有 RTK 差分信号与高精地图的开放场景下可以；但在城市高楼间、树荫下精度会降到分米级甚至更低。因此量产系统通常要求“车道级正确”即可（误差 < 50cm 且能正确判断所在车道），而不是处处追求 2cm。</p></details>
-          <details><summary>定位错了，系统能发现吗？</summary><p>好的定位系统具备“完好性监测”：用多源结果互相校验（例如视觉车道位置与地图不一致时报警）、检测 GNSS 跳变、评估收敛度。发现不可信时会主动降级——限速、请求接管或停车，而不是带着错误坐标继续开。</p></details>
-          <details><summary>自动驾驶一定要高精地图吗？</summary><p>取决于等级与场景：封闭低速场景可以完全“在线建图”；Robotaxi 与干线物流目前仍依赖高精地图提升安全性与舒适性。未来端到端模型可能进一步弱化地图依赖，但“先验信息”本身不会消失。</p></details>
+          <details><summary>车道级定位真的能到“厘米级”吗？</summary><p>在有 RTK 差分信号与高精地图的开放场景下可以；但在城市高楼间、树荫下精度会降到分米级甚至更低。因此量产系统通常要求“车道级正确”即可（误差 &lt; 50cm 且能正确判断所在车道），而不是处处追求 2cm。</p></details>
+          <details><summary>定位错了，系统能发现吗？</summary><p>好的定位系统具备“完好性监测”：用多源结果互相校验（例如视觉车道位置与地图不一致时报警）、检测 GNSS 跳变、评估收敛度。发现不可信时会主动降级——限速、请求接管或停车，而不是带着错误坐标继续开，见 <a href="#fusion">组合定位原理</a>。</p></details>
+          <details><summary>自动驾驶一定要高精地图吗？</summary><p>取决于等级与场景：封闭低速场景可以完全“在线建图”；Robotaxi 与干线物流目前仍依赖高精地图提升安全性与舒适性。未来端到端模型可能进一步弱化地图依赖，但“先验信息”本身不会消失，见 <a href="#trend">轻地图/无图化之争</a>。</p></details>
+          <details><summary>“完好性”和“精度”有什么区别？</summary><p>精度回答“误差多大”，完好性回答“<b>系统知不知道自己错了</b>”。对安全而言后者更关键：一个误差 10cm 但能如实报告置信度的系统，比误差 5cm 却“自信地错”的系统更可用——因为前者能触发降级，后者会直接导致错误决策。</p></details>
+          <details><summary>为什么不同城市的定位体验差别很大？</summary><p>主要看三件事：<b>卫星可见性</b>（高楼峡谷、高架桥下会退化）、<b>差分服务覆盖</b>（有无 RTK 基准站/网络）、<b>地图鲜度与审图节奏</b>（施工频繁的城市地图更新压力更大）。这也是 ODD 通常按城市与区域逐块开放的原因。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>GNSS 与组合导航</h4><p>Groves, <i>Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems</i>；RTKLIB 开源实现；PPP-RTK 相关综述。</p></div>
+        <div class="paper"><h4>点云配准与 SLAM</h4><p>Besl &amp; McKay, “A Method for Registration of 3-D Shapes” (1992，ICP)；Biber &amp; Strasser, “The Normal Distributions Transform” (2003)；Zhang &amp; Singh, “LOAM” (2014)；Shan et al., “LIO-SAM” (2020)。</p></div>
       </section>
 
       <section class="related">
@@ -146,7 +171,7 @@
           <a href="decision.html">决策与规划</a>
           <a href="v2x.html">车路协同 V2X</a>
           <a href="../challenges/cybersecurity.html">地理数据合规</a>
-          <a href="../tech.html">返回核心技术总览</a>
+          <a href="../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -158,21 +183,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 定位与高精地图</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -186,7 +210,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

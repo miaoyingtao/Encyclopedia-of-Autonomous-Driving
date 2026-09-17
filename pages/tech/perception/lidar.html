@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../../index.html">首页</a>
-      <a href="../../overview.html">认识自动驾驶</a>
-      <a href="../../levels.html">分级标准 L0–L5</a>
-      <a href="../../tech.html">核心技术</a>
-      <a href="../../scenarios.html">应用场景</a>
-      <a href="../../challenges.html">安全与挑战</a>
-      <a href="../../future.html">未来展望</a>
-      <a href="../../tutorial/index.html">系统教程</a>
-      <a href="../../news.html">领域动态</a>
+      <a href="../../../pages/overview.html">入门</a>
+      <a href="../../../pages/tech.html" class="active">技术</a>
+      <a href="../../../pages/challenges.html">安全与验证</a>
+      <a href="../../../pages/scenarios.html">落地与产业</a>
+      <a href="../../../pages/frontier.html">AI 前沿</a>
+      <a href="../../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">核心技术 · 传感器深潜 ② / ⑤</span>
+    <span class="kicker">技术 · 传感器深潜 ② / ⑤</span>
     <h1>激光雷达 LiDAR</h1>
     <p class="lead">激光雷达主动发射激光、直接测量三维空间，是“几何精度之王”。过去十年它从数万美元的“奢侈品”降到千元级，也让量产车纷纷装上“顶了个包”的传感器。</p>
     <nav class="crumb">
-      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../tech.html">核心技术</a><span class="sep">/</span><a href="../perception.html">环境感知</a><span class="sep">/</span><span>激光雷达</span>
+      <a href="../../../index.html">首页</a><span class="sep">/</span><a href="../../../pages/tech.html">技术</a><span class="sep">/</span><a href="../../../pages/tech/perception.html">环境感知</a><span class="sep">/</span><span>激光雷达</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,21 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#principle">1. 原理与工作方式</a>
-      <a href="#routes">2. 三条技术路线</a>
-      <a href="#spec">3. 参数怎么看</a>
-      <a href="#cost">4. 从奢侈品到千元级</a>
-      <a href="#hard">5. 局限与挑战</a>
-      <a href="#use">6. 谁在用激光雷达</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#principle">1. ★ 原理与工作方式</a>
+      <a href="#routes">2. ★ 三条技术路线</a>
+      <a href="#spec">3. ★ 参数怎么看</a>
+      <a href="#cost">4. ◆ 从奢侈品到千元级</a>
+      <a href="#hard">5. ★ 局限与挑战</a>
+      <a href="#use">6. ◆ 谁在用激光雷达</a>
+      <a href="#range">7. ▪ 测距原理与点云密度</a>
+      <a href="#pipeline">8. ▪ 点云处理流水线</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 延伸阅读</a>
     </aside>
 
     <div>
+      <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/01-math-sensors.html">第 0 章 · 数学与传感器建模</a> 一起读。</p></div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“激光雷达是什么、值不值”</b>：读 ★ 四节（原理、三条技术路线、参数怎么看、局限与挑战）。<b>做选型或工程</b>：◆ 讲降本路径与装机现状，▪ 两节测距模型与点云流水线供深挖。四种传感器的横向对照见 <a href="../sensors.html">传感器横评</a>。</p></div>
       <section class="sec scroll-target" id="principle">
         <div class="sec-head"><span class="no">01</span><h2>原理：向空间“发问”并计算回声</h2></div>
         <p>激光雷达（Light Detection and Ranging）的测距原理与“蝙蝠声呐”同构，只是把声波换成激光。主流有两种调制方式：</p>
@@ -125,14 +129,34 @@
         <p>而坚持“纯视觉”的特斯拉认为：人眼不需要激光也能开车，摄像头 + 海量数据足以逼近甚至超越激光雷达方案——这场路线之争的最终裁判是<b>安全数据与单位经济模型</b>，详见 <a href="../perception.html#sensors">环境感知页</a>。</p>
       </section>
 
+      <section class="sec scroll-target" id="range">
+        <div class="sec-head"><span class="no">07</span><h2>测距原理与点云密度</h2></div>
+        <p>主流激光雷达用飞行时间（ToF）测距：发射脉冲、测量回波时间 Δt，距离 R = c·Δt/2。回波功率随距离平方衰减，所以“最大测距”必须在特定反射率下才可比；点云密度由角分辨率决定，远处目标点很稀——这正是远距离检测困难的物理根源。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>激光雷达方程、点云密度与角分辨率的定量关系见 <a href="../../tutorial/01-math-sensors.html#sensor">第 0 章 · 传感器几何建模</a>。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="pipeline">
+        <div class="sec-head"><span class="no">08</span><h2>点云处理流水线</h2></div>
+        <p>点云处理通常分四步：去畸变与滤波 → 地面分割与聚类 → 特征提取与检测 → 帧间配准与跟踪。去畸变要用 IMU / 里程计补偿扫描期间的车体运动，否则高速下点云会“拖影”。</p>
+        <div class="panel info"><span class="pt">深入阅读</span><p>点云配准（ICP / NDT）、体素化检测与 3D 跟踪的实现细节见 <a href="../../tutorial/02-perception.html#det3d">第 1 章 · 3D 检测</a>。</p></div>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>激光会伤害眼睛吗？</summary><p>量产雷达都需通过 IEC 60825 人眼安全等级认证，主流 905nm 产品为 Class 1（正常使用无危险）。1550nm 波长落在眼睛不聚焦的波段，同等功率下更安全。</p></details>
           <details><summary>为什么车顶的“小蘑菇”是旋转的？</summary><p>那是机械/半固态雷达在扫描。乘用车上的半固态雷达为了美观多藏在格栅或前保险杠内，无需 360° 旋转；真正旋转的顶置雷达多见于 Robotaxi。</p></details>
           <details><summary>激光雷达会被另一辆车的激光雷达干扰吗？</summary><p>可能。同波段多台设备会互相产生串扰噪点，这是量产前必须测试的“多雷达互扰”场景。抗干扰编码、随机调制与 FMCW 相干检测是主要对策。</p></details>
-          <details><summary>激光雷达会取代摄像头吗？</summary><p>不会。激光雷达给不出颜色与文字，摄像头给不出高精度深度——两者是互补关系。未来更可能的形态是“一颗高性能激光雷达 + 多摄像头 + 毫米波雷达”的异构冗余组合。</p></details>
+          <details><summary>激光雷达会取代摄像头吗？</summary><p>不会。激光雷达给不出颜色与文字，摄像头给不出高精度深度——两者是互补关系。未来更可能的形态是“一颗高性能激光雷达 + 多摄像头 + 毫米波雷达”的异构冗余组合，见 <a href="fusion.html">多传感器融合</a>。</p></details>
+          <details><summary>905nm 和 1550nm 到底怎么选？</summary><p>905nm 的探测器（硅）便宜成熟，成本低，但人眼安全限制了发射功率，探测距离上限较低；1550nm 允许更大功率、看得更远、抗阳光更好，但探测器（铟镓砷）昂贵。量产乘用车目前以 905nm 为主，长距高性能方案会考虑 1550nm。</p></details>
+          <details><summary>点云“去畸变”为什么必要？</summary><p>机械式/半固态雷达是逐点扫描的，一帧要几十毫秒才扫完；这段时间车辆已经前进了可能超过 1 米，导致同一帧里前后点的坐标系不一致（点云“拖影”）。必须用 IMU/里程计把每个点按各自时刻补偿回同一时刻，否则目标会被“拉长”甚至分裂，见 <a href="#pipeline">点云处理流水线</a>。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>延伸阅读与关键文献</h2></div>
+        <div class="paper"><h4>激光雷达原理</h4><p>Hecht, <i>Understanding Lasers</i>；Velodyne / Hesai / RoboSense 公开技术白皮书（测距、角分辨率与点频定义）。</p></div>
+        <div class="paper"><h4>点云处理</h4><p>Qi et al., “PointNet / PointNet++” (2017)；Zhou &amp; Tuzel, “VoxelNet” (2018)；Lang et al., “PointPillars” (2019)；Biber &amp; Strasser, “NDT” (2003)。</p></div>
       </section>
 
       <section class="related">
@@ -143,7 +167,7 @@
           <a href="radar.html">毫米波雷达专题</a>
           <a href="fusion.html">多传感器融合</a>
           <a href="../perception.html">返回环境感知</a>
-          <a href="../../tech.html">返回核心技术</a>
+          <a href="../../tech.html">返回技术总览</a>
         </div>
       </section>
     </div>
@@ -155,21 +179,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../../index.html">首页</a>
-        <a href="../../overview.html">认识自动驾驶</a>
-        <a href="../../levels.html">分级标准</a>
-        <a href="../../tech.html">核心技术</a>
-        <a href="../../scenarios.html">应用场景</a>
-        <a href="../../challenges.html">安全与挑战</a>
-        <a href="../../future.html">未来展望</a>
-        <a href="../../tutorial/index.html">系统教程</a>
-        <a href="../../news.html">领域动态</a>
+        <a href="../../../pages/overview.html">入门</a>
+        <a href="../../../pages/tech.html">技术</a>
+        <a href="../../../pages/challenges.html">安全与验证</a>
+        <a href="../../../pages/scenarios.html">落地与产业</a>
+        <a href="../../../pages/frontier.html">AI 前沿</a>
+        <a href="../../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 激光雷达专题</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -183,7 +206,6 @@
   <script src="../../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

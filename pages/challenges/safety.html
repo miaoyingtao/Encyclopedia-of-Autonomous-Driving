@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../../index.html">首页</a>
-      <a href="../overview.html">认识自动驾驶</a>
-      <a href="../levels.html">分级标准 L0–L5</a>
-      <a href="../tech.html">核心技术</a>
-      <a href="../scenarios.html">应用场景</a>
-      <a href="../challenges.html">安全与挑战</a>
-      <a href="../future.html">未来展望</a>
-      <a href="../tutorial/index.html">系统教程</a>
-      <a href="../news.html">领域动态</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html" class="active">安全与验证</a>
+      <a href="../../pages/scenarios.html">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">安全与挑战 · 专题一</span>
+    <span class="kicker">安全与验证 · 专题一</span>
     <h1>功能安全与预期功能安全</h1>
     <p class="lead">一辆自动驾驶车要证明自己安全，必须回答两类问题：<b>“系统坏了会不会伤人？”</b>（功能安全）和<b>“系统没坏，但遇到了设计没想到的情况，会不会伤人？”</b>（预期功能安全）。两道题分别由 ISO 26262 与 ISO 21448 回应。</p>
     <nav class="crumb">
-      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../challenges.html">安全与挑战</a><span class="sep">/</span><span>功能安全与 SOTIF</span>
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/challenges.html">安全与验证</a><span class="sep">/</span><span>功能安全与 SOTIF</span>
     </nav>
   </div>
 </section>
@@ -42,16 +41,20 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#two">1. 两类“安全”</a>
-      <a href="#fun">2. ISO 26262 与 ASIL</a>
-      <a href="#sotif">3. SOTIF 预期功能安全</a>
-      <a href="#case">4. 从“缺了什么”说起</a>
-      <a href="#argue">5. L3+ 如何论证安全</a>
-      <a href="#metric">6. 安全指标</a>
-      <a href="#faq">7. 常见疑问</a>
+      <a href="#two">1. ★ 两类“安全”</a>
+      <a href="#fun">2. ★ ISO 26262 与 ASIL</a>
+      <a href="#sotif">3. ★ SOTIF 预期功能安全</a>
+      <a href="#case">4. ◆ 从“缺了什么”说起</a>
+      <a href="#argue">5. ◆ L3+ 如何论证安全</a>
+      <a href="#metric">6. ▪ 安全指标</a>
+      <a href="#asil">7. ◆ ASIL 定级与安全分析</a>
+      <a href="#sotifproc">8. ◆ SOTIF 工程流程</a>
+      <a href="#faq">9. 常见疑问</a>
+      <a href="#refs">10. 标准原文</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想弄清“凭什么说自动驾驶安全”</b>：读 ★ 三节（两类安全、ISO 26262 与 ASIL、SOTIF）即可。它回答的是“系统坏了怎么办、没坏但没想到怎么办”。<b>做工程或写安全文档</b>：◆ 五节讲安全论证、ASIL 定级与 SOTIF 流程，是可落地的做法。▪ 安全指标与标准原文供对照查阅。</p></div>
       <section class="sec scroll-target" id="two">
         <div class="sec-head"><span class="no">01</span><h2>先把两类“安全”分开</h2></div>
         <div class="tbl-wrap">
@@ -130,14 +133,51 @@
         <p>行业也在研究“责任敏感安全模型（RSS）”等理论框架：把“谁该为事故负责”的规则数学化，让系统在任何时刻都保持“即使对方违规，我也不负有责任”的安全姿态，为安全论证提供形式化基础。</p>
       </section>
 
+      <section class="sec scroll-target" id="asil">
+        <div class="sec-head"><span class="no">07</span><h2>ASIL 定级与安全分析方法</h2></div>
+        <p>ISO 26262 用 <b>HARA（危害分析与风险评估）</b>给每个危害定 ASIL 等级。定级由三个维度决定：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>取值</th><th>含义</th></tr></thead>
+            <tbody>
+              <tr><td>严重度 S</td><td>S0–S3</td><td>伤害程度，S3 为危及生命</td></tr>
+              <tr><td>暴露率 E</td><td>E0–E4</td><td>运行场景出现频率，E4 为高概率</td></tr>
+              <tr><td>可控性 C</td><td>C0–C3</td><td>驾驶员 / 乘客能否避免伤害，C3 为几乎不可控</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>三者组合查表得到 QM（质量管理）到 ASIL D 的等级。例如“高速上制动失效且不可控”通常是 ASIL D，必须做冗余与高诊断覆盖率。定级之后用 <b>FMEA</b>（自下而上找失效模式）与 <b>STPA</b>（自上而下分析系统级不安全控制行为）互补识别风险。</p>
+      </section>
+
+      <section class="sec scroll-target" id="sotifproc">
+        <div class="sec-head"><span class="no">08</span><h2>SOTIF 的工程流程</h2></div>
+        <p>ISO 21448 把“预期功能不足”导致的风险作为独立问题处理，核心是把“未知的不安全”逐步变成“已知并可控”。流程可概括为：</p>
+        <ol class="steps">
+          <li><h3>定义功能与 ODD</h3><p>明确系统该做什么、在什么条件下做，作为后续分析的边界。</p></li>
+          <li><h3>识别危害与触发条件</h3><p>找出“功能正常但输出错误”的场景：逆光、雨雾、异形障碍、罕见交通行为。</p></li>
+          <li><h3>评估与改进</h3><p>对每个场景评估风险，通过算法改进、限制 ODD、增加冗余或人机交互来降低风险。</p></li>
+          <li><h3>验证与确认</h3><p>用仿真、封闭场地与实车证明残余风险可接受，并持续用运营数据监控。</p></li>
+        </ol>
+        <p>SOTIF 的关键难点在于“<b>证明未知场景足够少</b>”。工程上通过场景库覆盖度、参数化随机测试与运营影子模式三管齐下，逐步逼近这个目标，详见 <a href="testing.html">测试与评价</a>。</p>
+      </section>
+
       <section class="sec scroll-target" id="faq">
-        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">
           <details><summary>ISO 26262 能保证 AI 不出错吗？</summary><p>不能。26262 针对“已知的失效模式”，而 AI 的错误往往是“未知的泛化失败”，这属于 SOTIF 范畴。所以现在的认证思路是“26262 管失效 + 21448 管边界 + 数据驱动持续验证”。</p></details>
           <details><summary>ASIL D 是不是意味着绝对可靠？</summary><p>不是。ASIL D 代表“按当前工业方法能做到的最高安全要求”，仍需要配合冗余、监控与降级策略共同作用。它降低的是“系统性漏洞”的概率，不是把它清零。</p></details>
           <details><summary>为什么 L3 认证比 L2 难这么多？</summary><p>L2 的安全由驾驶员兜底，系统的“安全档案”可以简化；L3 一旦激活，法律与安全责任转移到系统，厂商必须为“系统自己做错的每一种可能”提供证据。责任主体的变化，带来的是整个开发与验证体系的变化。</p></details>
           <details><summary>安全论证会公开吗？</summary><p>越来越多企业主动公开“安全报告”（运营数据、接管定义、安全方法论），但核心设计细节涉及商业机密与安全（防攻击），通常只对监管方完整披露，公开的是摘要版。</p></details>
+          <details><summary>功能安全与 SOTIF 谁先做？</summary><p>同时做，但起点不同：<b>26262 从“失效”出发</b>（自下而上做 FMEA、定 ASIL、设计冗余），<b>SOTIF 从“场景”出发</b>（自上而下定义 ODD、找触发条件、量化残余风险）。两者在架构阶段交汇——冗余与监控机制既服务于失效处理，也服务于性能局限的兜底，见 <a href="#sotifproc">SOTIF 的工程流程</a>。</p></details>
+          <details><summary>为什么说“算力堆料”不能替代安全设计？</summary><p>因为算力解决的是“算得够不够快”，而安全解决的是“错了怎么办”。一套没有冗余、没有健康监控、没有降级策略的系统，即使算力翻倍，也无法在关键部件失效或判断出错时保证可控。安全是<b>架构属性</b>，不是性能参数。</p></details>
         </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">10</span><h2>标准原文与延伸阅读</h2></div>
+        <p class="sec-sub">本页相关标准见下方；<b>全站所有标准与法规</b>（含“管什么、谁必须做”）汇总在 <a href="../glossary.html#standards">概念 · 指标 · 标准 索引</a>。</p>
+        <div class="paper"><h4>标准</h4><p>ISO 26262:2018 第 3、5、6、9 部分；ISO 21448:2022 (SOTIF)；ISO 21434（网络安全）；UL 4600（自动驾驶安全案例）。</p></div>
+        <div class="paper"><h4>方法</h4><p>Leveson, <i>Engineering a Safer World</i>（STPA）；SAE J1739（FMEA）；NHTSA 关于自动驾驶安全自评报告的要求。</p></div>
       </section>
 
       <section class="related">
@@ -145,10 +185,11 @@
         <p style="margin-bottom:10px">功能安全关注“系统自己”，网络安全关注“外部敌人”，测试评价则是把前两者落到证据链上。</p>
         <div class="rel-links">
           <a href="cybersecurity.html">网络安全与数据安全</a>
+          <a href="../one-trip.html#step4">一次行程里的安全降级</a>
           <a href="testing.html">测试、验证与评价</a>
-          <a href="regulation.html">法规、伦理与责任</a>
+          <a href="../regulation.html">法规与政策</a>
           <a href="../tech/control.html">冗余执行器设计</a>
-          <a href="../challenges.html">返回安全与挑战总览</a>
+          <a href="../challenges.html">返回安全与验证总览</a>
         </div>
       </section>
     </div>
@@ -160,21 +201,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../../index.html">首页</a>
-        <a href="../overview.html">认识自动驾驶</a>
-        <a href="../levels.html">分级标准</a>
-        <a href="../tech.html">核心技术</a>
-        <a href="../scenarios.html">应用场景</a>
-        <a href="../challenges.html">安全与挑战</a>
-        <a href="../future.html">未来展望</a>
-        <a href="../tutorial/index.html">系统教程</a>
-        <a href="../news.html">领域动态</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 功能安全与 SOTIF</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
@@ -188,7 +228,6 @@
   <script src="../../assets/site-update.js"></script>
 </body>
 </html>
-
 
 
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>应用场景 · 驶向未来百科</title>
-<meta name="description" content="自动驾驶应用场景：Robotaxi、干线物流、港口矿区、末端配送与自动泊车，为什么封闭场景先落地。">
+<title>落地与产业 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶的落地与产业：Robotaxi、干线物流、港口矿区、末端配送等应用场景，以及法规政策、商业模式与未来展望。">
 <link rel="stylesheet" href="../assets/style.css">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 </head>
@@ -15,25 +15,24 @@
     <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
     <nav class="main-nav">
       <a href="../index.html">首页</a>
-      <a href="overview.html">认识自动驾驶</a>
-      <a href="levels.html">分级标准 L0–L5</a>
-      <a href="tech.html">核心技术</a>
-      <a href="scenarios.html">应用场景</a>
-      <a href="challenges.html">安全与挑战</a>
-      <a href="future.html">未来展望</a>
-      <a href="tutorial/index.html">系统教程</a>
-      <a href="news.html">领域动态</a>
+      <a href="../pages/overview.html">入门</a>
+      <a href="../pages/tech.html">技术</a>
+      <a href="../pages/challenges.html">安全与验证</a>
+      <a href="../pages/scenarios.html" class="active">落地与产业</a>
+      <a href="../pages/frontier.html">AI 前沿</a>
+      <a href="../pages/tutorial/index.html">系统教程</a>
+      <a href="../pages/news.html">领域动态</a>
     </nav>
   </div>
 </header>
 
 <section class="hero hero--inner">
   <div class="wrap">
-    <span class="kicker">主题 4 / 6 · 应用场景</span>
-    <h1>自动驾驶的应用场景</h1>
-    <p class="lead">自动驾驶不会同时在所有地方出现，而是沿着“封闭 → 半开放 → 开放”“低速 → 高速”“货运 → 客运”的路径逐个场景渗透。判断一个场景能否先落地，有一套通用逻辑。</p>
+    <span class="kicker">域 04 · 落地与产业</span>
+    <h1>落地与产业：从场景到商业闭环</h1>
+    <p class="lead">自动驾驶不会同时在所有地方出现，而是沿着“封闭 → 半开放 → 开放”“低速 → 高速”“货运 → 客运”的路径逐个场景渗透。本域不仅看“能不能开”，还看“法规允不允许、账算不算得过来”。</p>
     <nav class="crumb">
-      <a href="../index.html">首页</a><span class="sep">/</span><a href="scenarios.html">应用场景</a><span class="sep">/</span><span>总览</span>
+      <a href="../index.html">首页</a><span class="sep">/</span><span>落地与产业</span>
     </nav>
   </div>
 </section>
@@ -42,14 +41,24 @@
   <div class="wrap layout2">
     <aside class="toc" aria-label="本页目录">
       <h4>本页目录</h4>
-      <a href="#logic">1. 场景先行的逻辑</a>
-      <a href="#ladder">2. 落地难度光谱</a>
-      <a href="#topics">3. 四大落地场景</a>
-      <a href="#checklist">4. 先落地场景的特征</a>
+      <a href="#logic">1. ★ 场景先行的逻辑</a>
+      <a href="#ladder">2. ★ 落地难度光谱</a>
+      <a href="#topics">3. ★ 场景与产业治理</a>
+      <a href="#checklist">4. ★ 先落地场景的特征</a>
+      <a href="#eval">5. ◆ 场景评估框架</a>
+      <a href="#faq">6. 常见疑问</a>
+      <a href="#refs">7. 延伸阅读</a>
       <a href="#next" class="lv2-child">下一步怎么读</a>
     </aside>
 
     <div>
+      <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“自动驾驶先在哪里用得上”</b>：读 ★ 四节（场景先行的逻辑、落地难度光谱、场景与产业治理、落地场景的特征）。<b>做判断或投资分析</b>：◆ 一节给出一套四维评估框架（ODD 复杂度 / 单位经济 / 监管成熟度 / 技术复用度）。</p></div>
+      <div class="panel info">
+        <span class="pt">本域地图 · 怎么读最快</span>
+        <p><b>★ 只求了解（约 15 分钟）</b>：本页「为什么说场景先行」→「落地难度光谱」→ <a href="scenarios/port-mining.html">港口与矿区</a>（最先跑通的场景）。</p>
+        <p><b>◆ 关注商业与投资（约 60 分钟）</b>：场景评估框架 → <a href="scenarios/business.html">商业化与单位经济</a> → <a href="scenarios/robotaxi.html">Robotaxi</a> → <a href="scenarios/freight.html">干线物流</a> → <a href="future.html">未来展望</a>。</p>
+        <p><b>逐页难度与用时</b>：本页（入门 12 分 ★）｜<a href="scenarios/robotaxi.html">Robotaxi</a>（进阶 20 分 ★）｜<a href="scenarios/port-mining.html">港口与矿区</a>（进阶 15 分 ★）｜<a href="scenarios/freight.html">干线物流</a>（进阶 15 分 ◆）｜<a href="scenarios/delivery-avp.html">末端配送与 AVP</a>（进阶 13 分 ◆）｜<a href="scenarios/business.html">商业化与单位经济</a>（进阶 15 分 ★）｜<a href="regulation.html">法规与政策</a>（进阶 20 分 ★）｜<a href="future.html">未来展望</a>（入门 12 分 ◆）。</p>
+      </div>
       <section class="sec scroll-target" id="logic">
         <div class="sec-head"><span class="no">01</span><h2>为什么说“场景先行”</h2></div>
         <p>上一页的分级标准告诉我们，L4 只在<b>运行设计条件 ODD</b>内负责。ODD 划得越小、越可控，技术难度、安全证明成本与法规阻力就越低。因此自动驾驶产业不是“一步到位的无人驾驶”，而是<b>把一个个具体场景变成可盈利的生意</b>：</p>
@@ -81,7 +90,7 @@
       </section>
 
       <section class="sec scroll-target" id="topics">
-        <div class="sec-head"><span class="no">03</span><h2>四大落地场景（可继续下钻）</h2></div>
+        <div class="sec-head"><span class="no">03</span><h2>落地场景与产业治理（可继续下钻）</h2></div>
         <div class="grid g2">
           <div class="card reveal">
             <div class="ci">🚕</div><h3>出行服务 Robotaxi</h3>
@@ -107,6 +116,18 @@
             <span class="tag">无人配送车</span><span class="tag">AVP</span><span class="tag">低速</span>
             <a class="more" href="scenarios/delivery-avp.html">进入专题</a>
           </div>
+          <div class="card reveal">
+            <div class="ci">⚖️</div><h3>法规与政策</h3>
+            <p>从路测许可到 L3/L4 准入，从事故责任划分到保险设计，监管决定了一个场景能否真正收费运营。</p>
+            <span class="tag">准入试点</span><span class="tag">责任</span><span class="tag">保险</span>
+            <a class="more" href="regulation.html">进入专题</a>
+          </div>
+          <div class="card reveal">
+            <div class="ci">🔭</div><h3>未来展望</h3>
+            <p>LLM 与世界模型、端到端大模型、车路云一体化、商业闭环与产业竞争——未来几年最值得关注的方向。</p>
+            <span class="tag">技术路线</span><span class="tag">产业格局</span><span class="tag">时间表</span>
+            <a class="more" href="future.html">进入专题</a>
+          </div>
         </div>
       </section>
 
@@ -115,10 +136,44 @@
         <ol class="steps">
           <li><h3>边界可控</h3><p>有明确 ODD：封闭/半封闭环境、可预测的交通参与者，甚至能通过物理设施（闸机、护栏）过滤意外。</p></li>
           <li><h3>有真实痛点与经济账</h3><p>无人化能显著降本（司机、7×24 工时、油耗），或解决招不到人的问题——不是“为自动而自动”。</p></li>
-          <li><h3>法规给了路</h3><p>有路测牌照、准入试点或明确的管理办法，出了事故责任清晰。参见 <a href="challenges/regulation.html">法规与伦理</a>。</p></li>
+          <li><h3>法规给了路</h3><p>有路测牌照、准入试点或明确的管理办法，出了事故责任清晰。参见 <a href="regulation.html">法规与伦理</a>。</p></li>
           <li><h3>技术栈能闭环</h3><p>感知、定位、规划在限定区域内有足够冗余与保底策略（地图先验、固定路线、远程介入）。</p></li>
           <li><h3>可逐步扩展</h3><p>从一条路、一个港、一片园区起步，验证后把 ODD 一圈圈扩大，边运营边积累数据。</p></li>
         </ol>
+      </section>
+
+      <section class="sec scroll-target" id="eval">
+        <div class="sec-head"><span class="no">05</span><h2>怎么判断一个场景值不值得做</h2></div>
+        <p>“场景先行”不是拍脑袋，工程上可以用四个维度打分，决定先做哪个场景：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>要问的问题</th><th>判断</th></tr></thead>
+            <tbody>
+              <tr><td>ODD 复杂度</td><td>参与者是否可控？是否封闭？天气与光照是否稳定？</td><td>复杂度低 = 更容易先落地</td></tr>
+              <tr><td>单位经济</td><td>人力成本占比多少？自动化后能省多少？</td><td>人力占比高 = 替代价值大</td></tr>
+              <tr><td>监管成熟度</td><td>是否有明确准入路径与责任规则？</td><td>规则清晰 = 落地更快</td></tr>
+              <tr><td>技术复用度</td><td>这套技术能否迁移到其他场景？</td><td>复用度高 = 长期回报大</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>用这套框架看，港口与矿区在 ODD 复杂度与单位经济上占优，因此最先跑通；Robotaxi 单位经济潜力最大但 ODD 最复杂、监管最难，因此落地节奏更慢。四个场景的成本账（收入侧、成本侧与关键杠杆）用统一口径拆解在 <a href="scenarios/business.html">商业化与单位经济</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">06</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>为什么自动驾驶不能“一步到位”做成全无人驾驶？</summary><p>因为安全必须被证明，而不是被承诺。把 ODD 划小（固定路线、封闭场地、低速），才能把“每一公里会遇到什么”穷举清楚、把证据链做扎实；反之，范围越大，需要覆盖的极端场景呈指数增长，反而永远无法交付。这就是<b>场景先行</b>的本质，见 <a href="#logic">场景先行的逻辑</a>。</p></details>
+          <details><summary>哪个场景最先赚钱？</summary><p>目前是<b>港口与矿区</b>：环境封闭、路线固定、7×24 作业、司机成本高，无人化替代价值最直接。其次是园区接驳与末端配送等“小而美”的低速场景，见 <a href="scenarios/port-mining.html">港口与矿区</a>。</p></details>
+          <details><summary>普通人最先能接触到哪个？</summary><p>顺序大致是：<b>自动泊车/代客泊车</b>（买车就能体验）→ <b>无人配送车</b>（在部分园区、校园与小区）→ <b>Robotaxi</b>（在获批城市的限定区域）。三者的共同点是 ODD 明确、场景受限，见 <a href="scenarios/delivery-avp.html">末端配送与自动泊车</a>。</p></details>
+          <details><summary>Robotaxi 最难、为什么反而热度最高？</summary><p>因为它同时具备“技术天花板最高”与“市场空间最大”两个属性：城区人车混行、长尾无限，但一旦跑通，替代的是整个城市出行市场的司机成本。资本愿意为最大的那个市场支付最长的等待，见 <a href="scenarios/robotaxi.html">Robotaxi 专题</a>。</p></details>
+          <details><summary>一个场景的技术能直接“平移”到另一个场景吗？</summary><p>部分可以：感知、定位、仿真平台与数据闭环是通用的；但<b>ODD 边界、决策策略与安全论证几乎要重做</b>——矿区对扬尘与重载的要求，与城区行人博弈完全不同。技术复用度因此被列为场景评估的四个维度之一，见 <a href="#eval">场景评估框架</a>。</p></details>
+          <details><summary>怎么判断一家公司说的“落地”是真的？</summary><p>看四个可核验的细节：<b>是否收费</b>（有没有真实订单与收入）、<b>是否去掉安全员</b>（车内无人 vs 有人监督）、<b>运营区域与时段</b>（ODD 有多大）、<b>是否有公开的安全数据</b>（接管率、事故率）。四项都答得出来，才是商业化，而不只是技术演示。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">07</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>场景与商业化</h4><p>麦肯锡、BCG 关于自动驾驶商业化路径的公开报告；各场景头部企业的招股书与年度报告（含运营数据与单位经济披露）。</p></div>
       </section>
 
       <section class="related scroll-target" id="next">
@@ -129,8 +184,8 @@
           <a href="scenarios/freight.html">干线物流</a>
           <a href="scenarios/port-mining.html">港口与矿区</a>
           <a href="scenarios/delivery-avp.html">末端配送与自动泊车</a>
-          <a href="tech.html">回看支撑技术</a>
           <a href="future.html">看商业化前景</a>
+          <a href="tech.html">回看支撑技术</a>
         </div>
       </section>
     </div>
@@ -142,21 +197,20 @@
     <div class="footer-grid">
       <div>
         <p class="footer-title">驶向未来 · 自动驾驶百科</p>
-        <p style="max-width:520px">面向大众的自动驾驶中文科普站点。内容按主题分层组织，可逐级深入阅读。仅供学习交流。</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
       </div>
       <nav class="footer-links">
         <a href="../index.html">首页</a>
-        <a href="overview.html">认识自动驾驶</a>
-        <a href="levels.html">分级标准</a>
-        <a href="tech.html">核心技术</a>
-        <a href="scenarios.html">应用场景</a>
-        <a href="challenges.html">安全与挑战</a>
-        <a href="future.html">未来展望</a>
-        <a href="tutorial/index.html">系统教程</a>
-        <a href="news.html">领域动态</a>
+        <a href="../pages/overview.html">入门</a>
+        <a href="../pages/tech.html">技术</a>
+        <a href="../pages/challenges.html">安全与验证</a>
+        <a href="../pages/scenarios.html">落地与产业</a>
+        <a href="../pages/frontier.html">AI 前沿</a>
+        <a href="../pages/tutorial/index.html">系统教程</a>
+        <a href="../pages/news.html">领域动态</a>
       </nav>
     </div>
-    <div class="footer-bar"><span>© 2026 本地静态站点 · 应用场景</span>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
       <span id="site-stamp" class="site-stamp"></span>
     </div>
   </div>
