@@ -442,3 +442,29 @@
     else boot();
   }
 }(typeof window !== "undefined" ? window : globalThis));
+  
+/* --- adsim boot guard: direct mount + visible failure (ASCII only) --- */  
+(function () {  
+  if (typeof document === 'undefined') return;  
+  var el = document.getElementById('adsim-root');  
+  if (!el) return;  
+  var keys = [];  
+  try { for (var k in window.ADSim) keys.push(k); } catch (e) {}  
+  function fail(msg) {  
+    var box = document.createElement('div');  
+    box.style.border = '1px solid #f85149';  
+    box.style.padding = '12px';  
+    box.style.background = '#3d1418';  
+    box.style.color = '#ffd7d5';  
+    box.textContent = msg;  
+    el.innerHTML = '';  
+    el.appendChild(box);  
+  }  
+  if (!window.ADSim) { fail('ADSim undefined: the adsim scripts did not run'); return; }  
+  if (!window.ADSim.UI) { fail('ADSim.UI missing; loaded keys: ' + keys.join(',')); return; }  
+  try {  
+    if (!el.adsimApi) window.ADSim.UI.mount(el, { scene: el.getAttribute('data-scene') });  
+  } catch (err) {  
+    fail('MOUNT ERROR: ' + (err ? err.message : '') + ' ; ' + (err ? err.stack : '') + ' ; keys: ' + keys.join(','));  
+  }  
+}());  
