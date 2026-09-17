@@ -186,6 +186,12 @@
         <div class='panel info'><span class='pt'>深入阅读</span><p>量化 / 蒸馏的具体做法与 VLA 车载部署架构见 <a href="tutorial/05-llm-vla.html#vla">第 4 章 · VLA 架构与车载部署</a>。</p></div>
       </section>
 
+      <div class="panel tip">
+        <span class='pt'>▪ 进阶：关键公式</span>
+        <div class='math math-left'>注意力复杂度：O(n² · d)　（对序列长度平方，视觉 token 是主要成本）<br>模型显存（FP16）：7B 参数 ≈ 14 GB；量化到 4 bit ≈ 3.5 GB</div>
+        <p>量纲：n 为 token 数（个），d 为特征维度；显存按“参数量 × 每参数字节”估算（FP16 = 2 字节，INT4 ≈ 0.5 字节）。要点：<b>环视视频展开后 token 数可达 10⁵ 量级，平方复杂度直接决定“能不能上车”</b>——这就是时空降采样、token 压缩与稀疏注意力成为车端部署前提的原因。</p>
+      </div>
+
       <section class='sec scroll-target' id='faq'>
         <div class='sec-head'><span class='no'>09</span><h2>关于大模型智驾的常见疑问</h2></div>
         <div class='panel info'>

@@ -171,6 +171,13 @@
         <p>这就是安全目标以"每小时失效率"而非"每次行程"表述的原因：<b>它需要与暴露时间相乘才能变成可感知的发生频率</b>。同时也说明，单次演示成功不能说明任何安全水平——分母太小。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <p>风险如何映射到安全等级：</p>
+        <div class="math math-left">风险 = 严重度 S × 暴露概率 E × 可控性 C　→ 映射到 ASIL A–D<br>随机硬件失效目标（ASIL D 量级）：PFH &lt; 10⁻⁸ / 小时</div>
+        <p>量纲与含义：S、E、C 是 ISO 26262 的定性评级（各分 3–4 档），三者组合决定 ASIL 等级；PFH 是"每小时失效概率"（无量纲比值）。要点：<b>安全等级不是"系统好不好"的评分，而是"允许的失效概率"的等级</b>——等级越高，对冗余结构、诊断覆盖率与开发流程的要求越严。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="panel info">

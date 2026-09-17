@@ -152,6 +152,12 @@
         <p>但若同一入口能横向移动到车内总线，后果从"车门被开"跳到"行驶安全"，风险等级要再乘一个数量级。<b>所以 TARA 的关键不是数漏洞个数，而是判断"后果的跳变点"在哪</b>，并优先堵住通向它的路径。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">风险 ≈ 威胁 × 脆弱性 × 影响<br>串联（攻击链）：P(突破全部) = Π P_i　→ 每多一道防护，成功率乘性下降<br>并联（冗余）：P(全部失效) = Π P(失效_i)</div>
+        <p>要点：<b>这两个式子解释了所有"纵深防御"的设计逻辑</b>——攻击者必须连续突破多道防线（串联相乘），而你的冗余通道是并联的（同时失效的概率也是相乘）。因此安全评审该问的是"<b>哪一段是单点</b>"，而不是"装了多少个组件"。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="panel info">

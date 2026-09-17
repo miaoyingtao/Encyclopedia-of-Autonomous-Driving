@@ -171,6 +171,12 @@
           </table>
         </div>
       </section>
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：失效链的概率形式</span>
+        <div class="math math-left">P(事故) = Π P(第 i 道防线未能拦截)　（拦截环节是串联的）<br>例：五道防线各有 10% 漏过率 → P ≈ 0.1⁵ = 10⁻⁵</div>
+        <p>要点：<b>每增加一道有效防线，事故概率是“乘性”下降，而不是“加法”</b>。反过来更关键：只要某一环的漏过率等于 1（形同虚设），整条链就失去意义——这正是本页反复强调“多数事故不是单点故障，但往往存在一个‘1’”的数学含义。评审时该问：<b>这条链上每一环的漏过率，有没有人被验证过？</b></p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
         <div class="panel info">
