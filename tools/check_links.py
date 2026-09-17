@@ -25,6 +25,15 @@ ASSETS = os.path.join(ROOT, "assets")
 UPDATE_FILE = os.path.join(ASSETS, "site-update.js")
 SEARCH_INDEX = os.path.join(ASSETS, "search-data.js")
 
+
+def set_root(path):
+    """切换被检查的根目录（默认仓库根；构建产物在 site/）。"""
+    global ROOT, ASSETS, UPDATE_FILE, SEARCH_INDEX
+    ROOT = os.path.abspath(path)
+    ASSETS = os.path.join(ROOT, "assets")
+    UPDATE_FILE = os.path.join(ASSETS, "site-update.js")
+    SEARCH_INDEX = os.path.join(ASSETS, "search-data.js")
+
 NAV_PAT = re.compile(r'<nav\s+class=["\'](main-nav|footer-links)["\']>')
 TAG_RE = re.compile(r"<(/?)([a-zA-Z][a-zA-Z0-9]*)((?:\"[^\"]*\"|'[^']*'|[^>\"'])*)>")
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
@@ -230,7 +239,11 @@ def main():
     ap.add_argument("--quiet", action="store_true", help="只输出错误")
     ap.add_argument("--stamp", action="store_true", help="检查后写入今天的维护日期")
     ap.add_argument("--print-index", action="store_true", help="打印搜索索引统计")
+    ap.add_argument("--root", default=None, help="被检查的根目录（默认仓库根；构建产物用 site）")
     args = ap.parse_args()
+
+    if args.root:
+        set_root(args.root)
 
     if args.stamp:
         stamp_update()

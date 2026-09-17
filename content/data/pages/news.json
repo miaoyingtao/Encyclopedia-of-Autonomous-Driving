@@ -1,0 +1,34 @@
+{
+  "faq": [],
+  "refs": [],
+  "related": [
+    {
+      "href": "tutorial/05-llm-vla.html",
+      "text": "VLA / LLM 上车的原理讲义"
+    },
+    {
+      "href": "tutorial/06-worldmodel.html",
+      "text": "世界模型：定义到复现"
+    },
+    {
+      "href": "frontier.html",
+      "text": "AI 前沿"
+    },
+    {
+      "href": "levels.html",
+      "text": "L0–L5 分级与责任划分"
+    },
+    {
+      "href": "scenarios/robotaxi.html",
+      "text": "Robotaxi 出行服务"
+    },
+    {
+      "href": "regulation.html",
+      "text": "法规与政策"
+    }
+  ],
+  "faq_title": "",
+  "refs_title": "",
+  "related_title": "想把这个“结果”背后的技术弄懂？",
+  "toc": []
+}

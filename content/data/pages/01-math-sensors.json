@@ -1,0 +1,84 @@
+{
+  "faq": [
+    {
+      "q": "Q6：为什么姿态优化要用“3 维小量”而不是直接优化四元数的 4 个分量？",
+      "a": "四元数带单位约束（4 参数只有 3 个自由度），直接优化会不断破坏 ‖q‖ = 1；用 3 维旋转向量作为误差量，约束自动满足，雅可比也稳定。更新完再注入并归一化即可。"
+    },
+    {
+      "q": "Q7：EKF 什么情况下会“过度自信”？",
+      "a": "当状态不确定度大、非线性强（如大角度转弯、近距强透视）时，一阶泰勒展开忽略的高阶项被低估，估出的协方差偏小，滤波器对新观测越来越不信任，最终发散。"
+    },
+    {
+      "q": "Q8：ICP 收敛域大概多大？怎么提高成功率？",
+      "a": "通常要求初始位姿误差小于“点云尺度/体素大小”的量级（一般几厘米到半米）。工程做法是多分辨率由粗到精、先做 FPFH+RANSAC 或 TEASER++ 粗配准给初值，并监控残差曲线。"
+    },
+    {
+      "q": "Q9：为什么标定时要“倾斜标定板”，而不是全部正对镜头？",
+      "a": "正交约束 r₁ᵀr₂ = 0 需要非平凡的三维姿态信息才能同时约束焦距与主点。全部正对时深度与焦距强相关，解出的参数在别的距离上就失效。"
+    },
+    {
+      "q": "Q10：MPC 每周期只解一次 QP，为什么还要“热启动”？",
+      "a": "相邻控制周期的解通常非常接近，把上一周期的解作为初始点能显著减少迭代次数（常可减少数倍求解时间），并让求解时间更可预测，满足实时性要求。"
+    },
+    {
+      "q": "Q0：车体系 x 前、y 左、z 上时，绕 z 轴转 +90° 会把“正前方”变成什么方向？",
+      "a": "旋转矩阵作用在 [1,0,0]ᵀ 上得到 [cos90, sin90, 0]ᵀ = [0,1,0]ᵀ，即正左方。这就是“左转为正”的直观含义，也是后续 Frenet 与航向角 θ 的符号约定来源。"
+    },
+    {
+      "q": "Q1：旋转矩阵为什么求逆等于转置？",
+      "a": "旋转不改变向量长度与夹角，因此 RᵀR = I（正交性），两边同左乘 R⁻¹ 得 R⁻¹ = Rᵀ。"
+    },
+    {
+      "q": "Q2：卡尔曼更新公式中，观测噪声 R 趋于无穷大时，估计 x̂ 会变成什么？",
+      "a": "K → 0，x̂ → x̂⁻，即完全相信运动模型预测、忽略观测。"
+    },
+    {
+      "q": "Q3：针孔模型里，同一个物体放远一倍，在图像上大约缩小多少？",
+      "a": "投影坐标约与深度成反比（u ≈ fx·X/Z），所以距离翻倍，成像高度约为原来一半。"
+    },
+    {
+      "q": "Q4：为什么车规里常用 EKF/UKF 而很少直接用完整粒子滤波？",
+      "a": "车载算力与实时性约束：粒子滤波用大量采样近似任意分布，精度高但计算量随状态维数指数上升，难以在嵌入式平台跑高频。"
+    },
+    {
+      "q": "Q5：LM 阻尼 λ 很大时算法近似哪种方法，很小呢？",
+      "a": "λ 大时近似梯度下降（稳健、收敛慢）；λ 小时近似高斯牛顿（快、可能发散）。"
+    }
+  ],
+  "refs": [
+    {
+      "head": "教材",
+      "html": "<p>Thrun et al., <i>Probabilistic Robotics</i>；Bar-Shalom et al., <i>Estimation with Applications to Tracking and Navigation</i>；Hartley &amp; Zisserman, <i>Multiple View Geometry in Computer Vision</i>；Nocedal &amp; Wright, <i>Numerical Optimization</i>。</p>"
+    },
+    {
+      "head": "原始文献",
+      "html": "<p>Kalman, “A New Approach to Linear Filtering and Prediction Problems” (1960)；Julier &amp; Uhlmann, “Unscented Filtering and Nonlinear Estimation” (2004)；Zhang, “A Flexible New Technique for Camera Calibration” (2000)。</p>"
+    }
+  ],
+  "related": [
+    {
+      "href": "02-perception.html",
+      "text": "第 1 章 感知与状态估计"
+    },
+    {
+      "href": "index.html",
+      "text": "返回课程地图"
+    },
+    {
+      "href": "../tech/perception.html",
+      "text": "科普：环境感知"
+    },
+    {
+      "href": "../tech/perception/camera.html",
+      "text": "科普：摄像头"
+    },
+    {
+      "href": "../tech/perception/lidar.html",
+      "text": "科普：激光雷达"
+    }
+  ],
+  "faq_title": "",
+  "refs_title": "参考文献与延伸阅读",
+  "related_title": "下一站",
+  "toc": []
+}

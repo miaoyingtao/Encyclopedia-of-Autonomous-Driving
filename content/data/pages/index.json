@@ -1,0 +1,47 @@
+{
+  "faq": [
+    {
+      "q": "数学基础一般，能跟上吗？",
+      "a": "可以。第 0 章把后续要用的矩阵、概率、优化全部过一遍并标注用途；若遇到完全陌生的概念，先跳过符号、抓住“这个公式在解决什么问题”，回头再补推导。"
+    },
+    {
+      "q": "只有公式没有代码，怎么算教程？",
+      "a": "每章给出可运行思路的伪代码与参数表；算法类题目强烈建议对照伪代码用 Python + NumPy 复现一次——多数自动驾驶算法的最小原型只需要几十行。"
+    },
+    {
+      "q": "教程与科普页会重复吗？",
+      "a": "不重复：科普页管“概念与语境”，教程页管“建模与实现”，两者互链。想快速了解某个词，看科普；想弄懂某个算法，进教程。"
+    },
+    {
+      "q": "更新到“大模型/世界模型”了吗？",
+      "a": "已经补齐：第 4 章（LLM/VLA）与第 5 章（世界模型）覆盖表征统一、行为克隆与 RL、VLA 架构与车端部署、扩散/流匹配生成、闭环训练与评测；概念背景仍可先看 <a href='../frontier.html'>AI 前沿专题</a>，再回教程看实现与评测细节。"
+    },
+    {
+      "q": "学这套教程需要什么数学基础？",
+      "a": "只需要<b>大学工科一年级的底子</b>：微积分、线性代数、一点概率。第 0 章会把后续用到的矩阵、概率、优化全部过一遍并标注用途；如果某段公式看不懂，先抓住\"它在解决什么问题\"，回头再补推导，不影响往下读。"
+    },
+    {
+      "q": "学完之后能复现到什么程度？",
+      "a": "按章节动手做一遍，你应该能独立写出最小可用原型：<b>卡尔曼/EKF 跟踪</b>（第 0–1 章）、<b>BEV 栅格与 IoU/mAP 评测</b>（第 1 章）、<b>Frenet 采样规划与 MPC 跟踪</b>（第 2 章）、<b>ICP/GNSS 组合定位与仿真测试</b>（第 3 章）、<b>模仿学习与 VLA/世界模型的推理流程</b>（第 4–5 章）。真正的工程量级差距在数据、标定与工程化上，不在算法骨架。"
+    }
+  ],
+  "refs": [
+    {
+      "head": "核心教材",
+      "html": "<p>Thrun et al., <i>Probabilistic Robotics</i>；Siciliano &amp; Khatib, <i>Springer Handbook of Robotics</i>；Rajamani, <i>Vehicle Dynamics and Control</i>；Hartley &amp; Zisserman, <i>Multiple View Geometry</i>。</p>"
+    },
+    {
+      "head": "开源工具",
+      "html": "<p>Autoware / Apollo（完整栈）、ROS 2（中间件）、PCL / Open3D（点云）、Ceres / GTSAM / g2o（优化）、CARLA / SUMO（仿真）。</p>"
+    },
+    {
+      "head": "外部资源总览",
+      "html": "<p>公开课程（Coursera/Udacity）、教材、开源栈（Autoware/Apollo/CARLA/BEVFormer/LIO-SAM/UniAD/DreamerV3 等）、数据集与基准（nuScenes/Waymo/KITTI/NAVSIM/nuPlan/Bench2Drive）、工具链与安全标准（Ceres/GTSAM/OSQP/acados/ASAM/ISO 26262/21448）已整理成 <a href='resources.html'>教程资源库</a>，共 80 余条经可访问性验证的外部链接。</p>"
+    }
+  ],
+  "related": [],
+  "faq_title": "",
+  "refs_title": "参考书目与工具链",
+  "related_title": "现在开始",
+  "toc": []
+}

@@ -1,0 +1,166 @@
+{
+  "faq": [
+    {
+      "q": "摄像头能被太阳或强光“晃瞎”吗？",
+      "a": "会。逆光、眩光、隧道口明暗突变是真实挑战。量产方案用 HDR、偏振片、多曝光融合与算法滤波缓解，必要时把控制权交给对光照不敏感的雷达/激光雷达或让系统降级。"
+    },
+    {
+      "q": "激光雷达在雨雪天会失效吗？",
+      "a": "会衰减但不一定失效。雨滴会造成噪点、浓雾会缩短有效探测距离，这是激光雷达的物理短板；所以 L4 车队会限制恶劣天气下的 ODD，或依靠毫米波雷达兜底，见 <a href=\"perception/radar.html\">毫米波雷达</a>。"
+    },
+    {
+      "q": "为什么不能只用一种传感器？",
+      "a": "因为每种传感器都有“致命盲区”：摄像头怕黑与眩光、激光雷达怕雨雾、雷达看不清静止小物体。多传感器互为冗余，才能覆盖“任意单一传感器失效或受限”的情况——这也是功能安全的要求，见 <a href=\"perception/fusion.html\">多传感器融合</a>。"
+    },
+    {
+      "q": "感知系统“认错了”怎么办？",
+      "a": "行业有两层防线：一是置信度与冗余校验，多路证据矛盾时宁可“宁停三分”；二是安全降级——当系统无法确定前方是什么时，应减速、请求接管或靠边停车，而不是硬着头皮冲过去。相关设计见 <a href=\"../challenges/safety.html\">预期功能安全 SOTIF</a>。"
+    },
+    {
+      "q": "“召回优先”是什么意思？会不会导致频繁误刹？",
+      "a": "召回优先指“宁可误报，不可漏检”：宁可把一个可疑物体当成障碍去避让，也不能漏掉一个真实障碍。工程上用时间一致性过滤（连续多帧命中才升级为确定目标）和分级动作（先减速、再避让）来抑制误报带来的体验损失。"
+    },
+    {
+      "q": "多相机之间的时间同步有多重要？",
+      "a": "非常关键。相机约 30 fps、激光雷达约 10 fps，若对齐误差 100 ms，在 72 km/h 下就是约 2 米的错位——足以让同一目标在不同传感器里“落在两个位置”。因此系统必须做硬件触发或时间戳对齐与运动补偿，见 <a href=\"#calib\">标定与时间同步</a>。"
+    }
+  ],
+  "refs": [
+    {
+      "head": "检测与 BEV",
+      "html": "<p>Ren et al., “Faster R-CNN” (2015)；Redmon et al., “YOLO” (2016)；Tian et al., “FCOS” (2019)；Carion et al., “DETR” (2020)；Lang et al., “PointPillars” (2019)；Yin et al., “CenterPoint” (2021)；Li et al., “BEVFormer” (2022)。</p>"
+    },
+    {
+      "head": "跟踪与融合",
+      "html": "<p>Bewley et al., “SORT” (2016)；Wojke et al., “DeepSORT” (2017)；Liu et al., “BEVFusion” (2022)。</p>"
+    },
+    {
+      "head": "标定与数据集",
+      "html": "<p>Zhang, “A Flexible New Technique for Camera Calibration” (2000)；nuScenes、Waymo Open Dataset、Argoverse 2 的评测协议与指标定义。</p>"
+    }
+  ],
+  "related": [
+    {
+      "href": "perception/camera.html",
+      "text": "摄像头"
+    },
+    {
+      "href": "perception/lidar.html",
+      "text": "激光雷达"
+    },
+    {
+      "href": "perception/radar.html",
+      "text": "毫米波雷达"
+    },
+    {
+      "href": "perception/ultrasonic.html",
+      "text": "超声波雷达"
+    },
+    {
+      "href": "perception/fusion.html",
+      "text": "多传感器融合"
+    },
+    {
+      "href": "decision.html",
+      "text": "决策与规划"
+    },
+    {
+      "href": "../tech.html",
+      "text": "返回技术总览"
+    }
+  ],
+  "faq_title": "关于感知的高频疑问",
+  "refs_title": "延伸阅读与关键文献",
+  "related_title": "继续深潜或横向跳转",
+  "toc": [
+    {
+      "href": "#q",
+      "cls": "",
+      "text": "1. ★ 感知要回答的问题"
+    },
+    {
+      "href": "#sensors",
+      "cls": "",
+      "text": "2. ★ 传感器方案"
+    },
+    {
+      "href": "#sensor-pages",
+      "cls": "lv2-child",
+      "text": "3. 继续下钻：传感器专题"
+    },
+    {
+      "href": "#algo",
+      "cls": "",
+      "text": "4. ★ 感知算法流水线"
+    },
+    {
+      "href": "#understand",
+      "cls": "",
+      "text": "5. ★ BEV 与占用网络"
+    },
+    {
+      "href": "#fusion",
+      "cls": "",
+      "text": "6. ◆ 多传感器融合"
+    },
+    {
+      "href": "#compute",
+      "cls": "",
+      "text": "7. ◆ 算力需求"
+    },
+    {
+      "href": "#detection",
+      "cls": "",
+      "text": "8. ◆ 检测与跟踪算法"
+    },
+    {
+      "href": "#calib",
+      "cls": "",
+      "text": "9. ◆ 标定与时间同步"
+    },
+    {
+      "href": "#metrics",
+      "cls": "",
+      "text": "10. ▪ 评价指标"
+    },
+    {
+      "href": "#faq",
+      "cls": "",
+      "text": "11. 常见疑问"
+    },
+    {
+      "href": "#refs",
+      "cls": "",
+      "text": "12. 延伸阅读"
+    }
+  ],
+  "read_guide": {
+    "head": "本页读法",
+    "kind": "tip",
+    "html": "<p><b>只想搞懂“车怎么看见世界”</b>：读 ★ 四节（感知要回答什么、传感器方案、算法流水线、BEV 与占用网络）。<b>做工程或做选型</b>：◆ 四节讲融合、算力、检测跟踪与标定同步，是量产落地的关键。▪ 评价指标供对照。它在主线中的位置：<a href=\"../one-trip.html#step1\">环节 1 · 主路跟车</a> 与 <a href=\"../one-trip.html#step2\">环节 2 · 施工区</a>。</p>"
+  },
+  "key_numbers": {
+    "head": "关键数字",
+    "html": "<p>传感器帧率：相机约 30 fps、毫米波雷达约 20 fps、激光雷达约 10 fps ｜ 感知输出频率 10–30 Hz ｜ 时间同步误差 100 ms ≈ 2 m 错位 ｜ 感知是车载算力最大消耗方（多路 8MP 视频 + 点云 + 多网络并行）</p>"
+  },
+  "read_hint": {
+    "head": "阅读提示",
+    "html": "<p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href=\"../tutorial/02-perception.html\">第 1 章 · 感知与状态估计</a> 一起读。它在主线中的位置：<a href=\"../one-trip.html#step1\">环节 1 · 主路跟车</a> 与 <a href=\"../one-trip.html#step2\">环节 2 · 施工区</a>。</p>"
+  },
+  "example_blocks": [
+    {
+      "head": "算一算：时间不同步的代价",
+      "html": "<p>示意性估算：相机帧与激光雷达帧的时间戳偏差 <b>100 ms</b>，车速 72 km/h（20 m/s）→ 同一目标在两种数据里的位置会相差约 <b>2 m</b>。</p>\n        <p>后果不只是\"框对不上\"：3D 检测框投影到图像上会明显偏移，融合时可能被判为\"两个不同目标\"或直接关联失败；若此时恰好有相邻车辆，就可能出现\"把 A 车的速度贴到 B 车上\"的误融合。<b>所以硬件触发或时间戳对齐 + 运动补偿，是融合的前置条件。</b></p>"
+    }
+  ],
+  "advanced_blocks": [
+    {
+      "head": "▪ 进阶：关键公式",
+      "html": "<div class=\"math math-left\">IoU(A, B) = |A ∩ B| / |A ∪ B|　　（交并比：检测框与真值的重合程度）<br>BEV 栅格列号 i = floor((x − x_min) / r)　　（世界坐标 → 栅格索引）</div>\n        <p>量纲：x、x_min 为米（m），r 为栅格分辨率（m/格，常见 0.1–0.5 m），i 为整数列号。要点：<b>所有“坐标 ↔ 栅格”互转都应收敛到同一个函数并配单元测试</b>——这是感知代码里最常见的低级错误来源。评测指标（IoU、mAP、NDS、MOTA）的定义见 <a href=\"../glossary.html#metrics\">指标字典</a>。</p>"
+    }
+  ],
+  "debates": {
+    "head": "边界与争议：这几个问题行业还没有定论",
+    "html": "<p><b>① 纯视觉还是多传感器？</b>一派主张用海量数据与算法换取成本优势，另一派坚持异构冗余才能保证安全下限。难有定论的关键在于：<b>两者的结论都绑定在各自 ODD 与数据规模上，不能互相迁移</b>。</p>\n          <p><b>② 统一表征（BEV/占用）会不会吞掉模块化？</b>联合学习能提升上限，但可解释性与“逐项验证”变难。目前的实际答案是混合：<b>能力层融合、安全层独立</b>。</p>"
+  }
+}

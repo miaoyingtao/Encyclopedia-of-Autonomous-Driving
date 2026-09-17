@@ -1,0 +1,167 @@
+---
+id: "pages/levels.html"
+slug: "levels"
+title: "分级标准 L0–L5 · 驶向未来百科"
+description: "自动驾驶分级 L0–L5：SAE 与中国 GB/T 40429 标准详解、谁开车谁负责、L2 到 L3 的分水岭。"
+accent: "accent-levels"
+nav_active: "overview"
+hero_kicker: "入门 · 分级标准"
+hero_h1: "自动驾驶分级 L0–L5"
+hero_lead: "“自动驾驶”是一个连续的光谱。全球通行做法是把人机职责按自动化程度切成六档（L0–L5）。看懂这一页，你就掌握了讨论自动驾驶最通用的语言。"
+crumb: "首页|../index.html"
+crumb: "入门|../pages/overview.html"
+crumb: "分级标准 L0–L5|"
+---
+
+<section class="sec scroll-target" id="why">
+        <div class="sec-head"><span class="no">01</span><h2>为什么需要给自动驾驶分级</h2></div>
+        <p>如果没有统一分级，消费者、工程师、监管部门与保险公司将无法对话：车企宣传“自动驾驶”，车主误以为可以睡觉，出了事故责任却说不清。分级把<b>“人在驾驶中的角色”和“系统承担的责任”</b>标准化，从而支撑三件事：</p>
+        <div class="grid g3">
+          <div class="card reveal"><div class="ci">🗣️</div><h3>沟通</h3><p>消费者能一眼判断：这个功能需要我一直盯着吗？出问题谁来兜底？避免“文字游戏式营销”造成误解。</p></div>
+          <div class="card reveal"><div class="ci">⚖️</div><h3>责任</h3><p>L2 及以下，人类驾驶员是法定驾驶主体；从 L3 起，系统可能成为责任主体，监管开始要求准入、保险与事故报告。</p></div>
+          <div class="card reveal"><div class="ci">🧪</div><h3>验证</h3><p>不同等级对应不同安全要求与测试方法：L2 看“人机共驾是否清晰”，L3+ 看“系统失效时能否安全降级”。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="map">
+        <div class="sec-head"><span class="no">02</span><h2>L0–L5：一条责任从人到车的光谱</h2></div>
+        <div class="levelbar">
+          <div class="lv-seg lv-l0">L0<span><small>应急辅助</small></span></div>
+          <div class="lv-seg lv-l1">L1<span><small>部分驾驶辅助</small></span></div>
+          <div class="lv-seg lv-l2">L2<span><small>组合驾驶辅助</small></span></div>
+          <div class="lv-seg lv-l3">L3<span><small>有条件自动驾驶</small></span></div>
+          <div class="lv-seg lv-l4">L4<span><small>高度自动驾驶</small></span></div>
+          <div class="lv-seg lv-l5">L5<span><small>完全自动驾驶</small></span></div>
+        </div>
+        <p class="legend-line">左侧（L0–L2）：系统是“助手”，人负责开车并时刻监督；右侧（L3–L5）：系统逐步成为“司机”，人从“开车”退化为“必要时接管”再到“完全不参与”。</p>
+
+      </section>
+
+      <section class="sec scroll-target" id="table">
+        <div class="sec-head"><span class="no">03</span><h2>六级详解表</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>等级</th><th>通俗称呼（中国 GB/T / SAE）</th><th>系统能做什么</th><th>人类要做什么</th><th>典型例子</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="tag lv0">L0</span></td>
+                <td>应急辅助 / 无自动化</td>
+                <td>只发出警告，或做瞬时干预（≤一次动作）</td>
+                <td>完成全部驾驶操作</td>
+                <td>AEB 自动紧急制动、FCW 前碰撞预警、ESC 车身稳定</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv1">L1</span></td>
+                <td>部分驾驶辅助 / 驾驶辅助</td>
+                <td>持续执行<b>横向或纵向</b>中的一种控制</td>
+                <td>完成另一种控制并全程监控</td>
+                <td>ACC 自适应巡航、LKA 车道保持辅助（单开）</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv2">L2</span></td>
+                <td>组合驾驶辅助 / 部分自动驾驶</td>
+                <td>同时执行<b>横向 + 纵向</b>控制（限速、跟车、转弯皆可由车完成）</td>
+                <td>仍须盯着路面、随时接管（可短暂脱手，不可脱眼）</td>
+                <td>高速/城市“导航辅助驾驶（NOA）”，多数量产智驾属此级</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv3">L3</span></td>
+                <td>有条件自动驾驶（两国同名）</td>
+                <td>在<b>运行设计条件（ODD）</b>内独立完成驾驶与 OEDR</td>
+                <td>不须持续监控，但须响应系统的接管请求，做“备用驾驶员”</td>
+                <td>高速拥堵/高速巡航有条件脱手脱眼（首批量产 L3 已出现）</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv4">L4</span></td>
+                <td>高度自动驾驶（两国同名）</td>
+                <td>在 ODD 内全程自主；系统自己处理故障并驶入<b>最小风险状态</b></td>
+                <td>通常无需任何接管（ODD 内）</td>
+                <td>无人出租车 Robotaxi、无人干线物流、园区接驳车</td>
+              </tr>
+              <tr>
+                <td><span class="tag lv5">L5</span></td>
+                <td>完全自动驾驶（两国同名）</td>
+                <td>理论上覆盖所有道路与工况，无需 ODD 限制</td>
+                <td>只需设定目的地，可完全做乘客</td>
+                <td>概念阶段，尚未有量产落地</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="l2-l3">
+        <div class="sec-head"><span class="no">04</span><h2>为什么 L2→L3 是公认的“分水岭”</h2></div>
+        <p>从技术角度看，L2 与 L3 都能自动转向和加减速；真正的差别不在“会不会开车”，而在<b>出了问题由谁负责</b>：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>L2 组合驾驶辅助</th><th>L3 有条件自动驾驶</th></tr></thead>
+            <tbody>
+              <tr><td>法律身份</td><td>辅助系统，驾驶员是驾驶主体</td><td>自动驾驶系统成为 ODD 内的驾驶主体</td></tr>
+              <tr><td>监控要求</td><td>驾驶员全程监控路面（脱眼违规）</td><td>系统自我监控，用户可做其他事</td></tr>
+              <tr><td>交接机制</td><td>随时手动接管</td><td>系统提前发出接管请求，用户须“接管就绪”</td></tr>
+              <tr><td>系统失效</td><td>交给驾驶员</td><td>若用户未接管，系统须执行最小风险策略（如减速靠边停车）</td></tr>
+              <tr><td>量产门槛</td><td>较低，已广泛普及</td><td>需要法规准入、功能安全证明、保险与事件报告机制</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>这就是为什么许多车企宣称的“L2.9”“准 L3”只是营销话术——<b>只要法律仍把责任完整压在驾驶员身上，它本质上还是 L2</b>。从 L2 跃向 L3，拼的不是多一个传感器，而是可靠性与责任体系的完整设计，详见 <a href="challenges/safety.html">功能安全与验证</a>。</p>
+
+      </section>
+
+      <section class="sec scroll-target" id="standards">
+        <div class="sec-head"><span class="no">05</span><h2>中国与 SAE：两套主流标准</h2></div>
+        <p>目前最常被引用的分级来自两个体系，两者都采用 0–5 六级结构，总体思想一致：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🇺🇸 SAE J3016</h3><p>国际汽车工程师学会（SAE）发布的《道路机动车辆驾驶自动化系统相关术语的分类与定义》，被全球广泛引用。它明确了 DDT、OEDR、ODD、接管、最小风险状态等核心术语，并多次修订以澄清边界。</p></div>
+          <div class="card reveal"><h3>🇨🇳 GB/T 40429-2021</h3><p>中国国家标准《汽车驾驶自动化分级》，2022 年 3 月起实施。分级与 SAE 大体对应，但对 0–2 级给出了更细的中国式名称（应急辅助、部分驾驶辅助、组合驾驶辅助），并强调接管能力、ODD 与最小风险状态等要求。</p></div>
+        </div>
+
+      </section>
+
+      <section class="sec scroll-target" id="terms">
+        <div class="sec-head"><span class="no">06</span><h2>高频术语速查</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>术语</th><th>含义</th></tr></thead>
+            <tbody>
+              <tr><td><code>ODD</code></td><td>运行设计条件：系统能安全运行的地理、道路、天气、时段、速度等条件范围，是判断“系统能不能开”的前提。</td></tr>
+              <tr><td><code>DDT</code></td><td>动态驾驶任务：包括横向/纵向控制、OEDR、变道等实时驾驶动作，不含路径规划层面的目的地设定。</td></tr>
+              <tr><td><code>OEDR</code></td><td>对目标与事件的探测和响应：发现、识别、预测并应对路面上的各种情况。</td></tr>
+              <tr><td><code>接管</code></td><td>由自动驾驶状态切换回人类驾驶的过程。L3 依赖“请求式接管”，L4 靠“最小风险策略”兜底。</td></tr>
+              <tr><td><code>MRM / 最小风险状态</code></td><td>系统遇到无法继续运行的情况时，主动减速、变道并靠边停车的安全处置，是 L3+ 的必备能力。</td></tr>
+              <tr><td><code>脱手 / 脱眼 / 脱脑</code></td><td>分别指手离开方向盘、视线离开道路、认知离开驾驶。L2 允许短暂脱手但要求不脱眼；L3+ 才谈得上在 ODD 内脱脑。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="odd">
+        <div class="sec-head"><span class="no">07</span><h2>ODD：分级的真正边界</h2></div>
+        <p>级别只是“能力标签”，真正决定一个系统能否上路的是 <b>ODD（Operational Design Domain，运行设计域）</b>——系统被设计为可以安全运行的条件集合。ODD 通常包含多个维度：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th>典型约束示例</th></tr></thead>
+            <tbody>
+              <tr><td>地理</td><td>城市 / 高速 / 园区；是否含隧道、收费站、施工区</td></tr>
+              <tr><td>道路</td><td>车道数、是否物理分隔、限速范围、路口类型</td></tr>
+              <tr><td>交通</td><td>车流密度、是否有行人 / 非机动车混行</td></tr>
+              <tr><td>环境</td><td>白天 / 夜间、雨雪雾、能见度、光照</td></tr>
+              <tr><td>速度</td><td>最高运行车速（如 ≤ 60 km/h）</td></tr>
+              <tr><td>自身状态</td><td>传感器健康、地图版本、是否满载</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>一旦超出 ODD，系统必须能识别并执行最小风险策略（MRM）。因此两个都叫“L4”的系统，实际能力可能相差极大——比较自动驾驶能力时，<b>“L几 + ODD 是什么”才是完整描述</b>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="resp">
+        <div class="sec-head"><span class="no">08</span><h2>责任转移与接管：L3 的真正难点</h2></div>
+        <p>L2 与 L3 的分界线不是“能力”，而是<b>责任</b>：L2 时驾驶员始终是驾驶主体；L3 在 ODD 内由系统承担驾驶任务，但系统请求接管时驾驶员必须响应。这带来几个可量化的工程问题：</p>
+        <ul>
+          <li><b>接管时间预算</b>：从系统发出请求到驾驶员有效接管需要多长？研究显示分心状态下可能需要数秒，因此法规对“提前预警时间”有要求。</li>
+          <li><b>最小风险状态</b>：如果驾驶员不接管，系统必须自行进入安全状态（减速、靠边、停车），这要求执行器与规划都有冗余。</li>
+          <li><b>注意力管理</b>：L3 车辆需要监测驾驶员是否处于可接管状态（DMS），否则无法合法运行。</li>
+        </ul>
+        <p>UN R157（ALKS）是目前最具体的 L3 法规之一，限定了车速、道路类型与接管流程；中国的 L3 试点也在逐步明确类似边界。相关安全论证见 <a href="challenges/safety.html">功能安全与 SOTIF</a>。</p>
+      </section>

@@ -1,0 +1,344 @@
+---
+id: "pages/tutorial/04-loc-sim-test.html"
+slug: "04-loc-sim-test"
+title: "第 3 章 · 定位建图与仿真测试 · 驶向未来"
+description: "自动驾驶系统教程第 3 章：GNSS/RTK 与 IMU 组合定位、点云配准与因子图、高精地图与 OpenDRIVE、仿真测试与 SOTIF、数据闭环。"
+accent: "accent-tech"
+hero_kicker: "系统教程 · 第 3 章"
+hero_h1: "定位、建图、仿真与测试"
+hero_lead: "“我在哪”是规划的前提；“我怎么证明它足够安全”是量产的前提。本章把组合导航、点云配准、高精地图讲到底层数学，再把仿真、SOTIF 与数据闭环串成一套可执行的验证方法论。"
+crumb: "首页|../../index.html"
+crumb: "系统教程|../../pages/tutorial/index.html"
+crumb: "第 3 章|"
+---
+
+<div class='panel info'><span class='pt'>配套阅读</span><p>想先建立直觉？可先看科普版 <a href='../../pages/tech/mapping.html'>定位与高精地图</a>，再回来读公式与推导。</p></div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>3.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：进阶</span><span>预计：4–5 小时</span><span>前置：第 0–2 章</span></div>
+        <p>学完本章，你应该能：① 写出 RTK 相对单点定位提升精度的原理（差分消掉什么误差）；② 解释组合导航为什么必须“GNSS + IMU”互为补充；③ 用 ICP/NDT 的目标函数说明点云配准在干什么；④ 看懂 OpenDRIVE 车道元素的最小骨架；⑤ 把 SOTIF 的场景分区映射到测试策略。</p>
+      </section>
+
+      <section class='sec scroll-target' id='task'>
+        <div class='sec-head'><span class='no'>3.2</span><h2>定位问题的分层：三种信息来源</h2></div>
+        <p>自动驾驶需要“车道级”定位：横向上要能分辨自己在哪条车道，误差通常要求分米级以内。定位是三类信息的融合：</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🛰 全局观测</h3><p>GNSS 给出绝对位置但有漂移、多径与遮挡；RTK 可到厘米级但依赖基站与开阔天空。</p></div>
+          <div class='card reveal'><h3>🌀 航位推算</h3><p>IMU、轮速计短时高频且不受遮挡，但误差随时间积分发散（“越走越偏”）。</p></div>
+          <div class='card reveal'><h3>🗺 地图匹配与感知</h3><p>激光/视觉与高精地图或道路特征匹配，得到相对车道的约束，误差有界但不一定处处可匹配。</p></div>
+        </div>
+        <p>三者单独都不可靠，组合才是答案：<b>用 IMU 短时补 GNSS 的遮挡，用 GNSS/地图匹配校准 IMU 的漂移</b>，这正是 3.5 的状态估计。</p>
+      </section>
+
+      <section class='sec scroll-target' id='gnss'>
+        <div class='sec-head'><span class='no'>3.3</span><h2>GNSS 与 RTK：伪距、载波与差分</h2></div>
+        <h3>单点定位：解伪距方程</h3>
+        <p>接收机测量与卫星的距离（伪距），位置由至少 4 颗卫星联立解出（3 个坐标 + 1 个接收机钟差）：</p>
+        <div class='math'>ρᵢ = |r_satᵢ − r_rov| + c·dt + Iᵢ + Tᵢ + εᵢ</div>
+        <p>I 是电离层延迟、T 是对流层延迟、dt 是钟差。单点定位精度约米级，因为电离层延迟与钟差难以精确建模。</p>
+        <h3>差分与 RTK：把共同误差“减掉”</h3>
+        <p>RTK 的基本思想：基准站位置已知，它与流动站（车）在同一片天空下，两者的电离层/对流层/星历误差高度相关。把两站对同一卫星的观测相减，公共误差被消掉，只留几何差与模糊度：</p>
+        <div class='math math-left'>单差：Δρ = ρ_rov − ρ_base ≈ Δr + c·Δdt<br>双差：对两颗卫星再做一次差，消掉接收机钟差<br>载波相位观测含整周模糊度 N：λ·φ = r + λ·N + …</div>
+        <p>载波相位精度远高于码相位（毫米级波长），但必须先估计整数模糊度 N：先求浮点解，再用 LAMBDA 等算法固定为整数（fixed），固定后可达 1–2 cm 精度。RTK 的弱点也清晰：离开基站覆盖、穿过城市峡谷时固定解丢失，会退化为分米~米级——所以要 IMU 在中间“撑着”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='ins'>
+        <div class='sec-head'><span class='no'>3.4</span><h2>IMU 与航位推算：高频但会漂</h2></div>
+        <p>IMU 输出角速度（陀螺）与比力（加速度计），典型频率 100–1000 Hz。捷联惯导的思想是把这些增量连续积分出姿态、速度与位置：</p>
+        <div class='math math-left'>姿态更新：q ← q ⊗ Δq(ω·Δt)<br>速度更新：v ← v + (R·a − g)·Δt<br>位置更新：p ← p + v·Δt</div>
+        <p>关键问题是<b>零偏</b>：静止时加速度计/陀螺仍有小偏置，积分一次变速度误差、两次变位置误差，并随时间增长；同时姿态误差会通过重力耦合到水平速度，形成“姿态漂 → 速度漂 → 位置漂”的恶性循环。</p>
+        <div class='panel warn'><span class='pt'>零偏模型</span><p>工程上把零偏建模为“随机游走”并放进状态向量估计：ḃ = 高斯白噪声。这正是组合导航里状态维数比“位置+速度+姿态”多 6 维（3 陀螺零偏 + 3 加速度计零偏）的原因。误差来源分清后，IMU 选型（零偏稳定性、噪声密度）与算法选型才能有的放矢。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='fuse'>
+        <div class='sec-head'><span class='no'>3.5</span><h2>组合导航：状态估计的经典应用</h2></div>
+        <p>把 GNSS、IMU、轮速、地图匹配放进第 0 章的卡尔曼框架：</p>
+        <div class='math math-left'>状态 x = [p, v, q(姿态), b_a, b_g]（15 维或更多）<br>预测：用 IMU 积分（高频率推进状态与协方差）<br>更新：GNSS 位置/速度、轮速、车道匹配等作为观测 z</div>
+        <p>“松组合”把 GNSS 解算好的位置/速度当观测；“紧组合”直接用原始伪距/载波观测做更新，遮挡时仍能利用未受污染的卫星，抗差能力更强。城市环境下“IMU + 轮速 + 车道匹配”可以撑住数秒到数十秒的 GNSS 盲区，这也是“隧道里也能开”的原因。</p>
+        <h3>从滤波到因子图：SLAM/建图的视角</h3>
+        <p>滤波只保留上一时刻估计（马尔可夫假设）；而建图时我们希望“全局一起调”，让所有历史位姿与观测互相修正。因子图把问题画成二分图：<b>变量节点</b>（每个时刻的位姿、地图点）+ <b>因子节点</b>（相邻位姿间的里程计约束、与地图的观测约束、GNSS 先验）。目标是最小化所有因子残差的平方和：</p>
+        <div class='math'>min_X Σ_f ||r_f(X)||²_Σf</div>
+        <p>r_f 是某条约束的残差，Σf 是其协方差（权重）。求解用第 0 章的非线性最小二乘（高斯牛顿/LM）。这是理解激光 SLAM 后端（如 LIO-SAM、FAST-LIO 类系统）的一把钥匙：前端负责“匹配给了什么约束”，后端负责“把这些约束揉成一个一致地图”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='map'>
+        <div class='sec-head'><span class='no'>3.6</span><h2>高精地图与点云/视觉匹配</h2></div>
+        <h3>点云配准：让两片点云对齐</h3>
+        <p>定位到地图的本质是求一个位姿 T，使“当前帧点云”与“地图点云”最好地对齐。ICP 迭代最近点：每步把每个当前点关联到地图最近点，再求最优刚体变换：</p>
+        <div class='math'>min_{R,t} Σᵢ || R·pᵢ + t − q_j(i) ||²</div>
+        <p>q_j(i) 是 pᵢ 的最近邻。ICP 的缺点是依赖初始位姿与最近邻匹配质量。NDT（正态分布变换）把地图体素化成高斯分布，评分函数变成“当前点落在该分布上的概率密度之和”，对初值更鲁棒、工程上常用：</p>
+        <div class='math'>score(T) = Σᵢ exp( −½ (qᵢ − μ_j)ᵀ Σ_j⁻¹ (qᵢ − μ_j) )</div>
+        <p>视觉侧做类似的事：把“地图里的特征点/语义地标”重投影到图像，用重投影误差做位姿优化（见第 0 章 0.6）。激光测距稳但怕环境剧变与空旷路段，视觉/语义丰富但怕光照与视角变化——因此量产常做“激光几何 + 视觉语义”的互补匹配。</p>
+        <h3>高精地图的数据结构：以 OpenDRIVE 为例</h3>
+        <p>车道级高精地图至少分三层：<b>导航层</b>（道路连接关系，类似普通导航地图）、<b>车道层</b>（车道几何、宽度、与相邻车道的拓扑）、<b>定位/属性层</b>（交通标志、停止线、限速等）。OpenDRIVE 用 XML 描述这些元素，最小骨架大致是：</p>
+        <div class='codeblock'>OpenDRIVE
+  └─ road（一条路）
+       ├─ planView：道路中心线的几何段（直线/螺旋/圆弧）
+       ├─ elevationProfile / lateralProfile：高程与横坡
+       ├─ lanes：车道集合
+       │    ├─ laneSection
+       │    └─ lane：含 id（左正右负）、宽度、类型（driving/curb…）
+       ├─ link：道路之间的连接关系
+       └─ signals/objects：交通标志与路侧对象</div>
+        <p>地图必须与“在线感知”互为校验：地图说限速、感知说路障，冲突时按更保守者处理。众包更新与 OTA 是地图保鲜的工程主线——静止的地图是“昨天的世界”，而车端真正消费的是“本地化之后的车道拓扑”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='sim'>
+        <div class='sec-head'><span class='no'>3.7</span><h2>仿真与测试体系：验证金字塔</h2></div>
+        <p>无人驾驶无法用“开到 10 亿公里再发布”来验证，必须把测试分层、让大部分验证发生在仿真里：</p>
+        <ol class='steps'>
+          <li><h3>单元与模块测试</h3><p>感知单帧、跟踪单轨、单个规划函数的输入输出正确性（离线数据集上回归）。</p></li>
+          <li><h3>场景仿真</h3><p>在可控场景里跑“整车闭环”：本车 + 交通参与者 + 传感器模型。分为真实数据回放、参数化场景（改变速度/距离/天气组合）与生成式场景。</p></li>
+          <li><h3>封闭场地与实车路测</h3><p>仿真验证不了的传感器物理、执行器时延、人机交互，在试验场和限定 ODD 的真实道路收尾。</p></li>
+        </ol>
+        <p>场景是测试的基本单位，至少包含五类元素：道路结构、静态物体、动态交通参与者、环境条件（光照/雨雾）、传感器与执行器状态。测试的价值来自<b>覆盖度</b>：不是“测了多少小时”，而是这些元素组合覆盖了多少比例的危险区间。</p>
+        <div class='panel tip'><span class='pt'>世界模型与生成式仿真</span><p>传统参数化场景靠工程师写模板，覆盖长尾效率低。生成式世界模型（见 <a href='../frontier.html'>AI 前沿专题</a>）能从真实数据“改写”出罕见变体，用可控条件批量生成困难场景；其价值是扩大测试分布，但不能替代真实传感器物理回归。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='safety'>
+        <div class='sec-head'><span class='no'>3.8</span><h2>SOTIF 与安全指标：把“没想到”也管起来</h2></div>
+        <p>传统功能安全（ISO 26262）处理“系统坏了怎么办”：电子故障有概率模型可分析。但智驾更大的风险是“系统没坏、却遇到设计没想到的场景”——这就是预期功能安全 SOTIF（ISO 21448）的领域。</p>
+        <p>SOTIF 把运行场景按“是否已知 + 是否安全”分成四类：</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th></th><th>已知</th><th>未知</th></tr></thead>
+            <tbody>
+              <tr><td><b>安全</b></td><td>验证过、放行</td><td>通过场景挖掘不断“未知 → 已知”</td></tr>
+              <tr><td><b>危险</b></td><td>必须修复或限制 ODD</td><td>核心风险：用功能不足分析 + 运行监控兜底</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>工程动作对应为：系统性识别“功能局限”（如传感器雨雾退化、规划对异形车误判）→ 设计运行监控与降级 → 用仿真/路测持续把未知危险场景转化为已知并回归。ISO 26262 的 ASIL 等级则按严重度 S、暴露率 E、可控性 C 组合划分 A–D，D 最高（如高速无冗余的转向控制）。两者叠加构成“功能失效 + 功能不足”的双重保障叙事。</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📏 接管/干预率</h3><p>MPI（两次人工接管间的行驶里程）是 L2/L3 时代最常用粗指标，但“接管原因”比次数更重要。</p></div>
+          <div class='card reveal'><h3>📉 影子模式指标</h3><p>系统与人类驾驶员并行“想象驾驶”，统计两者决策分歧的严重度，用于挖长尾。</p></div>
+          <div class='card reveal'><h3>🔒 安全缓冲区指标</h3><p>如与障碍最小间距、TTC（碰撞时间）、预测违反约束率——比“出没出事故”更早反映风险。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='data'>
+        <div class='sec-head'><span class='no'>3.9</span><h2>数据闭环：让系统越开越聪明</h2></div>
+        <p>感知/规划的每个模型版本都依赖数据喂养。完整闭环是：</p>
+        <div class='codeblock'>路采/影子模式触发采集
+  → 自动挖掘（按 TTC、接管、预测误差、模型低置信度等打分筛选）
+  → 标注（3D 框、车道、占用、语义；人工 + 自动标注 + 交叉质检）
+  → 清洗与均衡（按场景要素去重、补长尾）
+  → 训练 / 仿真回归 / 安全关键场景回归
+  → 灰度 OTA → 回到采集</div>
+        <p>数据工程与算法同等重要，三个常被低估的细节：</p>
+        <ul>
+          <li><b>标注一致性</b>：同一条车道线两个人标出两种结果，等于给模型喂噪声；需要标注规范与自动质检。</li>
+          <li><b>分布审计</b>：模型变好可能只是“训练分布越来越像旧测试集”，要用留出的分布外数据持续审计。</li>
+          <li><b>回放 ≠ 闭环</b>：回放旧数据只能回归旧决策；真正验证要能“把模型换进去重放、看它是否会撞”，即仿真闭环。</li>
+        </ul>
+      </section>
+
+      <section class='sec scroll-target' id='adv'>
+        <div class='sec-head'><span class='no'>3.10</span><h2>进阶：ESKF 与因子图优化</h2></div>
+        <h3>① 误差状态卡尔曼滤波（ESKF）</h3>
+        <p>组合导航中状态含姿态（四元数），直接在流形上做 KF 会遇到归一化约束问题。ESKF 的做法是：名义状态用 IMU 积分传播，滤波器只估计<b>误差状态</b> δx（姿态误差、速度误差、位置误差、零偏），再把修正量注入名义状态并重置。这样误差小、线性化准确，是工业组合导航的主流实现。</p>
+        <div class='math math-left'>名义传播：x_nom ← f(x_nom, u)<br>误差传播：δx ← F·δx + w<br>观测更新：δx̂ = K·(z − h(x_nom))<br>注入并重置：x_nom ← x_nom ⊕ δx̂，δx ← 0</div>
+        <h3>② 因子图与滑动窗口优化</h3>
+        <p>把每一时刻的状态看作节点、每种观测（IMU 预积分、GNSS、视觉、激光）看作因子，整个定位问题就变成最大后验估计：</p>
+        <div class='math'>x̂ = argmin_x Σ_i || r_i(x) ||²_{Σ_i}</div>
+        <p>用高斯-牛顿或 Levenberg-Marquardt 迭代求解。为控制计算量，通常用<b>滑动窗口</b>只保留最近若干关键帧，并对旧状态做边缘化（marginalization）以保留其约束。这是 VINS-Mono、LIO-SAM 等系统的核心框架。</p>
+      </section>
+
+      <section class='sec scroll-target' id='rtk'>
+        <div class='sec-head'><span class='no'>3.11</span><h2>RTK/PPK 工作流与坐标系：从卫星信号到车体位置</h2></div>
+        <p>3.3 节讲了 RTK 为什么能达到厘米级，这一节讲工程上怎么把它跑起来、以及“厘米级”是怎么被坐标系与工程细节吃掉的。</p>
+        <h3>完整数据链路</h3>
+        <div class='codeblock'>卫星（多星座：GPS/BDS/GAL/GLO）
+   │ 原始观测：伪距、载波相位、多普勒
+   ▼
+接收机（车端流动站）         差分改正数（RTCM 格式）
+   │                              ▲
+   │  NTRIP 客户端 ────────────────┘  来自基准站 / CORS 网络（4G/5G 或电台）
+   ▼
+RTK 解算：双差 → 浮点解 → 模糊度固定（LAMBDA）→ 固定解/浮动解
+   ▼
+输出：WGS84 经纬高 + 速度 + 定位状态（固定解/浮动解/单点）
+   ▼
+坐标转换：WGS84 → 局部坐标（UTM/高斯投影 或 ENU）→ 车体坐标
+   ▼
+与 IMU/轮速/点云匹配融合（3.5 节）</div>
+        <h3>坐标系统一：最容易出错的一步</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>坐标系</th><th>定义</th><th>常见坑</th></tr></thead>
+            <tbody>
+              <tr><td>WGS84 大地坐标</td><td>经纬度 + 椭球高</td><td>高精度定位输出的是椭球高，而地图/规划需要的是海拔或相对地面高度，两者差一个大地水准面差距（数米）</td></tr>
+              <tr><td>UTM / 高斯投影平面坐标</td><td>把地球投影到平面（米制）</td><td>投影带边界处变形大；跨带必须转换，否则位置差数十米</td></tr>
+              <tr><td>ENU 局部坐标</td><td>以某原点（如起点或地图原点）建立东-北-天坐标系</td><td>必须记录原点，否则日志回放会整体偏移</td></tr>
+              <tr><td>车体系</td><td>x 前、y 左、z 上（ISO 8855）</td><td>GNSS 天线不在车体原点，需要杆臂补偿（lever arm）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='math math-left'>杆臂补偿：p_body = p_antenna − R_body·t_antenna_body<br>ENU 转换（局部切线近似）：东 = (λ − λ₀)·cosφ₀·(π/180)·R，北 = (φ − φ₀)·(π/180)·R，R ≈ 6371000 m</div>
+        <h3>PPK：把“实时”换成“更稳”</h3>
+        <p>PPK（后处理动态差分）用同一套载波相位观测，但把模糊度解算放到事后做，好处是可以用双向滤波、把整段数据一起解，固定率更高、无需实时链路。它常用于建图与真值生成：先采数据，回到办公室后处理出厘米级轨迹，作为评测其他定位算法的参考真值。</p>
+        <div class='panel warn'><span class='pt'>验收与失效</span><p>① 永远记录定位状态（固定/浮动/单点）与卫星数、PDOP、基线长度，只有固定解才能声称厘米级；② 城市峡谷、高架下、隧道进出口的固定解会丢失，定位系统必须由 IMU 与地图匹配接续，并把“降级区间”如实记录；③ 天线安装要远离干扰源（雷达、大功率线缆），否则多路径误差会让固定解忽隐忽现。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='lio'>
+        <div class='sec-head'><span class='no'>3.12</span><h2>激光惯性里程计（LIO）：系统对比与实操</h2></div>
+        <p>激光里程计提供“相对地图的厘米级局部定位”，是隧道、地下车库与城市峡谷中 GPS 失效时的主力。它要做三件事：点云配准（求帧间位姿）、IMU 预积分（提供高频与去畸变）、以及把两者放进滤波或因子图一起优化。</p>
+        <h3>四个代表性系统</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>系统</th><th>后端形式</th><th>特点</th><th>适合场景</th></tr></thead>
+            <tbody>
+              <tr><td>LOAM / LeGO-LOAM</td><td>扫描匹配 + 位姿图</td><td>特征（边缘/平面）匹配的开创性工作；LeGO 做了地面分割，轻量</td><td>学习原理、地面车辆</td></tr>
+              <tr><td>LIO-SAM</td><td>因子图（GTSAM，含 IMU 预积分 + GPS 因子）</td><td>结构清晰、易扩展（可加 GPS/回环），工程常用</td><td>建图、组合定位</td></tr>
+              <tr><td>FAST-LIO / FAST-LIO2</td><td>迭代 EKF（ikd-Tree 增量地图）</td><td>直接法、无特征提取、速度很快，CPU 上可实时</td><td>量产级实时定位</td></tr>
+              <tr><td>KISS-ICP</td><td>ICP + 极简管线</td><td>代码极短、几乎无参数、鲁棒性好</td><td>入门读源码、快速基线</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>跑通一条 LIO 流水线的关键参数</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>环节</th><th>关键参数</th><th>经验取值与影响</th></tr></thead>
+            <tbody>
+              <tr><td>点云预处理</td><td>体素降采样、盲区裁剪</td><td>0.2–0.5 m 体素；去掉车体自身与地面噪声</td></tr>
+              <tr><td>去畸变</td><td>每点时间戳 + IMU 插值</td><td>不做去畸变在 10 m/s 下会带来分米级误差（见 1.11 节）</td></tr>
+              <tr><td>配准</td><td>最大对应距离、迭代次数</td><td>0.5–1 m / 5–10 次；过大易误匹配，过小会“配不动”</td></tr>
+              <tr><td>IMU 预积分</td><td>噪声密度、零偏随机游走</td><td>直接取自 IMU 数据手册，需用静止段验证</td></tr>
+              <tr><td>地图管理</td><td>局部地图尺寸、关键帧间距</td><td>局部地图 100–200 m；关键帧 1 m / 10° 量级</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel warn'><span class='pt'>LIO 的四个失效场景</span><p>① 长直隧道或无特征走廊：几何约束退化，必须靠 IMU 与轮速维持，并监控协方差是否膨胀；② 大范围动态物体（车流密集）：动态点会污染配准，需要动态点剔除或鲁棒核；③ 时间同步不当：IMU 与激光时间戳偏差直接变成尺度与姿态误差；④ 外参错误：IMU 与激光之间的外参（旋转为主）错 1° 就会让转弯时位置误差累积。上线前务必用回环误差与已知控制点（如标定场）验证。</p></div>
+      </section>
+      <section class='sec scroll-target' id='hdmap'>
+        <div class='sec-head'><span class='no'>3.13</span><h2>高精地图格式与生产：从采集到可用的地图</h2></div>
+        <p>高精地图是定位与规划的“先验”：定位靠它找参照（车道匹配），规划靠它确定合法行驶空间（车道、路口、限速）。工程上关心两件事：地图格式表达力够不够、地图精度与新鲜度能不能维持。</p>
+        <h3>三种主流格式</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>格式 / 体系</th><th>数据模型</th><th>优点</th><th>缺点</th></tr></thead>
+            <tbody>
+              <tr><td>ASAM OpenDRIVE</td><td>道路几何（参考线、车道、连接关系、信号、物体）</td><td>国际标准，仿真器（CARLA/SUMO）与工具链支持好</td><td>偏几何描述，复杂语义（如复杂路口的通行规则）表达有限</td></tr>
+              <tr><td>Lanelet2</td><td>车道段（lanelet）+ 规则（regulatory element）</td><td>开源、规则可编程，与 Autoware/ROS 生态贴合</td><td>非标准，跨厂商交换需转换</td></tr>
+              <tr><td>Apollo 地图（protobuf）</td><td>车道、路口、停止线、信号灯、逻辑关系</td><td>面向规划决策的语义完整</td><td>与 Apollo 平台绑定，转换成本高</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='math math-left'>OpenDRIVE 最小骨架：road → 参考线（geometry：直线/螺旋线/圆弧/多项式）<br>　　　　　　　　　→ lanes（left/right，含 width、speed、lane type）<br>　　　　　　　　　→ junction（连接关系）与 signal / object</div>
+        <h3>地图生产流水线</h3>
+        <div class='steps'>
+          <ol>
+            <li><h3>采集</h3><p>配备高精度组合导航（RTK/PPK + IMU）与激光/环视相机的采集车，按路线重复采集以提高一致性。轨迹精度直接决定地图精度上限。</p></li>
+            <li><h3>建图与配准</h3><p>用 LIO/SLAM 建点云地图，再用 PPK 轨迹做全局约束（回环 + GNSS 因子），最后与已有地图做配准获得统一坐标。</p></li>
+            <li><h3>要素提取</h3><p>车道线、路沿、停止线、斑马线、箭头：可自动提取（深度学习 + 几何拟合）再人工精修；信号灯位置需要多帧三角化并逐帧核对。</p></li>
+            <li><h3>拓扑与规则</h3><p>把几何要素组织成车道连通关系、路口通行规则、限速与禁行信息——这一步决定规划是否“合法”，通常需要人工与规则引擎结合。</p></li>
+            <li><h3>质检与发布</h3><p>质检指标包括几何精度（与实测轨迹偏差，目标 &lt; 0.2–0.5 m）、要素召回率、拓扑连通性、坐标系一致性；发布采用版本号 + 差分包，配合 OTA 更新与灰度。</p></li>
+          </ol>
+        </div>
+        <div class='panel tip'><span class='pt'>“轻地图”趋势</span><p>维护高精地图成本极高（道路每月都在变）。近年趋势是用感知 + 轻量语义地图（甚至只保留车道级拓扑与少量先验）降低维护成本，代价是定位与规划更依赖实时感知，对感知可靠性的要求随之上升。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='simlab'>
+        <div class='sec-head'><span class='no'>3.14</span><h2>仿真实操：CARLA / SUMO / OpenSCENARIO 怎么配合</h2></div>
+        <p>3.7 节讲了验证金字塔，这一节给出“从零搭一套仿真回归”的具体做法。三个工具各司其职：CARLA 提供传感器级仿真与车辆动力学，SUMO 提供大规模交通流，OpenSCENARIO 描述你要考的场景。</p>
+        <h3>分工与典型组合</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>工具</th><th>角色</th><th>输出</th><th>常见组合</th></tr></thead>
+            <tbody>
+              <tr><td>CARLA</td><td>传感器级仿真（相机/激光/雷达真值、天气光照）</td><td>图像/点云/真值框、碰撞与违规事件</td><td>被测算法在环（SIL），配 ScenarioRunner 执行场景</td></tr>
+              <tr><td>SUMO</td><td>微观交通流仿真（车流、信号配时）</td><td>车辆轨迹与交通统计</td><td>为 CARLA 提供背景车流；宏观策略验证</td></tr>
+              <tr><td>OpenSCENARIO / OpenDRIVE</td><td>场景与地图描述（标准格式）</td><td>可复用的场景文件（.xosc）与路网（.xodr）</td><td>场景库 + 自动批跑 + 回归报告</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>搭一套场景回归的最小流程</h3>
+        <div class='codeblock'>1) 定义场景：路网（.xodr，可从 OpenDRIVE 编辑器或 CARLA 导出）
+2) 写场景文件（.xosc 或 Python 版 ScenarioRunner 脚本）：
+   触发条件（Trigger）+ 参与者动作（Maneuver）+ 判定条件（Success/Failure 准则）
+3) 批跑：为每个场景设置参数范围（速度、间距、天气、触发时刻），生成 N 个变体
+4) 采集指标：路线完成率、碰撞（分类型：车/人/静态物）、违规
+   （闯红灯、压实线、超速）、舒适度（jerk、加速度极值）、接管次数
+5) 回归比对：与上一版本逐场景对比，标出“新出现的失败场景”
+6) 失败场景进入人工分析 → 修复 → 加入常驻回归集</div>
+        <div class='codeblock'># ScenarioRunner 执行示例（命令行）
+python scenario_runner.py --scenario my_cutin.xosc \
+    --repetitions 20 --output --outputDir results/ \
+    --timeout 60
+# 各工具生态：CARLA 场景执行器 ScenarioRunner、Python 场景生成 scenariogeneration</div>
+        <div class='panel warn'><span class='pt'>仿真的三个陷阱</span><p>① 场景过拟合：只在少数“精调过”的场景里通过，必须做参数随机化与场景变体；② 传感器太理想：仿真里没有脏污、雨滴、镜头光晕与时间同步误差，需要主动注入噪声与延迟才接近真车；③ 只测通过率不测“为什么失败”：必须保留完整的传感器与决策日志，否则无法定位是感知、预测还是规划的问题。</p></div>
+      </section>
+      <section class='sec scroll-target' id='safety2'>
+        <div class='sec-head'><span class='no'>3.15</span><h2>安全合规与场景挖掘：把“没想到”变成可管理项</h2></div>
+        <p>3.8 节介绍了 SOTIF 与安全指标的思路，这里补齐两个标准体系的分工，以及工程上如何持续挖掘危险场景。</p>
+        <h3>三个标准各自管什么</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>标准</th><th>管的对象</th><th>核心动作</th><th>典型产出</th></tr></thead>
+            <tbody>
+              <tr><td>ISO 26262（功能安全）</td><td>E/E 系统失效（硬件故障、软件 bug）</td><td>危害分析与风险评估（HARA）、ASIL 等级、安全机制与冗余</td><td>安全需求、安全目标、故障树/失效模式分析、冗余设计验证</td></tr>
+              <tr><td>ISO 21448（SOTIF，预期功能安全）</td><td>功能本身不足与可预见的误用（传感器退化、算法局限）</td><td>定义 ODD、识别功能局限、场景分区（已知/未知 × 安全/不安全）、运行监控与降级</td><td>场景清单、触发条件分析、降级策略、验证与确认证据</td></tr>
+              <tr><td>UL 4600（自动驾驶安全论证）</td><td>整体安全案例（含 AI 与运营）</td><td>构建安全论证（safety case）：主张—证据—反证，覆盖开发过程与运营</td><td>安全案例文档、独立评审、持续监控计划</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>一句话记忆：<b>26262 管“坏掉”，21448 管“不会”，UL 4600 管“怎么证明”</b>。三者叠加构成完整的安全论证叙事。</p>
+        <h3>ASIL 等级怎么定</h3>
+        <div class='math math-left'>ASIL = f(S 严重度, E 暴露率, C 可控性)，取三者组合最高档<br>例：高速行驶中无冗余的转向失控 → S3（致命）+ E4（高暴露）+ C3（难以控制）→ ASIL D</div>
+        <h3>场景挖掘：从路采数据里把危险场景“捞出来”</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>触发信号</th><th>说明</th><th>典型产出</th></tr></thead>
+            <tbody>
+              <tr><td>接管与急刹</td><td>司机接管、AEB 触发、jerk 超阈值</td><td>高价值难例，优先回放复核</td></tr>
+              <tr><td>TTC / 最小间距越界</td><td>碰撞时间低于阈值或与障碍间距过小</td><td>危险交互场景（加塞、鬼探头）</td></tr>
+              <tr><td>模型不确定度</td><td>检测置信度低、占用预测方差大、规划求解失败</td><td>感知/规划的能力边界样本</td></tr>
+              <tr><td>与仿真预测不一致</td><td>实车行为与仿真器预测的行为分布差异大</td><td>仿真器保真度问题 + 新场景</td></tr>
+              <tr><td>法规/规则事件</td><td>压实线、闯黄灯、超速边缘</td><td>合规风险场景</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel info'><span class='pt'>闭环到回归</span><p>挖出来的场景要“结构化”（提取地图、参与者、初速度、触发时刻），转成 OpenSCENARIO/仿真场景，加入常驻回归集，并标注来源与发现日期。这样每一次路测都能沉淀为可重复执行的测试用例，而不是停留在“遇到过”的口头经验。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='res'>
+        <div class='sec-head'><span class='no'>3.16</span><h2>学习资源地图</h2></div>
+        <div class='paper'><h4>定位与组合导航</h4><p><a href='https://arxiv.org/abs/1711.02508'>Sola, “Quaternion kinematics for the error-state Kalman filter”</a>（ESKF 必读）；<a href='https://github.com/rpng/MINS'>MINS</a>（多传感器组合导航开源实现）、<a href='https://github.com/Aceinna/gnss-ins-sim'>gnss-ins-sim</a>（GNSS/INS 仿真与算法验证）、<a href='https://github.com/tomojitakasu/RTKLIB'>RTKLIB</a>（RTK 解算，理解差分与模糊度固定）。</p></div>
+        <div class='paper'><h4>激光里程计与 SLAM</h4><p><a href='https://github.com/TixiaoShan/LIO-SAM'>LIO-SAM</a>、<a href='https://github.com/hku-mars/FAST_LIO'>FAST-LIO</a>、<a href='https://github.com/hku-mars/FAST-LIVO2'>FAST-LIVO2</a>、<a href='https://github.com/PRBonn/kiss-icp'>KISS-ICP</a>；配准与优化库：<a href='https://github.com/koide3/fast_gicp'>fast_gicp</a>、<a href='https://gtsam.org/'>GTSAM</a>。</p></div>
+        <div class='paper'><h4>地图格式与工具</h4><p><a href='https://github.com/fzi-forschungszentrum-informatik/lanelet2'>Lanelet2</a>（开源高精地图格式与工具链）、<a href='https://www.asam.net/standards/detail/openscenario/'>ASAM 标准主页</a>（OpenSCENARIO / OpenDRIVE 规范与示例仓库）。</p></div>
+        <div class='paper'><h4>仿真与测试</h4><p><a href='https://carla.readthedocs.io/en/latest/'>CARLA 文档</a>、<a href='https://github.com/carla-simulator/scenario_runner'>ScenarioRunner</a>、<a href='https://github.com/pyoscx/scenariogeneration'>scenariogeneration</a>、<a href='https://eclipse.dev/sumo/'>Eclipse SUMO</a>；闭环评测参见 <a href='https://leaderboard.carla.org/'>CARLA Leaderboard</a> 与 <a href='https://github.com/Thinklab-SJTU/Bench2Drive'>Bench2Drive</a>。</p></div>
+        <div class='paper'><h4>安全标准与场景研究</h4><p><a href='https://www.iso.org/standard/68383.html'>ISO 26262</a>、<a href='https://www.iso.org/standard/77490.html'>ISO 21448（SOTIF）</a>、UL 4600；场景化安全评估的近期研究可读 <a href='https://arxiv.org/abs/2507.22433'>Scenario-Based Safety Assessment 的落地化研究</a> 与 <a href='https://arxiv.org/abs/2302.00437'>自动驾驶安全论证框架综述</a>。</p></div>
+        <div class='panel info'><span class='pt'>延伸</span><p>完整清单见 <a href='resources.html'>教程资源库</a>；本章的数据闭环会直接支撑第 4、5 章的大模型训练。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>3.18</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q6：为什么 RTK 输出的“厘米级”经常在日志里对不上？</summary><p>多半是坐标系没统一：接收机给的是 WGS84 大地坐标（经纬高 + 椭球高），而地图/规划用 UTM 或 ENU，且高度常需转换为海拔；再加上天线杆臂未补偿，几米的系统偏差很常见。</p></details>
+          <details><summary>Q7：LIO 在长隧道里为什么会发散？</summary><p>隧道断面一致，几何约束在纵向退化为欠约束，配准无法提供前进方向信息；此时只能靠 IMU 与轮速推算，协方差持续增大，长时间就会明显漂移。需要监控协方差并配合地图/绝对观测修正。</p></details>
+          <details><summary>Q8：Lanelet2 与 OpenDRIVE 的关键差别是什么？</summary><p>OpenDRIVE 偏几何描述（道路与车道几何、连接关系），是国际通用交换格式；Lanelet2 把“车道段 + 交通规则元素”作为一等公民，规则可编程，更适合直接驱动规划决策，但需要转换才能跨厂商交换。</p></details>
+          <details><summary>Q9：ISO 26262 与 ISO 21448 的分工用一句话概括？</summary><p>26262 管“系统坏了怎么办”（随机硬件失效与系统性失效，靠安全机制与冗余），21448 管“系统没坏但能力不足怎么办”（可预见的误用与性能局限，靠 ODD 定义、场景覆盖与运行降级）。</p></details>
+          <details><summary>Q10：为什么仿真能过、实车仍会失败？</summary><p>仿真里传感器过理想、参与者行为过于理性、缺少脏污/延迟/光照退化等真实扰动，且场景集常被“精调”过。要缩小差距必须注入噪声与延迟、做参数随机化，并把实车挖出的场景持续回灌。</p></details>
+        </div>
+        <div class='faq'>
+          <details><summary>Q1：为什么 RTK 需要基准站？</summary><p>需要基准站提供同一天空下的参考观测，做差分才能消掉电离层、对流层与星历等共同误差；单机无法获得这份“参考”。</p></details>
+          <details><summary>Q2：为什么 IMU 零偏必须在线估计而不能出厂标定后不管？</summary><p>零偏随温度、老化、振动缓慢变化，且积分后会被放大成位置漂移；在线把它放进状态向量由观测持续修正，是最有效的补偿方式。</p></details>
+          <details><summary>Q3：ICP 的目标函数优化的是什么？前提条件是什么？</summary><p>优化刚体变换使点对距离平方和最小；前提是初始位姿足够近、最近邻关联大致正确，否则会落入局部最优。</p></details>
+          <details><summary>Q4：为什么 SOTIF 说“多测几百万公里”不能单独证明安全？</summary><p>安全风险集中在极罕见场景，均匀随机路测很难命中；需要“场景化 + 按危险组合定向生成 + 覆盖度分析”来系统逼近未知危险区。</p></details>
+          <details><summary>Q5：回放测试能代替仿真闭环测试吗？</summary><p>不能。回放只检验“旧决策是否仍然复现”，仿真闭环把新版本模型放回场景重跑，才能发现“因为模型变了而新产生的危险行为”。</p></details>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='03-planning-control.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 2 章 · 决策规划与控制</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='05-llm-vla.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 4 章 · LLM 与 VLA</b>
+      </a>
+      </nav>

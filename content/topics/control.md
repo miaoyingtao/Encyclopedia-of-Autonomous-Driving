@@ -1,0 +1,115 @@
+---
+id: "pages/tech/control.html"
+slug: "control"
+title: "控制执行 Control · 驶向未来百科"
+description: "自动驾驶控制执行专题：线控底盘、转向制动驱动控制、轨迹跟踪算法与执行冗余。"
+accent: "accent-tech"
+nav_active: "tech"
+hero_kicker: "技术 · 专题三"
+hero_h1: "控制执行 Control"
+hero_lead: "大脑想好了“怎么开”，最后必须由“手脚”精确执行：方向盘打多少、制动踩多深、电门给多大。控制执行决定了一辆自动驾驶车是“开得顺”还是“开得毛”，也是“停得住”的最后防线。"
+crumb: "首页|../../index.html"
+crumb: "技术|../../pages/tech.html"
+crumb: "控制执行|"
+---
+
+<section class="sec scroll-target" id="position">
+        <div class="sec-head"><span class="no">01</span><h2>控制层在整个链条中的位置</h2></div>
+        <p>完整链路是：<b>感知 → 决策与规划 →（轨迹）→ 控制 →（指令）→ 执行器 → 车辆运动</b>。其中：</p>
+        <ul>
+          <li>规划层输出的是“参考轨迹”：每一时刻期望的位置、速度、朝向（例如“0.5 秒后应到 x=3.2m，车速 8m/s”）；</li>
+          <li>控制层实时计算“现在该打多少方向、踩多少刹车”，去逼近这条轨迹；</li>
+          <li>执行层（线控底盘）把电信号变成真实的转向角、制动力与驱动扭矩；</li>
+          <li>车辆运动后，传感器又测出实际位置偏差，反馈回控制器——形成一个每秒数百次校正的闭环。</li>
+        </ul>
+
+      </section>
+
+      <section class="sec scroll-target" id="xbywire">
+        <div class="sec-head"><span class="no">02</span><h2>线控底盘：自动驾驶的“硬件前提”</h2></div>
+        <p>传统汽车靠机械/液压连接传递驾驶指令；自动驾驶则要求<b>电信号直接控制</b>执行器，即“线控（by-wire）”。核心三大件：</p>
+        <div class="grid g3">
+          <div class="card reveal"><h3>🎯 线控转向</h3><p>方向盘与转向机之间没有机械硬连接（或保留离合器作为后备），由电机按控制指令转向。好处是响应快、可精确到 0.1°，还能隔离路面抖动。</p></div>
+          <div class="card reveal"><h3>🛑 线控制动</h3><p>用电机/液压单元代替驾驶员踩踏板。可分“舒适制动（日常减速）”与“紧急制动（全力刹停）”两档，响应时间从人的 0.5 秒量级缩短到毫秒级。</p></div>
+          <div class="card reveal"><h3>⚡ 线控驱动</h3><p>电驱动天然适合精确控制：扭矩响应在毫秒级，电动车还能通过“扭矩矢量控制”辅助转向稳定性。</p></div>
+        </div>
+        <p>除三大件外，自动换挡、电子驻车、灯光与喇叭也需能由系统直接控制。L3+ 车辆还要求这些子系统<b>具备独立冗余通道</b>——电子转向失效时，备份电机/液压仍能完成靠边停车。</p>
+      </section>
+
+      <section class="sec scroll-target" id="algo">
+        <div class="sec-head"><span class="no">03</span><h2>控制算法家族</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>算法</th><th>思路</th><th>特点与用途</th></tr></thead>
+            <tbody>
+              <tr><td><b>PID</b></td><td>按误差的比例、积分、微分输出控制量</td><td>简单、工程常用；但难处理强耦合与大惯性，常加前馈提高响应</td></tr>
+              <tr><td><b>前馈 + 反馈</b></td><td>按轨迹曲率“提前”给控制量，再按偏差修正</td><td>弯道不滞后；横向控制的主流工程框架（如 Stanley、LQR 类）</td></tr>
+              <tr><td><b>MPC 模型预测控制</b></td><td>用车辆模型预测未来一段状态，滚动求解最优控制序列</td><td>能显式处理约束（加速度限值、转向限位），适合横向+纵向联合控制，算力要求高</td></tr>
+              <tr><td><b>滑模/鲁棒控制</b></td><td>设计滑模面使状态快速收敛</td><td>抗参数摄动与外界扰动（侧风、坡度）研究常用</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>纵向控制（速度/车距）则常拆成两层：上层根据前车距离与目标车速计算“期望加速度”（类似 ACC 的逻辑），下层由驱动/制动协调器决定油门与刹车如何分配，避免“又踩油门又踩刹车”的抖动。</p>
+      </section>
+
+      <section class="sec scroll-target" id="model">
+        <div class="sec-head"><span class="no">04</span><h2>车辆模型：从运动学到动力学</h2></div>
+        <p>控制器必须内置“车辆会怎么动”的模型。低速场景（泊车、末端配送）可用运动学自行车模型：状态为后轴中心 (x, y)、航向 θ、速度 v，控制量为前轮转角 δ 与纵向加速度 a；高速时轮胎侧偏不可忽略，必须用含横摆角速度与侧偏刚度的动力学模型。经验准则是横向加速度 |a_y| &lt; 0.3·g 时可近似用运动学模型。</p>
+
+      </section>
+
+      <section class="sec scroll-target" id="track">
+        <div class="sec-head"><span class="no">05</span><h2>轨迹跟踪：让车沿着“看不见的轨道”走</h2></div>
+        <p>规划轨迹是一条虚拟轨道，控制要解决的典型问题包括：</p>
+        <ul>
+          <li><b>横向跟踪</b>：车与参考线的横向偏差、航向偏差如何通过转向角消除（弯道需要根据曲率预打方向，即前馈项）；</li>
+          <li><b>纵向跟踪</b>：实际速度与期望速度的偏差，通过加减速消除，并考虑坡度（上坡多给扭矩、下坡靠制动/能量回收）；</li>
+          <li><b>联合控制</b>：高速急弯时“先减速后转向”能显著提升稳定性与舒适性，这需要横纵向解耦或 MPC 联合优化；</li>
+          <li><b>执行器延迟补偿</b>：转向电机、液压制动都有几十毫秒延迟，控制律需预测补偿，否则高速下会振荡。</li>
+        </ul>
+        <p>评价控制好坏的三组指标：<b>跟踪精度</b>（横向误差 < 10cm 级）、<b>平顺性</b>（加速度变化率 jerk 尽量小）、<b>鲁棒性</b>（雨雪湿滑、载荷变化、轮胎磨损下仍稳定）。</p>
+      </section>
+
+      <section class="sec scroll-target" id="redundancy">
+        <div class="sec-head"><span class="no">06</span><h2>执行层的冗余与故障降级</h2></div>
+        <p>对 L3+ 而言，执行器是安全关键部件，必须遵循功能安全（ISO 26262，最高 ASIL-D 等级）设计：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🔁 双通道冗余</h3><p>转向有主/备份电机，制动有双回路液压或“电子制动 + 机械驻车”后备，电源与通信总线也做冗余，做到“单点失效不影响安全”。</p></div>
+          <div class="card reveal"><h3>📉 分层降级</h3><p>轻度异常 → 限制性能继续行驶（限速）；中度异常 → 请求驾驶员接管；严重异常 → 独立的安全监控单元直接接管，执行“减速靠边停车”。</p></div>
+        </div>
+        <p>这套“降级剧本”与决策规划中的最小风险策略协同：规划负责“去哪停”，执行冗余负责“还能不能打方向和刹车”。两者缺一不可，详见 <a href="../challenges/safety.html">功能安全专题</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="platform">
+        <div class="sec-head"><span class="no">07</span><h2>不同车型的差异</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>车型</th><th>控制难点</th></tr></thead>
+            <tbody>
+              <tr><td>乘用车</td><td>追求平顺与低速精准（泊车、窄路），底盘成熟、供应商选择多</td></tr>
+              <tr><td>干线重卡</td><td>车长、轴距大、制动距离长、载重变化剧烈，横向控制需要专门的挂车/鞍座模型</td></tr>
+              <tr><td>矿区宽体车</td><td>重载、路面颠簸扬尘、坡度大，常需改造转向与制动系统，可靠性要求极高</td></tr>
+              <tr><td>末端配送车</td><td>低速小车身，但要在人车混行的非机动车道穿行，制动的“果断性”比舒适更重要</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="params">
+        <div class="sec-head"><span class="no">08</span><h2>标定参数与性能指标</h2></div>
+        <p>控制效果最终体现为一组可测量的指标。下表给出乘用车常见工程参考区间（不同品牌标定差异很大，仅作量级参照）：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>指标</th><th>典型目标</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>横向跟踪误差</td><td>稳态 &lt; 10–30 cm</td><td>弯道与曲率突变处允许更大瞬态误差</td></tr>
+              <tr><td>横向加速度 a<sub>y</sub></td><td>≤ 1–2 m/s²（舒适）</td><td>紧急避障可短时超过，需与舒适性权衡</td></tr>
+              <tr><td>纵向加速度</td><td>日常 ≤ 2–3 m/s²</td><td>紧急制动可达 6–9 m/s²</td></tr>
+              <tr><td>jerk（加速度变化率）</td><td>&lt; 2–5 m/s³</td><td>决定乘客是否感到“顿挫”，是舒适性核心指标</td></tr>
+              <tr><td>转向执行延迟</td><td>100–300 ms</td><td>需在控制律中补偿，否则高速下振荡</td></tr>
+              <tr><td>控制周期</td><td>50–100 Hz</td><td>低于 20 Hz 会明显影响跟踪品质</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>标定通常在“仿真回归 → 封闭场地（ISO 3888 双移线、ISO 4138 稳态回转）→ 公开道路”三级完成，并用统一的数据采集与指标计算脚本保证可复现。</p>
+      </section>

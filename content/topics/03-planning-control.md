@@ -1,0 +1,353 @@
+---
+id: "pages/tutorial/03-planning-control.html"
+slug: "03-planning-control"
+title: "第 2 章 · 决策规划与控制 · 驶向未来"
+description: "自动驾驶系统教程第 2 章：轨迹预测、行为决策、A* 与 Hybrid A*、Frenet 轨迹优化、自行车模型与 PID/LQR/MPC 控制。"
+accent: "accent-tech"
+hero_kicker: "系统教程 · 第 2 章"
+hero_h1: "决策、运动规划与控制"
+hero_lead: "感知回答“世界是什么样”，本章回答“我接下来怎么开、并把它变成方向盘与踏板的指令”。这是自动驾驶里最“算法密集”的一章：搜索、采样、优化与反馈控制在这里汇合。"
+crumb: "首页|../../index.html"
+crumb: "系统教程|../../pages/tutorial/index.html"
+crumb: "第 2 章|"
+---
+
+<div class='panel info'><span class='pt'>配套阅读</span><p>想先建立直觉？可先看科普版 <a href='../../pages/tech/decision.html'>决策与规划</a>，再回来读公式与推导。</p></div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>2.1</span><h2>学习目标</h2></div>
+        <div class='lesson-meta'><span>难度：进阶</span><span>预计：5–6 小时</span><span>前置：第 0 章 + 第 1 章</span></div>
+        <p>学完本章，你应该能：① 口算 A* 的 g/f/h 并实现一个网格版；② 解释 Frenet 坐标为什么适合车道场景、写出最小 jerk 轨迹的目标函数；③ 推导自行车运动学模型；④ 讲清 PID、LQR、MPC 各自解决什么问题、代价与约束怎么定；⑤ 描述一套“决策 → 规划 → 校验 → 控制”的工业级数据流。</p>
+      </section>
+
+      <section class='sec scroll-target' id='arch'>
+        <div class='sec-head'><span class='no'>2.2</span><h2>决策规划控制栈的分层与接口</h2></div>
+        <p>工业系统通常按下述顺序逐级“降尺度、升频率”，每层输出为下层输入：</p>
+        <div class='codeblock'>输入：高精地图 + 定位 + 感知目标列表 + 占用栅格
+  ├─ 全局路径规划（Hz 级）：路网图 → 车道序列
+  ├─ 行为决策（10–30 Hz）：车道序列 → 驾驶意图（跟车/变道/让行/停车）
+  ├─ 运动规划（10–50 Hz）：意图 → 未来 3–10 s 的轨迹（时间戳 + 位置 + 速度）
+  ├─ 安全校验（与规划同频）：碰撞检查、限速、ODD 检查
+  └─ 控制（50–100 Hz）：轨迹 → 转向角与油门/制动指令</div>
+        <p>轨迹是本章的“硬通货”：它是一条带时间的曲线，通常写成 x(t)、y(t) 与 v(t)（或航向与曲率），规划的目标是生成“安全、合法、高效、舒适”且“控制能跟得上”的轨迹。</p>
+      </section>
+
+      <section class='sec scroll-target' id='predict'>
+        <div class='sec-head'><span class='no'>2.3</span><h2>轨迹预测：把不确定性带进决策</h2></div>
+        <p>预测的本质是估计其他交通参与者“未来几秒最可能做什么”。最简单基线是常速度/常加速度外推：</p>
+        <div class='math'>x(t+τ) = x(t) + v(t)·τ + ½·a(t)·τ²</div>
+        <p>但真实驾驶是多模态的：一辆车在路口可能直行、左转或靠边，各有概率。因此现代预测输出的是<b>一组带概率的候选轨迹</b>（通常 3–8 条）或未来占用热图：</p>
+        <div class='math'>Pred = { (Traj₁, p₁), (Traj₂, p₂), … }，Σ pᵢ = 1</div>
+        <p>实现上可分三档：地图规则驱动（沿车道几何生成“直行/换道”候选并打分）、意图分类 + 轨迹集、以及学习型（把历史轨迹编码，用目标点或潜变量生成多模态轨迹）。学习型网络常用“轨迹终点采样 + 评分”思路：先在可到达区域采样 K 个终点，为每个终点生成一条轨迹，再用一个评分头输出每条的概率。</p>
+        <div class='panel warn'><span class='pt'>安全设计原则</span><p>预测永远有错。规划层不赌“它一定直行”，而是把预测的不确定性转成约束：对低概率但危险的多模态保留安全距离，或对“最坏情况”做保守处理（见 2.6）。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='search'>
+        <div class='sec-head'><span class='no'>2.4</span><h2>搜索类规划：A* 与 Hybrid A*</h2></div>
+        <h3>A*：带启发式的 Dijkstra</h3>
+        <p>A* 在地图（栅格或车道图）上搜索代价最小路径。每个节点 n 维护两个值：从起点到 n 的实际代价 g(n)，以及 n 到终点的启发式估计 h(n)。每次从开放集中取 f(n) = g(n) + h(n) 最小的节点扩展。</p>
+        <div class='codeblock'>open = { start }; g[start] = 0
+while open 非空：
+    n = open 中 f(n) 最小的节点；若 n == goal：回溯输出路径
+    对 n 的每个邻居 m：
+        new_g = g[n] + cost(n, m)
+        if new_g &lt; g[m]：更新 g[m]、parent[m]，把 m 加入 open</div>
+        <p>h(n) 常用欧氏距离。当 h 满足“不超过真实代价”（可采纳）时，A* 保证最优；h 越接近真实代价，扩展越少、越快。把 cost 设计成交规代价（变道惩罚、跨实线禁止）与时间代价之和，就能让路径“好走”而不是“最短”。</p>
+        <h3>Hybrid A*：给 A* 装上运动学</h3>
+        <p>普通 A* 找出的折线路径车开不出来：车辆不能原地转向。Hybrid A* 把搜索节点从 (x, y) 扩展为位姿 (x, y, θ)（乃至曲率 κ），每一步只做“方向盘转多少、油门踩多少”这样真实可执行的动作：</p>
+        <div class='math'>状态：(x, y, θ, κ)，控制：(a, δ)，θ̇ = v·κ，κ 与 δ 的关系见 2.7</div>
+        <p>离散控制动作生成一小段一小段真实可行的弧线；到终点附近再用 Dubins/Reeds-Shepp 曲线（满足最小转弯半径的几何连线）快速收尾。代价函数一般同时惩罚时间、倒车、转向突变与靠近障碍物，并用后处理平滑曲线。</p>
+      </section>
+
+      <section class='sec scroll-target' id='traj'>
+        <div class='sec-head'><span class='no'>2.5</span><h2>局部轨迹生成：Frenet 坐标与轨迹优化</h2></div>
+        <h3>在“贴着车道”的坐标系里生成轨迹</h3>
+        <p>Frenet 坐标把平面运动拆成沿参考线（如车道中心线）的纵向距离 s 与横向偏移 l：</p>
+        <div class='math'>路径点 (x,y) ↔ (s, l)，l 相对参考线的法向偏移（左正右负可约定）</div>
+        <p>好处：车道边界约束变成简单的 l 上下界；换道就是 l 从 0 平顺移到目标车道中心的“横向规划问题”；纵向则单独规划 s(t)（跟车、巡航、刹停）。横纵解耦后各用多项式插值：</p>
+        <div class='math'>l(s) = a₀ + a₁s + a₂s² + a₃s³ + a₄s⁴ + a₅s⁵（五次多项式）</div>
+        <p>五次多项式有 6 个系数，可同时满足两端的位置、速度（一阶导）与加速度（二阶导）共 6 个边界条件，保证轨迹连续到加速度级。纵向常以“舒适性”为目标——最小化 jerk 的平方积分：</p>
+        <div class='math'>min ∫ (d³s/dt³)² dt，约束：不撞前车、不超速、限位</div>
+        <p>实现上通常“采样 + 评估”：对候选目标（跟车距离/巡航速度/终点 l 值）批量生成轨迹，逐条计算总代价后取最优：</p>
+        <div class='math'>J = w_safe·碰撞代价 + w_eff·行程时间 + w_comf·jerk 积分 + w_rule·压线/超速惩罚</div>
+        <p>碰撞检查不是“一个点撞没撞”，而是轨迹与障碍预测占用在<b>每个时刻</b>做时空相交检查：把轨迹离散成 (t, x, y)，把障碍预测展开成未来的膨胀圆/占用，逐段检测。障碍形状用半径膨胀的圆族近似，可将碰撞检测降到 O(轨迹点数 × 障碍数)。</p>
+        <div class='panel tip'><span class='pt'>RRT 家族在真实系统里的位置</span><p>RRT/RRT* 适合“几何上难、约束复杂”的开放空间（自动泊车、园区），用随机采样快速探索可行域并保证渐进最优；但在结构化公路上，车道参考线 + 采样/优化的确定性方案更稳定、更好调试，因此量产以后者为主。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='behav'>
+        <div class='sec-head'><span class='no'>2.6</span><h2>行为决策：从“会不会”到“该不该”</h2></div>
+        <p>行为决策是策略层：它不画轨迹，而是决定“跟车、变道、超车、让行、停车、绕障”等驾驶模式。三种主流实现：</p>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>📋 规则状态机</h3><p>有限状态机/行为树按条件跳转：前车太慢且左侧安全 → 变道。直观、可解释、易做安全分析，但状态爆炸。</p></div>
+          <div class='card reveal'><h3>📊 代价评分</h3><p>把“每个候选意图的收益”量化打分：预期通行时间、碰撞风险、规则违反、舒适度，选分数最高者。可解释性好，是工业主流折中。</p></div>
+          <div class='card reveal'><h3>🧮 MDP/POMDP</h3><p>把驾驶写成马尔可夫决策过程：状态 s、动作 a、转移概率 P(s′|s,a)、奖励 r。最优策略 π* 满足贝尔曼方程：</p></div>
+        </div>
+        <div class='math'>V*(s) = max_a [ r(s,a) + γ Σ_s′ P(s′|s,a) V*(s′) ]</div>
+        <p>POMDP 再引入“不完全可观测”的信念状态 b(s)（因为别人在想什么不可直接观测），理论上更优雅，但精确求解复杂，量产多为简化近似或作为研究路线。无论哪种实现，都必须回答两个安全问题：当前意图是否可行（几何/交规检查），以及不可行/超时时如何降级到“最小风险状态”（减速靠边停车）。</p>
+      </section>
+
+      <section class='sec scroll-target' id='ctrl'>
+        <div class='sec-head'><span class='no'>2.7</span><h2>控制：把轨迹变成转向与加减速</h2></div>
+        <h3>先有车模型：自行车运动学</h3>
+        <p>低速下可用自行车模型近似：车简化为前后轴连线，后轴中心为参考点，前轮转角 δ 决定曲率：</p>
+        <div class='math math-left'>ẋ = v cosθ<br>ẏ = v sinθ<br>θ̇ = (v / L) tanδ</div>
+        <p>L 是轴距，δ 是前轮转角。可见曲率 κ ≈ tanδ / L：轴距越长、同一转角下转弯半径越大。高速或大侧向加速度时需要引入带质心侧偏角的动力学模型（含轮胎侧偏刚度），这里从运动学起步已足够理解控制主线。</p>
+        <h3>横向跟踪：从纯追踪到状态反馈</h3>
+        <p><b>纯追踪</b>：在当前点前方找参考点（前视距离 Ld），计算转向前轮角度，使车沿“当前点—参考点”的圆弧走：</p>
+        <div class='math'>δ = arctan( 2·L·sinα / Ld )</div>
+        <p>α 是航向与“指向参考点方向”的夹角。前视距离越大越稳但越“抄近路”，需要随速度调整。</p>
+        <p><b>LQR</b>：把误差动力学线性化，求解状态反馈 u = −K e 使代价最小：</p>
+        <div class='math'>J = Σ ( eᵀ Q e + uᵀ R u )，K 由黎卡提方程给出</div>
+        <p>Q、R 的比值决定“更快纠正误差”还是“更少打方向”。LQR 适合线性、无约束、定点调节的场景，是理解“代价函数 → 控制器”的标准跳板。</p>
+        <h3>MPC：预测未来、处理约束</h3>
+        <p>MPC 在每个控制周期解一个<b>有限时域开环最优控制问题</b>，只执行第一步，下一周期带着新状态重新求解（滚动时域）：</p>
+        <div class='math math-left'>min Σ_{k=0}^{N−1} ( ||e_k||²_Q + ||u_k||²_R ) + ||e_N||²_P<br>s.t. x_{k+1} = f(x_k, u_k)<br>u_min ≤ u_k ≤ u_max，转向/加减速限幅<br>x 保持在道路边界、避开障碍（软约束 + 松弛变量）</div>
+        <p>每步把非线性 f 在当前点线性化（或直接用非线性求解器），转成二次规划后快速求解。MPC 相比 LQR 的增量价值是：<b>能显式处理约束</b>（转角限位、加速度上限、避障边界），代价是每个周期要在线解一个优化问题，对实时性要求高（数十毫秒内）。</p>
+        <h3>纵向控制</h3>
+        <p>纵向用双层结构：上层“速度规划器”给出期望速度曲线（跟车时按安全时距 τ 保持间距：v_des 使 d ≥ v·τ + d₀），下层用 PID/MPC 跟踪。制动与驱动是两套执行器，切换处要做好平滑，避免“油门到底—刹停—再油门”的顿挫。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eng'>
+        <div class='sec-head'><span class='no'>2.8</span><h2>工程要点</h2></div>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>⏱ 频率与延迟预算</h3><p>规划轨迹要与执行延迟对齐：控制执行的是“几百毫秒前规划、补偿过延迟”的指令，轨迹里要带时间戳并按当前时刻插值。</p></div>
+          <div class='card reveal'><h3>🛡 最后一道校验</h3><p>规划输出进入控制前必须再过一次硬校验：碰撞、边界、加加速度、执行器限位。校验不过就丢弃并降级，而不是把“最优但危险”的轨迹直接下发。</p></div>
+          <div class='card reveal'><h3>📉 数值积分</h3><p>车模型积分用固定小步长（如 10–20 ms）并保证单位一致；长时间积分要留意误差累积。</p></div>
+          <div class='card reveal'><h3>🧭 参考线管理</h3><p>高精地图的离散车道线要先重采样、平滑成参数化参考线（如按弧长均匀重采样），Frenet 转换才能稳定。</p></div>
+          <div class='card reveal'><h3>😌 舒适性参数</h3><p>典型舒适标定：纵向加减速约 2–3 m/s² 以内、急刹除外；横向加速度 1–2 m/s² 量级；jerk 控制在更严量级。具体随品牌体验标定不同，作为初始值而非金标准。</p></div>
+          <div class='card reveal'><h3>🧪 仿真先行</h3><p>策略与参数先在场景仿真回归（路口博弈、加塞、鬼探头、接管边界），再上实车——这也是第 3 章的主题。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='adv'>
+        <div class='sec-head'><span class='no'>2.9</span><h2>进阶：MPC 的 QP 形式化与 iLQR</h2></div>
+        <h3>① 线性 MPC → 二次规划</h3>
+        <p>若把车辆模型在当前工作点线性化 x_{k+1} = A·x_k + B·u_k，并把状态与控制约束写成线性不等式，则 MPC 每步求解一个标准 QP：</p>
+        <div class='math math-left'>min_U ½ Uᵀ H U + fᵀ U<br>s.t. A_ineq·U ≤ b_ineq<br>其中 U = [u₀, …, u_{N−1}]，H 由 Q、R 与预测模型堆叠得到</div>
+        <p>QP 是凸问题，可用内点法或主动集法在毫秒级求解——这是 MPC 能实时运行的关键。若模型非线性（含 sin/cos、轮胎非线性），则每步线性化后用 SQP 迭代。</p>
+        <h3>② iLQR / DDP</h3>
+        <p>对无约束或软约束的非线性最优控制，可用 iLQR：先向前 rollout 得到名义轨迹，再向后做二次近似求解反馈增益，迭代收敛。它比采样法精度高，但对约束处理不如 QP 直接，工程上常与 MPC 互补。</p>
+        <h3>③ 实时性预算怎么分配</h3>
+        <p>20 Hz 规划意味着每步 50 ms。典型分配：预测 10 ms、采样 / 优化 25 ms、碰撞校验 10 ms、留 5 ms 余量。若优化超时，必须能返回“上一步可行解”或降级到保守轨迹，绝不能卡住。</p>
+      </section>
+
+      <section class='sec scroll-target' id='frenet'>
+        <div class='sec-head'><span class='no'>2.10</span><h2>Frenet 最小 jerk 轨迹的闭式解</h2></div>
+        <p>2.5 节提到“在 Frenet 坐标下采样 + 优化”，这一节把它写成可以落在代码里的公式。Frenet 坐标用参考线（通常是车道中心线）作为纵轴：s 是沿参考线走过的弧长，d 是相对参考线的横向偏移。在这套坐标下，“沿着走”和“横向挪一点”被解耦，轨迹生成就变成两个一维函数的设计。</p>
+        <div class='math math-left'>横向 d(t)：五阶多项式（边界 d、d′、d″ 共 6 个条件）<br>纵向 s(t)：四阶或五阶多项式（边界 s、s′、s″）<br>总代价：J = w_j·∫(d‴)²dt + w_t·T + w_v·(速度偏差) + w_obs·障碍代价</div>
+        <h3>五次多项式的系数：一步解出，不用迭代</h3>
+        <p>设 d(t) = a₀ + a₁t + a₂t² + a₃t³ + a₄t⁴ + a₅t⁵，给定 t=0 与 t=T 两端的位置、速度、加速度共 6 个边界条件，系数向量 a = [a₀…a₅]ᵀ 由下面的线性方程一次性解出：</p>
+        <div class='math math-left'>a = M⁻¹ · b，其中 b = [d₀, d₀′, d₀″, d_T, d_T′, d_T″]ᵀ<br>M 的行分别为 [1, t, t², t³, t⁴, t⁵]（t = 0 与 t = T 各三行，后三行取一阶、二阶导）</div>
+        <p>把 T 代入积分可以证明：当两端速度为 0、加速度为 0、横向位移为 Δ 时，最小 jerk 轨迹就是著名的五次曲线，且其 jerk 代价随 T 迅速下降——这就是“同样的横向位移，给更多时间就更舒适”的定量表达。</p>
+        <div class='codeblock'>import numpy as np
+
+def quintic_coeffs(d0, d1, d2, T, e0, e1, e2):
+    """横向五阶多项式：起点 (d0,d1,d2)、终点 (e0,e1,e2)，d1/d2 为对 t 的一阶/二阶导"""
+    A = np.array([
+        [1, 0, 0,      0,      0,     0],
+        [0, 1, 0,      0,      0,     0],
+        [0, 0, 2,      0,      0,     0],
+        [1, T, T**2,   T**3,   T**4,  T**5],
+        [0, 1, 2*T,    3*T**2, 4*T**3, 5*T**4],
+        [0, 0, 2,      6*T,    12*T**2, 20*T**3]])
+    b = np.array([d0, d1, d2, e0, e1, e2], dtype=float)
+    return np.linalg.solve(A, b)
+
+def quintic_eval(a, t):
+    return sum(a[i] * t**i for i in range(6))
+
+def quintic_jerk_cost(a, T):        # ∫ (d''')² dt 的闭式解
+    c3, c4, c5 = a[3], a[4], a[5]
+    return 36*c3*c3*T + 144*c3*c4*T**2 + 240*c3*c5*T**3 + 192*c4*c4*T**3 + 720*c4*c5*T**4 + 720*c5*c5*T**5
+
+# 采样候选：横向终点偏移 × 到达时间，挑总代价最低者
+best = None
+for d_end in np.arange(-3.5, 3.6, 0.5):
+    for T in np.arange(2.0, 6.1, 0.5):
+        a = quintic_coeffs(0.0, 0.0, 0.0, T, d_end, 0.0, 0.0)
+        cost = 2.0 * quintic_jerk_cost(a, T) + 1.0 * T + obstacle_cost(a, T)
+        if best is None or cost &lt; best[0]:
+            best = (cost, d_end, T, a)</div>
+        <h3>工程上的三条经验</h3>
+        <div class='steps'>
+          <ol>
+            <li><h3>采样粒度与算力成反比</h3><p>横向终点偏移 0.5 m 一档、时间 0.5 s 一档，大约几十到上百条候选；想更细就得换优化式方法，否则算力会被采样吃光。</p></li>
+            <li><h3>代价权重要“能解释”</h3><p>jerk 权重管舒适，时间权重管效率，障碍权重管安全。三者比例决定了“激进”还是“保守”，上线前应当能用一句话解释每个权重的作用。</p></li>
+            <li><h3>Frenet 的两处失效</h3><p>参考线曲率很大或不平滑时，等距 s 对应的实际距离会明显变化，横向 d 也不再垂直于真实道路方向；此外当横向偏移接近曲率半径时会出现坐标奇异（d 无法唯一映射回 x-y）。这时应回退到笛卡尔坐标系规划，或对参考线做平滑与曲率限制。</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='pred'>
+        <div class='sec-head'><span class='no'>2.11</span><h2>轨迹预测：数据集、指标与模型谱系</h2></div>
+        <p>2.3 节讲清了“预测输出是多模态分布”，这一节补上评测与主流做法。预测是决策的输入，预测指标的设计方式直接影响规划是否真的受益。</p>
+        <h3>公开数据集与指标</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>数据集</th><th>规模与特点</th><th>常用指标</th></tr></thead>
+            <tbody>
+              <tr><td>nuScenes（预测任务）</td><td>城市道路，含 5 类目标的未来轨迹</td><td>minADE、minFDE、miss rate、NLL</td></tr>
+              <tr><td>Waymo Open Motion</td><td>大规模、交互密集，含交互挑战赛</td><td>minADE/minFDE、miss rate、mAP</td></tr>
+              <tr><td>Argoverse 2</td><td>聚焦路口与复杂交互，社区工具链完善</td><td>minADE/minFDE、brier-minFDE、MR</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='math math-left'>minADE_K = (1/T)·min_k Σ_t ‖ŷₜ⁽ᵏ⁾ − yₜ‖₂　（K 条候选中最好的那条）<br>minFDE_K = min_k ‖ŷ_T⁽ᵏ⁾ − y_T‖₂　（只看终点误差）<br>miss rate：K 条候选中没有一条落进阈值半径的比例</div>
+        <div class='panel warn'><span class='pt'>minADE 的陷阱</span><p>它只看“是否生成了至少一条接近真值的轨迹”，完全不看概率分配——模型把全部概率压在错误轨迹上仍能得高分。所以评测至少要同时看 miss rate 与概率校准（如 NLL/brier），否则会出现“榜单很强、规划不敢用”的情况。</p></div>
+        <h3>模型谱系</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>世代</th><th>代表做法</th><th>能表达什么</th><th>主要弱点</th></tr></thead>
+            <tbody>
+              <tr><td>运动学基线</td><td>常速度/常加速度外推、CTRV 模型</td><td>匀速直线与缓弯</td><td>完全不会交互与让行</td></tr>
+              <tr><td>序列模型</td><td>LSTM/GRU 编码历史轨迹</td><td>个体运动模式</td><td>忽略道路结构与其他车辆</td></tr>
+              <tr><td>图神经网络</td><td>VectorNet 等把车道与智能体建成图</td><td>交互与场景结构</td><td>多模态表达弱</td></tr>
+              <tr><td>Transformer / Query</td><td>MTR、QCNet、Wayformer</td><td>长时序 + 多智能体交互 + 多模态</td><td>训练数据与算力需求高</td></tr>
+              <tr><td>生成式</td><td>扩散/流匹配预测、占用流</td><td>复杂多模态分布、闭环一致性</td><td>推理步数多、实时性压力</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel tip'><span class='pt'>从开环到闭环</span><p>开环指标高≠闭环表现好：预测误差对规划的影响是非线性放大的（一个错误预测可能触发急刹）。工程上更看重“对规划友好的预测”：给出可解释的多模态、在关键交互（汇入、路口）上保守，以及能在仿真闭环中验证的稳定性。</p></div>
+      </section>
+      <section class='sec scroll-target' id='qp'>
+        <div class='sec-head'><span class='no'>2.12</span><h2>QP 建模与求解器工程：让 MPC 真的跑在车上</h2></div>
+        <p>2.7 与 2.9 节给出了 MPC 的数学形式，这一节讲怎么把它变成一个在 10 ms 内返回结果的工程模块。</p>
+        <h3>标准形与离散化</h3>
+        <p>把连续动力学用零阶保持（ZOH）离散成 x_{k+1} = A x_k + B u_k，把 N 步的状态与输入叠成长向量，MPC 就变成标准二次规划：</p>
+        <div class='math math-left'>min ½·zᵀ H z + gᵀ z　（z = [u₀…u_{N−1}, x₁…x_N, ε] 为决策变量）<br>s.t. 等式约束：动力学 x_{k+1} = A x_k + B u_k<br>　　 不等式约束：u_min ≤ u_k ≤ u_max、a_min ≤ a_k ≤ a_max（含松弛 ε）</div>
+        <p>松弛变量 ε 是必需项：真实系统常有“约束互相冲突”的瞬间（前车急刹 + 道路边界），硬约束会导致 QP 无解；加入松弛并对 ε 施加大惩罚，求解器总能返回“最接近可行”的解，同时你能从 ε 是否被激活看出“现在正在违背哪条约束”。</p>
+        <div class='codeblock'># 用 CasADi 建一个横向跟踪 MPC（示意）
+import casadi as ca
+
+x = ca.SX.sym('x', 4)        # [e_y, e_psi, v, yaw_rate]
+u = ca.SX.sym('u', 2)        # [delta, a]
+f = ca.Function('f', [x, u], [model_step(x, u, dt)])   # 离散动力学
+
+opti = ca.Opti()
+X, U, eps = [], [], opti.variable()
+X.append(opti.parameter(4));
+for k in range(N):
+    X.append(opti.variable(4)); U.append(opti.variable(2))
+    opti.subject_to(X[k+1] == f(X[k], U[k]))                  # 动力学
+    opti.subject_to(opti.bounded(-0.5, U[k][0], 0.5))         # 转向限幅
+    opti.subject_to(opti.bounded(-3.0, U[k][1], 2.0))         # 加速度限幅
+    opti.subject_to(X[k+1][0] &lt;= lane_half_width + eps)       # 边界（软约束）
+
+opti.minimize(ca.sumsqr(ref - ca.vertcat(*[X[k][0] for k in range(N+1)])) + 1e3*eps**2)
+opti.solver('sqpmethod', {'qpsol': 'osqp', 'qpsol_options': {'warm_start': True}})
+sol = opti.solve()
+delta_cmd = float(sol.value(U[0][0]))      # 只执行第一步</div>
+        <h3>五个让 MPC 落地的工程手段</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>手段</th><th>解决什么</th><th>代价</th></tr></thead>
+            <tbody>
+              <tr><td>热启动（用上周期解初始化）</td><td>迭代次数少、求解时间稳定</td><td>几乎无</td></tr>
+              <tr><td>固定最大迭代次数</td><td>保证最坏情况下的实时性（超时用上周期解兜底）</td><td>精度略降</td></tr>
+              <tr><td>软约束 + 松弛惩罚</td><td>避免无解，暴露冲突</td><td>需要调惩罚权重</td></tr>
+              <tr><td>变步长/变时域</td><td>近处精细、远处粗放，减少变量数</td><td>建模复杂度上升</td></tr>
+              <tr><td>求解失败兜底</td><td>请求无效或超时时降级为“保持车道 + 减速”</td><td>必须有独立的安全通道</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>实时预算怎么估</h3>
+        <div class='math math-left'>求解时间 ≈ 迭代次数 × 单次迭代代价(变量数、约束数、稀疏结构)<br>经验量级：N = 20、状态 4 维、控制 2 维的 QP 在车端 CPU 上约 1–5 ms<br>若含有非线性动力学（SQP/非线性 MPC），通常需要 N × 求解次数的预算，考虑 20–50 ms</div>
+        <div class='panel info'><span class='pt'>求解器选择</span><p>凸 QP 用 OSQP/qpOASES（嵌入式友好、支持热启动）；嵌入式非线性 MPC 用 acados（自带 C 代码生成）；原型与仿真用 CasADi + IPOPT/SQP 快速搭模型。选型第一原则永远是“能否在最坏情况下按时返回”。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='learn'>
+        <div class='sec-head'><span class='no'>2.13</span><h2>学习式规划与强化学习：数据驱动的规划路线</h2></div>
+        <p>规则与优化式规划可解释、易做安全论证，但难以覆盖所有交互。学习式规划的目标不是替代它们，而是补上“策略层”的短板。三条主流路线：</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>路线</th><th>做法</th><th>数据需求</th><th>落地现状</th></tr></thead>
+            <tbody>
+              <tr><td>模仿学习（BC）</td><td>学人类轨迹/位移分布，输出候选轨迹概率</td><td>大规模真实驾驶日志</td><td>已用于规划打分与候选生成（如概率化规划器）</td></tr>
+              <tr><td>代价学习 / 打分器</td><td>保留采样+优化框架，只用网络学习代价或挑选分数</td><td>中等（可用负样本挖掘）</td><td>工业折中方案，可解释性保留较好</td></tr>
+              <tr><td>强化学习（RL）</td><td>在仿真中用奖励直接优化策略，覆盖“数据里没有”的行为</td><td>高保真仿真 + 大量交互</td><td>研究为主，多用于特定场景（路口、匝道）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>强化学习在驾驶里的三个硬问题</h3>
+        <div class='steps'>
+          <ol>
+            <li><h3>奖励设计</h3><p>奖励 = 进度 − 碰撞惩罚 − 舒适惩罚 − 规则违反惩罚。权重一变策略就变，且“不撞”与“到达”常冲突，需要大量调参与课程学习。</p></li>
+            <li><h3>安全约束</h3><p>RL 在训练早期必然撞车，因此通常在仿真里训练；部署时必须叠加安全层：动作可行性检查、控制屏障函数（CBF）或屏蔽（shielding），禁止不可逆的危险动作。</p></li>
+            <li><h3>仿真到现实</h3><p>策略容易过拟合仿真器的动力学与视觉分布。常用域随机化（动力学参数、传感噪声、延迟）与真实数据微调来缩小差距。</p></li>
+          </ol>
+        </div>
+        <h3>闭环评测：学习式规划的试金石</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>基准</th><th>闭环方式</th><th>主要指标</th></tr></thead>
+            <tbody>
+              <tr><td>nuPlan</td><td>反应式仿真（其他交通参与者会对自车行为作出反应）</td><td>PDMS：碰撞、可行驶区域、进度、舒适、方向合规</td></tr>
+              <tr><td>NAVSIM</td><td>非反应式伪仿真（基于真实日志的短程滚动）</td><td>PDMS 类综合分、舒适与进度</td></tr>
+              <tr><td>CARLA Leaderboard / Bench2Drive</td><td>全仿真闭环，含交通流与多样场景</td><td>路线完成率、违规、碰撞、DS 分数</td></tr>
+              <tr><td>CommonRoad</td><td>标准场景格式，可复现对比</td><td>成功率、舒适度、求解时间</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel warn'><span class='pt'>别只看总分</span><p>闭环总分常被某一类指标主导。上线前必须拆开看：碰撞率（安全）、违规率（合法）、进度（效率）、jerk/加速度分布（舒适），并按场景类型（路口、环岛、施工、加塞）分层统计，找出真正拖后腿的场景族。</p></div>
+      </section>
+      <section class='sec scroll-target' id='dyn'>
+        <div class='sec-head'><span class='no'>2.14</span><h2>车辆动力学进阶：从运动学到侧偏动力学</h2></div>
+        <p>2.7 节的自行车模型是运动学模型（假设轮胎不打滑），它在中低速、正常轮胎附着下足够用。但高速变线、湿滑路面、急加速时，轮胎侧偏与载荷转移会主导车辆行为，必须换成动力学模型。</p>
+        <h3>轮胎侧偏与线性轮胎</h3>
+        <p>轮胎实际行进方向与轮子朝向之间的夹角叫侧偏角 α。小侧偏角下，侧向力与侧偏角近似成正比：</p>
+        <div class='math math-left'>前轮侧偏角：α_f = δ − (v_y + a·r)/v_x<br>后轮侧偏角：α_r = −(v_y − b·r)/v_x<br>侧向力：F_y = C_α·α（C_α 为侧偏刚度，单位 N/rad）</div>
+        <p>把牛顿–欧拉方程写出来，就得到经典的“二自由度车辆模型”，状态取 [v_y, r]（侧向速度与横摆角速度），输入为前轮转角 δ。它的两个结论非常重要：<b>不足转向</b>（车速升高时转弯半径变大，稳定）与<b>过度转向</b>（车速升高时转向过灵，可能失控）由“前后轴等效侧偏刚度与轴距分配的乘积关系”决定（即不足转向梯度）。</p>
+        <h3>从线性到极限工况</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>模型层次</th><th>适用范围</th><th>忽略了什么</th><th>工程用途</th></tr></thead>
+            <tbody>
+              <tr><td>运动学自行车模型</td><td>速度 &lt; 约 5–8 m/s 或曲率缓慢</td><td>轮胎侧偏、载荷转移</td><td>低速泊车、园区、轨迹跟踪教学</td></tr>
+              <tr><td>二自由度动力学（线性轮胎）</td><td>正常附着、侧向加速度 &lt; 0.3–0.4 g</td><td>轮胎非线性、悬架与载荷转移</td><td>LQR/MPC 控制器设计、稳定性分析</td></tr>
+              <tr><td>含载荷转移与非线性轮胎</td><td>极限工况（防滑、紧急避障）</td><td>悬架细节、路面随机性</td><td>稳定性控制（ESC）、极限工况仿真</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>轮胎力不是无限增长的：摩擦圆给出上界 F_total ≤ μ·F_z，纵向力与侧向力互相挤占。这解释了两个反直觉现象：急加速时可用侧向力下降（加速时不要同时大转向）；制动与转向同时拉满时更容易失稳。工程上常用 Pacejka“魔术公式”或查表轮胎模型描述这条非线性曲线。</p>
+        <div class='math math-left'>稳定边界（简化的横摆稳定条件）：|v_x| &lt; √( L²·C_f·C_r / (m·(b·C_r − a·C_f)) )（当 b·C_r &gt; a·C_f 时存在临界车速）</div>
+        <div class='panel tip'><span class='pt'>给控制器的三条实用建议</span><p>① 中低速用运动学模型，高速改用动力学模型或至少给曲率加上“随速度收紧”的限制；② 控制器输出必须留裕量（转向角、轮胎力都不许长期贴着摩擦极限）；③ 执行器有延迟（转向 50–150 ms、驱动/制动 100–300 ms），必须在模型里显式建模或在 MPC 里做延迟补偿，否则高速下会出现振荡。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='res'>
+        <div class='sec-head'><span class='no'>2.15</span><h2>学习资源地图</h2></div>
+        <div class='paper'><h4>经典论文（按主题）</h4><p>轨迹生成：Werling et al., “Optimal Trajectory Generation for Dynamic Street Scenarios in a Frenét Frame”(ICRA 2010)；搜索规划：Dolgov et al., “Practical Search Techniques in Path Planning for Autonomous Driving”(Hybrid A*)；综述：Paden et al., <a href='https://arxiv.org/abs/1604.07446'>“A Survey of Motion Planning and Control Techniques for Self-driving Urban Vehicles”</a>（一篇读完规划控制全貌）。</p></div>
+        <div class='paper'><h4>开源实现</h4><p><a href='https://github.com/erdos-project/frenet_optimal_trajectory_planner'>frenet_optimal_trajectory_planner</a>、<a href='https://github.com/TUM-AVS/Frenetix-Motion-Planner'>Frenetix</a>（Frenet 采样规划）；<a href='https://github.com/zhaohaojie1998/Path-Planning'>Path-Planning（中文注释，A*/Hybrid A*）</a>；<a href='https://github.com/s7ev3n/MPC_Code'>MPC_Code</a>、<a href='https://github.com/DhruvaKumar/model-predictive-control'>model-predictive-control</a>（MPC 轨迹跟踪）；<a href='https://github.com/bark-simulator/bark'>BARK</a>（行为决策仿真基准）；<a href='https://github.com/ethz-adrl/towr'>towr</a>（轨迹优化）。</p></div>
+        <div class='paper'><h4>求解器与基准</h4><p>求解器：<a href='https://osqp.org/'>OSQP</a>、<a href='https://web.casadi.org/'>CasADi</a>、<a href='https://docs.acados.org/'>acados</a>；闭环基准：<a href='https://arxiv.org/abs/2106.11810'>nuPlan</a>、<a href='https://github.com/autonomousvision/navsim'>NAVSIM</a>、<a href='https://commonroad.in.tum.de/'>CommonRoad</a>；整车参考实现：<a href='https://github.com/ApolloAuto/apollo'>Apollo</a> 的 planning 模块、<a href='https://github.com/autowarefoundation/autoware'>Autoware</a> 的 behavior/planning 组件。</p></div>
+        <div class='panel info'><span class='pt'>延伸</span><p>完整资源清单见 <a href='resources.html'>教程资源库</a>；第 3 章会讲这些规划器如何被仿真与安全体系验证。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>2.17</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q6：最小 jerk 轨迹为什么用五阶多项式而不是三阶？</summary><p>五阶才有 6 个系数，能同时满足两端的位置、速度、加速度共 6 个边界条件，从而直接优化 jerk（三阶导）的平方积分。三阶多项式无法同时约束两端加速度。</p></details>
+          <details><summary>Q7：为什么 Frenet 规划在急弯或参考线不平滑时会失效？</summary><p>Frenet 依赖参考线的弧长参数化：曲率大时等距 s 对应的实际距离变化明显、d 方向也不再垂直于道路；当横向偏移接近曲率半径时坐标映射出现奇异，必须回退到笛卡尔坐标或先平滑参考线。</p></details>
+          <details><summary>Q8：MPC 中为什么要引入松弛变量 ε？</summary><p>真实场景下约束可能瞬时互相冲突（前车急刹 + 道路边界），硬约束会让 QP 无解。松弛后总能有解，且 ε 的激活值能告诉你“正在违背哪条约束、违背多少”，便于做降级决策。</p></details>
+          <details><summary>Q9：minADE_K 高就代表预测好用吗？</summary><p>不一定。minADE 只看 K 条里是否有接近真值的一条，不看概率分配，全押错误轨迹也能得高分。必须配合 miss rate、概率校准（NLL/brier）以及闭环评测。</p></details>
+          <details><summary>Q10：为什么高速时必须用动力学模型而不是运动学自行车模型？</summary><p>高速时轮胎侧偏与载荷转移显著，运动学模型假设“无侧滑”，会严重低估失稳风险；动力学模型（线性轮胎起步）才能描述不足/过度转向、临界车速与轮胎力饱和。</p></details>
+        </div>
+        <div class='faq'>
+          <details><summary>Q1：A* 的启发函数为什么要求“不大于真实代价”？</summary><p>可采纳启发保证不会把尚未扩展但可能更优的节点误判为最差而剪掉，从而保证第一次到达终点时就是最优路径。</p></details>
+          <details><summary>Q2：五次多项式横向换道为什么至少要用五次而不是三次？</summary><p>需要 6 个边界条件（位置、速度、加速度各两个端点），五次多项式恰好 6 个系数可唯一满足，保证轨迹在连接点处加速度连续。</p></details>
+          <details><summary>Q3：MPC 相比纯追踪/Stanley 的“杀手锏”是什么？</summary><p>在预测时域内显式处理状态与控制约束（转向限位、避障边界、加速度上限），纯追踪只解决“跟住参考线”不解决约束。</p></details>
+          <details><summary>Q4：自行车模型里 θ̇ = (v/L)tanδ，说明低速大转角 vs 高速小转角哪个更危险？</summary><p>高速时同样的 δ 产生更大横摆角速度需求，实际轮胎力会饱和，超出运动学模型适用范围——所以高速必须用带侧偏角的动力学模型。</p></details>
+          <details><summary>Q5：为什么预测输出“多条带概率轨迹”比只输出最可能一条更安全？</summary><p>只信一条会把小概率危险（如突然变道）完全忽略；多模态概率化后，规划可以对其保守约束或保持安全距离。</p></details>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='02-perception.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 1 章 · 感知与状态估计</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <a class='chapter-link next' href='04-loc-sim-test.html'>
+        <span class='chapter-dir'>下一讲 →</span>
+        <b>第 3 章 · 定位·仿真·测试</b>
+      </a>
+      </nav>

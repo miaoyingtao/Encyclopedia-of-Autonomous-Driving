@@ -1,0 +1,100 @@
+---
+id: "pages/tech/perception/lidar.html"
+slug: "lidar"
+title: "激光雷达 LiDAR · 驶向未来百科"
+description: "自动驾驶激光雷达专题：TOF/FMCW 原理、机械/半固态/固态路线、点云与角分辨率、成本下降。"
+accent: "accent-tech"
+nav_active: "tech"
+hero_kicker: "技术 · 传感器深潜 ② / ⑤"
+hero_h1: "激光雷达 LiDAR"
+hero_lead: "激光雷达主动发射激光、直接测量三维空间，是“几何精度之王”。过去十年它从数万美元的“奢侈品”降到千元级，也让量产车纷纷装上“顶了个包”的传感器。"
+crumb: "首页|../../../index.html"
+crumb: "技术|../../../pages/tech.html"
+crumb: "环境感知|../../../pages/tech/perception.html"
+crumb: "激光雷达|"
+---
+
+<section class="sec scroll-target" id="principle">
+        <div class="sec-head"><span class="no">01</span><h2>原理：向空间“发问”并计算回声</h2></div>
+        <p>激光雷达（Light Detection and Ranging）的测距原理与“蝙蝠声呐”同构，只是把声波换成激光。主流有两种调制方式：</p>
+        <div class="grid g2">
+          <div class="card reveal"><h3>⏱️ TOF 飞行时间法</h3><p>发射激光脉冲，测量光往返目标的时间 t，距离 = c·t/2。实现相对简单，是目前量产主流；测的是“单点距离”，需要激光足够强、接收器足够灵敏。</p></div>
+          <div class="card reveal"><h3>🎵 FMCW 调频连续波</h3><p>发射频率连续变化的激光，通过回波与本地光的“拍频”同时解出<b>距离与速度</b>（多普勒效应），抗阳光干扰更强，被视为下一代方向，但光学系统复杂、成本高。</p></div>
+        </div>
+        <p>每一次发射对应一个“点”，成千上万个点汇聚成三维<b>点云</b>——用点数“画”出前方世界的轮廓。波长选择也有讲究：主流 905nm 成本低，1550nm 对人眼更安全、可加大功率看得更远，但需要昂贵的铟镓砷探测器。</p>
+      </section>
+
+      <section class="sec scroll-target" id="routes">
+        <div class="sec-head"><span class="no">02</span><h2>三条技术路线：从“旋转塔”到“芯片化”</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>路线</th><th>实现方式</th><th>优点</th><th>短板</th><th>典型阶段</th></tr></thead>
+            <tbody>
+              <tr><td><b>机械旋转式</b></td><td>整个发射/接收模块绕轴 360° 旋转</td><td>视场角全覆盖、点云最密，早期 L4 标配</td><td>体积大、有运动部件、车规寿命与成本压力大</td><td>Robotaxi 早期方案（如 Velodyne 时代的 64 线/128 线）</td></tr>
+              <tr><td><b>半固态</b></td><td>发射器固定，靠转镜/棱镜/MEMS 微振镜扫描</td><td>兼顾视场、体积与成本，车规量产主流</td><td>视场角略小于 360°，部分方案需要多个拼接</td><td>当前乘用车量产主力</td></tr>
+              <tr><td><b>固态</b></td><td>完全无机械运动：OPA 相控阵 / Flash 闪光</td><td>最紧凑、最可靠、未来成本最低</td><td>OPA 工艺难度高、Flash 探测距离短</td><td>研发与早期量产探索</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="spec">
+        <div class="sec-head"><span class="no">03</span><h2>选购与解读激光雷达的关键参数</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>参数</th><th>含义</th><th>怎么看</th></tr></thead>
+            <tbody>
+              <tr><td><b>线数 / 点频</b></td><td>机械式按垂直光束“线”数计（16/32/64/128 线）；新一代按每秒点数计</td><td>点数越多，远距小目标（轮胎、锥桶）越可能被“扫到”</td></tr>
+              <tr><td><b>探测距离</b></td><td>能测多远（通常标注在 10% 反射率的暗色物体上）</td><td>注意看“@反射率”——测白色车身 200m 与测黑色轮胎 60m 是两回事</td></tr>
+              <tr><td><b>视场角</b></td><td>水平与垂直覆盖范围</td><td>车规主雷达一般 ≥120° 水平，垂直要覆盖近处地面</td></tr>
+              <tr><td><b>角分辨率</b></td><td>相邻点的角度间隔</td><td>越小越能在远处“看清”小物体：0.1° 在 100m 处分辨约 17cm</td></tr>
+              <tr><td><b>回波次数</b></td><td>一次发射记录几个回波</td><td>多次回波可穿透雨滴/玻璃/树枝，看见“后面的目标”</td></tr>
+              <tr><td><b>点云频率</b></td><td>每秒刷新帧数（通常 10–20Hz）</td><td>高速下需要更高帧率以跟上目标变化</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="cost">
+        <div class="sec-head"><span class="no">04</span><h2>成本雪崩：从“数万美元”到“千元级”</h2></div>
+        <p>激光雷达的普及史就是一部降本史：</p>
+        <ul class="timeline">
+          <li><b>2010 年代</b><p>64 线机械雷达单价高达数万美元，仅用于 Robotaxi 研发，一辆改装车光传感器就比车贵。</p></li>
+          <li><b>2017–2021</b><p>半固态方案出现，价格降至数千美元级别，部分高端量产车开始前装。</p></li>
+          <li><b>2022–2025</b><p>国内供应链成熟、规模上量，半固态激光雷达价格进入<b>千元人民币级</b>，20–30 万元车型即可搭载，Robotaxi 整机成本也随之大幅下探。</p></li>
+        </ul>
+        <p>降本的核心是<b>芯片化与规模效应</b>：把数百个分立器件集成到几颗芯片上，良率与自动化程度决定最终成本。这与摄像头 CMOS 当年的普及路径如出一辙。</p>
+      </section>
+
+      <section class="sec scroll-target" id="hard">
+        <div class="sec-head"><span class="no">05</span><h2>激光雷达的物理局限</h2></div>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🌫️ 天气敏感</h3><p>雨滴反射产生噪点，浓雾会衰减激光、缩短探测距离。对策：多次回波算法滤噪、与毫米波雷达互补——毫米波穿雾能力远强于激光。</p></div>
+          <div class="card reveal"><h3>🖤 黑色与吸光物体</h3><p>深色轮胎、黑色车辆反射率低，探测距离骤降；玻璃会透射或镜面反射。对策：与摄像头语义识别互补，靠多传感器融合确认。</p></div>
+          <div class="card reveal"><h3>🧹 脏污遮挡</h3><p>车顶/格栅的雷达窗口被泥水覆盖会直接“失明”。量产车为此加装喷洗装置，并通过“脏污自检”报警。</p></div>
+          <div class="card reveal"><h3>🔆 阳光干扰</h3><p>太阳背景光太强会淹没回波信号。TOF 靠窄带滤光片缓解，FMCW 靠相干检测从物理上免疫，这也是 FMCW 被看好的原因。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="use">
+        <div class="sec-head"><span class="no">06</span><h2>谁在用激光雷达</h2></div>
+        <ul>
+          <li><b>Robotaxi</b>：几乎所有主流无人出租车都装备多颗激光雷达（顶置 360° 或前向多颗），作为安全关键的几何信息源；</li>
+          <li><b>干线重卡</b>：高速远距场景需要看得远，常在车顶与前保险杠加装前向雷达；</li>
+          <li><b>港口与矿区</b>：环境多尘、无光照规律，激光雷达几乎不可替代，且固定场景可部署多颗覆盖；</li>
+          <li><b>量产乘用车</b>：20 万级以上智驾车型普遍以 1 颗前向激光雷达作为“安全增强件”，用于补齐黑夜/眩光下的感知置信度。</li>
+        </ul>
+        <p>而坚持“纯视觉”的特斯拉认为：人眼不需要激光也能开车，摄像头 + 海量数据足以逼近甚至超越激光雷达方案——这场路线之争的最终裁判是<b>安全数据与单位经济模型</b>，详见 <a href="../perception.html#sensors">环境感知页</a>。</p>
+      </section>
+
+      <section class="sec scroll-target" id="range">
+        <div class="sec-head"><span class="no">07</span><h2>测距原理与点云密度</h2></div>
+        <p>主流激光雷达用飞行时间（ToF）测距：发射脉冲、测量回波时间 Δt，距离 R = c·Δt/2。回波功率随距离平方衰减，所以“最大测距”必须在特定反射率下才可比；点云密度由角分辨率决定，远处目标点很稀——这正是远距离检测困难的物理根源。</p>
+
+      </section>
+
+      <section class="sec scroll-target" id="pipeline">
+        <div class="sec-head"><span class="no">08</span><h2>点云处理流水线</h2></div>
+        <p>点云处理通常分四步：去畸变与滤波 → 地面分割与聚类 → 特征提取与检测 → 帧间配准与跟踪。去畸变要用 IMU / 里程计补偿扫描期间的车体运动，否则高速下点云会“拖影”。</p>
+
+      </section>

@@ -1,0 +1,275 @@
+---
+id: "pages/tutorial/06-worldmodel.html"
+slug: "06-worldmodel"
+title: "第 5 章 · 世界模型深度教程 · 驶向未来"
+description: "自动驾驶系统教程第 5 章：世界模型形式化定义、视频/潜空间预测建模、可控生成与反事实、规划预演、评测指标与工程安全边界。"
+accent: "accent-tech"
+hero_kicker: "系统教程 · 第 5 章"
+hero_h1: "世界模型：让系统在脑中“预演未来”"
+hero_lead: "世界模型的目标不是“生成好看的视频”，而是学会“世界在给定动作下如何演化”，并把它用于训练数据生成、规划预演与安全验证。本章把它拆成可实现的数学模型：视频 token 化、自回归/扩散预测、可控反事实生成，以及“生成得真”和“预测得准”之间的那道鸿沟。"
+crumb: "首页|../../index.html"
+crumb: "系统教程|../../pages/tutorial/index.html"
+crumb: "第 5 章|"
+---
+
+<div class='panel info'><span class='pt'>配套阅读</span><p>想先建立直觉？可先看科普版 <a href='../../pages/frontier.html'>AI 前沿</a>，再回来读公式与推导。</p></div>
+      <section class='sec scroll-target' id='obj'>
+        <div class='sec-head'><span class='no'>5.1</span><h2>学习目标与前置</h2></div>
+        <div class='lesson-meta'><span>难度：高阶</span><span>预计：5–7 小时</span><span>前置：第 4 章（token 与序列建模）+ 第 1 章（占用/预测）</span></div>
+        <p>学完本章，你应该能：① 用条件概率写出“视频世界模型”“潜空间世界模型”“占用流世界模型”三者的区别；② 说清 VQ tokenizer 的训练损失由哪几项组成；③ 描述用世界模型做“规划预演”的优化目标；④ 设计一套能区分“生成逼真”与“预测正确”的评测方案；⑤ 知道为什么世界模型生成的数据不能直接当作安全证据。</p>
+      </section>
+
+      <section class='sec scroll-target' id='def'>
+        <div class='sec-head'><span class='no'>5.2</span><h2>形式化：世界模型到底学什么</h2></div>
+        <p>给定到当前时刻 t 为止的观测 o（环视图像/点云/占用）与动作 a（自车轨迹或控制），世界模型学习未来观测的条件分布：</p>
+        <div class='math'>p(o_{t+1}, …, o_{t+T} | o_{≤t}, a_{≤t+T})</div>
+        <p>“预测观测”只是个抽象框架，工程上有三种具体落法，学习对象完全不同：</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>类型</th><th>预测什么</th><th>用途</th><th>代表思路</th></tr></thead>
+            <tbody>
+              <tr><td><b>视频世界模型</b></td><td>未来图像/视频（像素或离散 token）</td><td>生成仿真数据、评估与演示</td><td>GAIA 系列、Cosmos 等扩散/自回归生成路线</td></tr>
+              <tr><td><b>潜空间世界模型</b></td><td>压缩后的隐状态 z 及其演化</td><td>在“低成本梦境”里做强化学习与规划</td><td>Dreamer 类（“做梦”训练策略）</td></tr>
+              <tr><td><b>占用/预测流模型</b></td><td>未来 BEV/体素的占用与速度场</td><td>直接给规划器当时空约束</td><td>占用网络 + 未来流（见第 1 章 1.5）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>三者不互斥：视频世界模型是最“通用”的表象，潜空间模型把“像不像像素”的负担卸掉、只保留决策相关的结构信息，占用流模型则直接服务规划接口。本章主线是<b>视频/潜空间世界模型</b>，因为它是 2025–2026 年前沿讨论的主战场。</p>
+      </section>
+
+      <section class='sec scroll-target' id='token'>
+        <div class='sec-head'><span class='no'>5.3</span><h2>视频世界模型的训练：Token 化 + 预测</h2></div>
+        <h3>第一步：把视频压成离散 token</h3>
+        <p>像素维度过高且存在大量冗余，先把每帧图像编码成紧凑的离散码（类似把文字变成 token）。常用 VQ-VAE/VQ-GAN：编码器把图像映到连续潜码，再量化到最近的码本向量：</p>
+        <div class='math math-left'>z = E(x)，z_q = argmin_{c_k∈C} ‖z − c_k‖₂（逐格量化到码本 C）<br>重构损失：L_rec = ‖D(z_q) − x‖₁/₂<br>码本损失：L_cb = ‖sg(z) − z_q‖² 与承诺损失 L_commit = β‖z − sg(z_q)‖²</div>
+        <p>其中 sg 表示停止梯度。为提高视觉质量，还叠加感知损失（LPIPS）与对抗损失（判别器认为重构是真的）。训练完成的 tokenizer 把一帧 1280×720 图像压成约几十×几十的离散格子，供下一步自回归预测。</p>
+        <h3>第二步：在 token 序列上做“下一帧预测”</h3>
+        <p>把时间维展开，世界模型变成在离散 token 序列上的自回归模型：给定历史帧的 token、自车动作 a 与条件 c（地图/天气/相机位姿），逐 token 预测未来：</p>
+        <div class='math'>p(z₁,…,z_N | z_history, a, c) = Πᵢ p(zᵢ | z_{&lt;i}, z_history, a, c)</div>
+        <div class='codeblock'>训练流程：
+1. 准备片段：视频窗口（含多相机） + 自车轨迹/控制 + 元数据条件
+2. 用已训练 tokenizer 把每帧变成离散 token，摊平成时间序列
+3. 用 Transformer 做自回归 next-token 预测（交叉熵）
+4. 可选：扩散式世界模型改用“在潜空间加噪去噪”训练（DDPM 目标），
+   好处是采样可控性强、多帧整体一致；代价是推理需多步去噪</div>
+        <p>动作如何进模型是设计关键：常见做法是把自车轨迹编码成条件 token 序列插在帧 token 之前，或用交叉注意力注入。让模型“看见动作后预测后果”，模型才会学到因果关系——这也是它能做反事实生成的基础。</p>
+        <div class='panel tip'><span class='pt'>为什么自回归视频生成很难</span><p>一帧的 token 数远大于一句话，未来 4 秒 @ 10 Hz 就是 40 帧，序列长度上万，自回归代价与误差累积都很大。工业方案通常：降低分辨率/帧率训练、分块预测、先在潜空间预测再解码、用扩散模型一次生成多帧。选型时“画面一致性 vs 生成效率”是核心权衡。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='controllable'>
+        <div class='sec-head'><span class='no'>5.4</span><h2>可控生成：反事实与训练数据增强</h2></div>
+        <p>世界模型的量产价值主要在“<b>改写现实</b>”而非“复现现实”：</p>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>🔁 反事实改写</h3><p>同一段真实视频，把“自车动作”换成急刹/变道，或把天气改为雨、把行人位置挪近，生成“如果……会怎样”的场景。这比工程师手写场景更接近真实世界的光影与语义。</p></div>
+          <div class='card reveal'><h3>🧪 长尾扩充</h3><p>真实数据里事故前兆极少。模型在真实片段上做“危险化改写”（加塞、鬼探头、路面遗撒），批量制造 corner case 用于训练与回归。</p></div>
+        </div>
+        <p>可控生成的实现主要有两类：<b>条件注入</b>（把目标属性编码进条件 c，如“路面=湿滑”），以及<b>引导采样</b>——扩散模型常用的 classifier-free guidance 把条件与无条件估计按强度 w 外推：</p>
+        <div class='math'>ẽ_θ(z, c) = (1+w)·ε_θ(z, c) − w·ε_θ(z, ∅)</div>
+        <p>w 越大越“贴条件”但可能损失多样性。评估可控性时逐项检验：给定条件“换到雨天”，生成帧的雨纹/倒影/能见度是否真的变了；给定“自车向左变道”，场景中的自车是否真的左移——动作一致性是世界模型最常翻车的点（模型可能“嘴上左转、画面直行”）。</p>
+        <div class='panel warn'><span class='pt'>生成数据的合法性边界</span><p>用生成数据训练要防三类污染：① 生成场景只是“像”，物理规则可能不守恒（车穿墙、行人瞬移）；② 模型会把真实数据里的系统偏差放大（比如总生成空旷道路）；③ 生成样本进测试集会造成“考试泄题”，训练/测试切分必须审计。生成数据必须与真实数据按比例混用并做分布监控。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='plan'>
+        <div class='sec-head'><span class='no'>5.5</span><h2>用世界模型做规划预演</h2></div>
+        <p>更前沿的用法是把世界模型放进控制回路：让策略在“想象”里试错，而不是在真实道路上试错。给定当前隐状态 z₀，对每个候选动作序列 a，用世界模型 rollout 出未来状态，再按代价函数选最优：</p>
+        <div class='math'>a* = argmin_{a∈A} Σ_{k=1..T} C( z_k(a) )，z_{k+1} = f_wm(z_k, a_k)</div>
+        <p>C 通常包含碰撞代价、车道偏离、进度与舒适度。这就是“以世界模型为预测器的模型预测控制”——和 MPC 在结构上同构，只是把“人为写死的运动模型”换成“从数据学到的转移函数”。潜空间世界模型让这种 rollout 可以在远低于实时的成本里跑很多步，因此常被用来：</p>
+        <ul>
+          <li><b>策略自我对弈</b>：在梦里评估不同策略、筛选训练数据；</li>
+          <li><b>安全预判</b>：对“激进候选”先在隐空间 roll out 看是否必然碰撞，再决定是否拒绝；</li>
+          <li><b>闭环评估</b>：把新版本策略放进世界模型生成的环境里批量跑，替代部分昂贵仿真。</li>
+        </ul>
+        <p>注意区分“预测性预演”与“生成性想象”：前者要求模型对<b>动态交互</b>预测准（别人会不会让、会不会撞），后者只要画面合理。一个“生成漂亮但预测不准”的世界模型用于规划是危险的——这正是 5.6 评测要分开测的原因。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eval'>
+        <div class='sec-head'><span class='no'>5.6</span><h2>评测：别被“像真的”骗了</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🖼 生成质量</h3><p>FVD（视频分布距离）、LPIPS、IS/多样性。衡量“单帧/片段像不像真实视频”，但与驾驶正确性无关。</p></div>
+          <div class='card reveal'><h3>🎛 可控性</h3><p>条件属性是否真的改变（天气/场景/动作）、动作-画面一致性、多视角一致性。用属性分类器与几何一致性检验。</p></div>
+          <div class='card reveal'><h3>🎯 下游有效性</h3><p>生成数据训练的策略在真实数据上的提升、闭环碰撞率是否下降。这是“有用”的最硬指标。</p></div>
+        </div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>⚖️ 物理合理性</h3><p>碰撞穿模率、车辆轨迹物理可行性（曲率/加速度分布）、占用演化是否连续。用规则检查器自动审计。</p></div>
+          <div class='card reveal'><h3>🕳 分布审计</h3><p>生成样本与真实样本在场景要素上的分布差异（道路类型/天气/目标密度），防止模型“偷懒只生成简单场景”。</p></div>
+          <div class='card reveal'><h3>🔁 可重复性</h3><p>同一输入多次采样的一致性：是“多模态合理差异”还是“同一场景随机乱画”。</p></div>
+        </div>
+        <p>对“预测准不准”还要单独加预测类指标：未来占用 IoU、未来轨迹的 minADE（与真值对比）、以及“给定动作执行后，预测自车位置与实际位置的偏差”。如果一个世界模型在生成质量上拿高分、在动作一致性上不及格，它在安全流程里的信任等级必须降级。</p>
+      </section>
+
+      <section class='sec scroll-target' id='eng'>
+        <div class='sec-head'><span class='no'>5.7</span><h2>工程与安全边界</h2></div>
+        <div class='grid g2'>
+          <div class='card reveal'><h3>⏱ 实时性分级</h3><p>云端离线生成（训练数据、场景库）可慢可大；车端“规划预演”则要求 ms 级 rollout，通常用小型潜空间模型而非全分辨率视频生成。不要用一个 10 秒才能生成一帧的模型做实时决策。</p></div>
+          <div class='card reveal'><h3>🛡 幻觉防护</h3><p>世界模型也会“一本正经地编”未来。用于安全预判时，必须与规则/占用模型做交叉验证：预测结果与独立检测冲突时，以保守者为准。</p></div>
+          <div class='card reveal'><h3>📊 数据血缘</h3><p>每条生成样本要记录“来源片段 + 改写参数 + 模型版本”，出现事故/回归时能溯源，这是合规与调试的共同要求。</p></div>
+          <div class='card reveal'><h3>🏭 成本模型</h3><p>高质量视频世界模型训练需要海量 GPU 与数据清洗管线；落地要先算清“替代多少手写场景/路测里程”的 ROI，而不是为了炫技。</p></div>
+        </div>
+        <p>与 SOTIF 的衔接：世界模型生成数据扩展了“已知场景”空间，但它自己也引入新的不确定性（生成分布 ≠ 真实分布）。因此业界普遍把它定位为<b>训练与验证的放大器</b>，最终放行依据仍要回到真实传感器、真实执行器与独立安全层。</p>
+      </section>
+
+      <section class='sec scroll-target' id='road'>
+        <div class='sec-head'><span class='no'>5.8</span><h2>从零到一复现路线</h2></div>
+        <div class='codeblock'>S0 数据准备：下载开源驾驶视频/点云数据集，做帧对齐与自车轨迹抽取
+S1 Tokenizer：在单帧图像上训/加载 VQ tokenizer，复现重构质量（LPIPS）
+S2 短程预测：固定 1 秒历史，做 0.5–1 秒未来帧自回归预测（小分辨率起步）
+S3 条件化：加入自车动作/目标轨迹条件，验证“条件改变 → 画面改变”
+S4 反事实与评测：实现 FVD/可控性/动作一致性评估，对比三种条件注入方式
+S5 下游验证（可选）：把生成场景接进 CARLA 或开源仿真器，跑策略闭环</div>
+        <p>开源资源建议：先从单目短序列 + 小 Transformer 起步复现训练闭环，再逐步扩到多相机与扩散架构；公开数据集与开源模型可参考 nuScenes/Waymo Open 等（详见第 3 章 3.7 与各数据集官方文档）。延伸阅读可按关键词检索：GAIA-1/GAIA-2（Wayve）、Cosmos（NVIDIA）、Dreamer 系列、以及视频生成世界模型综述——阅读时注意区分“研究演示”与“量产落地”。</p>
+      </section>
+
+      <section class='sec scroll-target' id='adv'>
+        <div class='sec-head'><span class='no'>5.9</span><h2>进阶：JEPA 与隐空间规划</h2></div>
+        <h3>① 生成式 vs 联合嵌入预测</h3>
+        <p>生成式世界模型（视频扩散、自回归 Transformer）要重建像素，计算昂贵且容易被无关细节主导。LeCun 提出的 <b>JEPA（Joint Embedding Predictive Architecture）</b> 主张在<b>表征空间</b>预测：编码器把观测映射为隐向量，预测器在隐空间预测未来的隐向量，用一个“避免塌缩”的正则（如 VICReg）保证表征有信息量，而不重建每个像素。</p>
+        <div class='math math-left'>生成式：max log p(x_{t+1} | x_{≤t})（预测像素）<br>JEPA：max I(s_{t+1}; s_{≤t})（预测表征）</div>
+        <h3>② 隐空间里的规划</h3>
+        <p>如果世界模型能在隐空间滚动预测，规划就可以在隐空间做：给定候选动作序列，模型预测对应的隐状态轨迹与代价，选代价最小者。这把“想象”与“决策”统一起来，但要求隐空间对动作敏感、对噪声鲁棒，且能可靠评估代价。</p>
+        <h3>③ 与模型预测控制的关系</h3>
+        <p>世界模型做规划，本质上是把 MPC 中的“动力学模型 f”换成学习到的隐动力学模型，把“代价 L”换成学习到的价值 / 奖励函数。区别在于学习模型没有解析形式，约束处理与安全性论证更难，因此目前多用于仿真数据生成与候选评估，而非直接替代安全控制。</p>
+      </section>
+
+      <section class='sec scroll-target' id='gen'>
+        <div class='sec-head'><span class='no'>5.10</span><h2>生成建模数学基础：VAE / VQ-VAE / 扩散 / 流匹配</h2></div>
+        <p>5.3 节提到了 VQ tokenizer 与扩散式生成，这里把三套数学工具的最小必要版本补齐。看得懂这一节，就能读懂绝大多数驾驶世界模型论文的方法部分。</p>
+        <h3>① 自编码与 VAE</h3>
+        <div class='math math-left'>自编码器：min ‖x − D(E(x))‖²<br>VAE：min ‖x − D(z)‖² + KL( q(z|x) ‖ p(z) )，z ~ q(z|x) = N(μ(x), σ²(x))</div>
+        <p>KL 项约束潜码分布接近标准正态，使潜空间“连续可用”（可采样、可插值）。代价是重构模糊（KL 与重构损失相互拉扯）。对世界模型的意义：先有一个紧凑的潜空间，后面才谈得上在其上预测。</p>
+        <h3>② VQ-VAE：把图像变成离散 token</h3>
+        <div class='math math-left'>量化：z_q = c_k，k = argmin_j ‖z − c_j‖₂（码本 C = {c_1…c_K}）<br>损失：L = ‖x − D(z_q)‖² + ‖sg(z) − z_q‖² + β‖z − sg(z_q)‖²<br>　　（第一项重构、第二项码本更新、第三项承诺损失；sg 表示停止梯度）</div>
+        <p>离散 token 的价值在于：与 Transformer 的交叉熵训练天然兼容，且能通过增大码本与分辨率持续提升质量（VQ-GAN 再叠加感知损失与对抗损失，显著改善纹理细节）。代价是“码本坍缩”（少数码字被反复使用），常用重启/EMA 更新码本来缓解。</p>
+        <h3>③ 扩散模型：学去噪，而不是学生成</h3>
+        <div class='math math-left'>前向：x_t = √(ᾱ_t)·x_0 + √(1 − ᾱ_t)·ε，ε ~ N(0, I)<br>训练：L = E[ ‖ε − ε_θ(x_t, t, c)‖² ]（预测噪声，等价于预测分数）<br>采样：x_{t−1} = (1/√α_t)(x_t − (β_t/√(1−ᾱ_t))·ε_θ) + σ_t·z</div>
+        <p>训练时不需要对抗、目标稳定；采样要迭代几十步，是实时性的主要负担。加速手段：DDIM（确定性跳步）、一致性/蒸馏模型（少步生成）、潜空间扩散（在 VAE 潜码上做扩散，把像素维度降下来）。</p>
+        <h3>④ 流匹配 / Flow Matching</h3>
+        <div class='math math-left'>学一个速度场 v_θ(x, t)，把噪声沿直线（或最优传输路径）搬运到数据：<br>L = E[ ‖v_θ(x_t, t) − (x_1 − x_0)‖² ]，x_t = (1−t)·x_0 + t·x_1</div>
+        <p>流匹配与扩散同源但路径更直，采样步数更少（常见 1–10 步），正因如此被新一代 VLA 与世界模型广泛采用（π0 即用流匹配生成动作块）。对驾驶的意义：把“生成多模态未来”的成本压到接近实时。</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>方法</th><th>潜空间</th><th>训练稳定性</th><th>采样成本</th><th>驾驶里的典型用途</th></tr></thead>
+            <tbody>
+              <tr><td>VAE</td><td>连续</td><td>高</td><td>一次前向</td><td>压缩表征、占用预测的潜码</td></tr>
+              <tr><td>VQ-VAE / VQ-GAN</td><td>离散 token</td><td>中（码本坍缩）</td><td>一次前向</td><td>视频 tokenizer、自回归世界模型第一步</td></tr>
+              <tr><td>扩散（DDPM/DDIM）</td><td>像素或潜码</td><td>高</td><td>多步（10–1000）</td><td>视频生成、可控场景生成</td></tr>
+              <tr><td>流匹配</td><td>像素或潜码</td><td>高</td><td>少步（1–10）</td><td>实时动作生成、视频预测</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='compare'>
+        <div class='sec-head'><span class='no'>5.11</span><h2>主流驾驶世界模型对比：四条技术路线</h2></div>
+        <p>“世界模型”在驾驶领域至少有四种用法，先分清类型再看具体工作，能避免把不同目标的方法放在一起比较。</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>路线</th><th>代表工作</th><th>预测对象</th><th>主要用途</th></tr></thead>
+            <tbody>
+              <tr><td>视频生成式</td><td>GAIA-1 / GAIA-2、<a href='https://github.com/JeffWang987/DriveDreamer'>DriveDreamer</a>、Vista、GenAD 类</td><td>未来环视/前视视频</td><td>场景生成、仿真数据增强、可视化验证</td></tr>
+              <tr><td>占用/流预测式</td><td><a href='https://github.com/wzzheng/OccWorld'>OccWorld</a>、D²-World 等</td><td>未来 3D 占用与速度场</td><td>直接给规划提供时空约束（与第 1 章占用网络衔接）</td></tr>
+              <tr><td>潜空间世界模型（MBRL）</td><td><a href='https://github.com/danijar/dreamerv3'>DreamerV3</a> 及其驾驶应用</td><td>紧凑隐状态与其转移</td><td>在“梦境”里训练/评估策略，省真实交互成本</td></tr>
+              <tr><td>通用视频基础模型</td><td><a href='https://github.com/NVIDIA/cosmos'>NVIDIA Cosmos</a> 等</td><td>通用视频/物理预测</td><td>作为预训练基座，再微调到驾驶域</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>评估一条路线是否适合你</h3>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🎯 目标是什么</h3><p>要“补数据”选视频生成；要“给规划约束”选占用/流预测；要“训练策略”选潜空间模型。目标不同，指标完全不同。</p></div>
+          <div class='card reveal'><h3>🧮 算力是否够</h3><p>视频生成训练动辄数百 GPU 天；占用预测可复用感知网络，成本低一个量级；潜空间模型最小，但泛化到真实图像需要额外编码器。</p></div>
+          <div class='card reveal'><h3>🔍 可验证性</h3><p>生成视频“像不像”容易骗人，能落到几何（占用、深度）与下游指标（规划收益）的方案更容易被信任与验收。</p></div>
+        </div>
+        <div class='panel tip'><span class='pt'>研究脉络索引</span><p>想系统跟进可参考两篇综述：<a href='https://arxiv.org/abs/2502.10498'>The Role of World Models in Shaping Autonomous Driving: A Comprehensive Survey</a> 与 <a href='https://github.com/LMD0311/Awesome-World-Model'>Awesome-World-Model 资源库</a>（持续更新的论文清单）。</p></div>
+      </section>
+      <section class='sec scroll-target' id='closedloop'>
+        <div class='sec-head'><span class='no'>5.12</span><h2>闭环训练与想象 rollout：把世界模型用起来</h2></div>
+        <p>5.5 节讲了“用世界模型做规划预演”，这一节给出闭环训练的具体做法与风险控制。核心思想很简单：<b>让策略在世界模型里“想象”执行，用想象的后果改进策略</b>，从而绕开真实世界交互昂贵、危险的问题。</p>
+        <h3>三种典型用法</h3>
+        <div class='steps'>
+          <ol>
+            <li><h3>数据增强（最安全、最容易落地）</h3><p>用世界模型对真实片段做可控改写：改天气、改自车动作、增删参与者，生成新的训练样本。风险最低，因为生成数据只进训练集，不直接影响决策链。</p></li>
+            <li><h3>想象 rollout 训练策略</h3><p>在潜空间世界模型里展开未来若干步，用想象回报更新策略（Dreamer 类做法）。优点是样本效率高，风险是“模型误差被策略利用”——策略会学会钻世界模型的漏洞。</p></li>
+            <li><h3>规划预演（在线评估候选轨迹）</h3><p>对每条候选轨迹用世界模型预测未来占用/视频，选择风险最低者。注意推理成本：K 条候选 × 预测步数，通常只能在低频规划层使用。</p></li>
+          </ol>
+        </div>
+        <div class='math math-left'>想象 rollout 的折扣回报：Ĵ(θ) = E_{τ ~ 世界模型, π_θ}[ Σ_t γᵗ r̂(s_t, a_t) ]<br>风险控制：把真实数据上的验证误差作为约束项或早停条件（模型误差大时停止想象训练）</div>
+        <h3>四个必须做的防护</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>风险</th><th>表现</th><th>防护手段</th></tr></thead>
+            <tbody>
+              <tr><td>模型误差被利用</td><td>策略在想象中收益极高，真实环境表现差</td><td>限制想象长度、加集成模型分歧惩罚、定期用真实数据校准</td></tr>
+              <tr><td>生成数据分布偏移</td><td>增强数据里的“物理规律”与真实不符</td><td>只做局部改写（小范围时空扰动），并做几何一致性校验（深度/占用）</td></tr>
+              <tr><td>长尾被“洗掉”</td><td>生成样本集中在常见场景，罕见场景更少</td><td>定向生成：以罕见的真实片段为条件生成变体</td></tr>
+              <tr><td>评测自欺</td><td>用同一世界模型训练又评测，指标虚高</td><td>训练用世界模型与评测环境分离，闭环评测用独立仿真器/实车</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel warn'><span class='pt'>一句话原则</span><p>世界模型生成的数据可以用于“训练”，但绝不能作为“安全证据”。验证永远要在独立环境（其他仿真器或实车）中进行，否则就是在自我循环论证。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='cost'>
+        <div class='sec-head'><span class='no'>5.13</span><h2>评测指标与算力预算：怎么管住成本与自欺</h2></div>
+        <h3>三档评测指标</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>层级</th><th>指标</th><th>能说明什么</th><th>局限</th></tr></thead>
+            <tbody>
+              <tr><td>像素级</td><td>FVD（视频分布距离）、LPIPS/PSNR/SSIM</td><td>画质与分布相似度</td><td>“像真的”不等于“预测对”，物理错误可能得高分</td></tr>
+              <tr><td>几何/语义级</td><td>未来占用 IoU、深度误差、目标轨迹一致性</td><td>几何与语义是否正确</td><td>需要真值占用（多为伪标签），标注噪声需评估</td></tr>
+              <tr><td>下游任务级</td><td>用生成数据训练后，规划/检测指标的提升量</td><td>是否真的有工程价值</td><td>测量成本高、噪声大，需要严格控制变量</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel warn'><span class='pt'>常见自欺手法</span><p>① 只展示“最好看的几段视频”；② 用同一模型生成又评测；③ 只在短时域（1 秒内）评测一致性；④ 忽略生成数据的物理合理性（穿模、瞬移、轮胎不打滑）。评测方案应随机抽样、覆盖长时域，并至少包含几何指标。</p></div>
+        <h3>算力与预算量级</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>环节</th><th>量级</th><th>说明</th></tr></thead>
+            <tbody>
+              <tr><td>视频 tokenizer 训练</td><td>数十–数百 GPU 天</td><td>可考虑使用开源预训练 tokenizer 直接微调</td></tr>
+              <tr><td>世界模型训练（视频生成）</td><td>数百–数千 GPU 天</td><td>分辨率、帧率、时域长度是三个主要成本旋钮</td></tr>
+              <tr><td>占用世界模型训练</td><td>数十 GPU 天</td><td>复用感知骨干、体素分辨率适度降低</td></tr>
+              <tr><td>潜空间 MBRL 训练</td><td>数 GPU 天</td><td>最省算力，但需额外编码器把真实观测转成潜码</td></tr>
+              <tr><td>推理（生成一段 4 s 视频）</td><td>0.1–数秒（视步数与分辨率）</td><td>车端实时生成目前不现实，多用于离线数据生产</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class='panel tip'><span class='pt'>省算力的四个实际做法</span><p>① 降低帧率训练、推理时插帧；② 在潜空间做预测，只在需要时解码；③ 用预训练通用视频基座（如 Cosmos 类）微调，而不是从零训练；④ 把“可控条件”做成少量条件 token，避免重训整个模型。</p></div>
+      </section>
+      <section class='sec scroll-target' id='res'>
+        <div class='sec-head'><span class='no'>5.14</span><h2>学习资源地图</h2></div>
+        <div class='paper'><h4>综述与索引</h4><p><a href='https://arxiv.org/abs/2502.10498'>驾驶世界模型综述（The Role of World Models in Shaping Autonomous Driving）</a>；<a href='https://github.com/LMD0311/Awesome-World-Model'>Awesome-World-Model</a>（驾驶与机器人世界模型论文清单）；<a href='https://github.com/leofan90/Awesome-World-Models'>Awesome-World-Models</a>（世界模型定义与谱系梳理）。</p></div>
+        <div class='paper'><h4>开源实现</h4><p>潜空间 + 强化学习：<a href='https://github.com/danijar/dreamerv3'>DreamerV3</a>（“在梦境中学习”的标准实现）；驾驶视频世界模型：<a href='https://github.com/JeffWang987/DriveDreamer'>DriveDreamer</a>；占用世界模型：<a href='https://github.com/wzzheng/OccWorld'>OccWorld</a>；通用视频基础模型：<a href='https://github.com/NVIDIA/cosmos'>NVIDIA Cosmos</a>。</p></div>
+        <div class='paper'><h4>相关的近期工作</h4><p>滚动预测动作与视频：<a href='https://arxiv.org/abs/2505.18650'>ProphetDWM</a>；掩码重建式可泛化驾驶世界模型：<a href='https://arxiv.org/abs/2502.11663'>MaskGWM</a>；解耦动态流的轻量世界模型：<a href='https://arxiv.org/abs/2411.17027'>D²-World</a>；占用世界模型的机器人版本：<a href='https://arxiv.org/abs/2505.05512'>Occupancy World Model for Robots</a>。</p></div>
+        <div class='paper'><h4>前置数学</h4><p>Transformer 与扩散模型基础见 <a href='https://zh.d2l.ai/'>动手学深度学习（中文）</a>；本教程第 4 章 4.10 节的注意力机制与 5.10 节的生成建模两节配合阅读效果最好。</p></div>
+        <div class='panel info'><span class='pt'>延伸</span><p>完整清单见 <a href='resources.html'>教程资源库</a>。读到这里，你已经把“感知—规划—定位—评测—大模型—世界模型”整条主线走了一遍；建议回到 <a href='index.html'>课程地图</a> 选一条学习路径做项目实践。</p></div>
+      </section>
+
+      <section class='sec scroll-target' id='quiz'>
+        <div class='sec-head'><span class='no'>5.16</span><h2>自测题</h2></div>
+        <div class='faq'>
+          <details><summary>Q6：VQ-VAE 里的“承诺损失”在约束什么？</summary><p>它约束编码器输出不要离码本向量太远（‖z − sg(z_q)‖²），同时用停止梯度让码本朝 z 更新。没有它，编码器会不断漂移、码本追不上，导致码本利用率低与训练不稳。</p></details>
+          <details><summary>Q7：扩散模型训练目标为什么可以只学“预测噪声 ε”？</summary><p>在给定 x_t 时，预测噪声与原数据得分函数之间存在解析关系，最小化 ‖ε − ε_θ‖² 等价于学习数据分布的得分（对数概率梯度）。因此不需要对抗训练也能学到生成分布。</p></details>
+          <details><summary>Q8：流匹配相比扩散在车上更实用的原因是什么？</summary><p>它把噪声到数据的路径拉直，采样步数可以从几十步降到几步甚至一步，延迟大幅下降，因此适合实时生成动作或短时域未来（π0 的动作生成即用此思路）。</p></details>
+          <details><summary>Q9：为什么不能用同一个世界模型既训练又评测策略？</summary><p>策略会专门利用该模型的漏洞，评测分数虚高但真实表现差（自我循环论证）。训练与评测环境必须分离，且评测应包含独立的几何指标与下游任务指标。</p></details>
+          <details><summary>Q10：占用世界模型相比视频世界模型的核心优势？</summary><p>它输出的占用与速度场可以直接作为规划器的时空约束（碰撞检查、让行判断），且几何可验证、算力需求低一个量级；视频生成的“好看”与安全决策之间没有直接接口。</p></details>
+        </div>
+        <div class='faq'>
+          <details><summary>Q1：视频世界模型、潜空间世界模型、占用流模型分别“预测什么”？</summary><p>分别预测未来像素/离散视频 token、压缩隐状态、未来体素占用与速度场。选型取决于用途：演示与数据生成选视频，低成本策略预演选潜空间，直接当规划约束选占用流。</p></details>
+          <details><summary>Q2：VQ tokenizer 的三项核心损失分别管什么？</summary><p>重构损失管“解码回去像不像”，码本损失管“码本被用起来”，承诺损失管“编码器输出靠近码本”。感知与对抗损失进一步把“像”提到人类视觉层面。</p></details>
+          <details><summary>Q3：为什么说“生成得像”不等于“预测得准”？</summary><p>生成质量衡量画面分布，预测准确衡量给定动作后世界演化的正确性；一个画面很真但自车动作与画面不符、或未来碰撞关系错误的世界模型，不能用于安全决策。</p></details>
+          <details><summary>Q4：classifier-free guidance 的 w 调大带来什么副作用？</summary><p>更贴条件、属性更可控，但多样性下降且可能过拟合条件、产生伪影；w 需要在可控性与真实感之间标定。</p></details>
+          <details><summary>Q5：生成数据为什么不能直接替代真实路测做安全证明？</summary><p>生成分布不等于真实分布，物理可能不守恒，且模型可能放大数据偏差；生成数据只能作为训练与验证的放大器，最终仍由真实传感器/执行器与独立安全层把关。</p></details>
+        </div>
+      </section>
+
+      <nav class='chapter-nav' aria-label='讲义翻页'>
+      <a class='chapter-link prev' href='05-llm-vla.html'>
+        <span class='chapter-dir'>← 上一讲</span>
+        <b>第 4 章 · LLM 与 VLA</b>
+      </a>
+      <a class='chapter-link map' href='index.html'>
+        <b>课程地图</b>
+      </a>
+      <span class='chapter-link gap'></span>
+      </nav>

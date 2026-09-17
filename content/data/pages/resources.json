@@ -1,0 +1,38 @@
+{
+  "faq": [],
+  "refs": [],
+  "related": [
+    {
+      "href": "index.html",
+      "text": "课程地图"
+    },
+    {
+      "href": "01-math-sensors.html",
+      "text": "第 0 章 数学与传感器建模"
+    },
+    {
+      "href": "02-perception.html",
+      "text": "第 1 章 感知与状态估计"
+    },
+    {
+      "href": "03-planning-control.html",
+      "text": "第 2 章 决策规划与控制"
+    },
+    {
+      "href": "04-loc-sim-test.html",
+      "text": "第 3 章 定位·仿真·测试"
+    },
+    {
+      "href": "05-llm-vla.html",
+      "text": "第 4 章 LLM 与 VLA"
+    },
+    {
+      "href": "06-worldmodel.html",
+      "text": "第 5 章 世界模型"
+    }
+  ],
+  "faq_title": "",
+  "refs_title": "",
+  "related_title": "回到教程",
+  "toc": []
+}

@@ -1,0 +1,99 @@
+---
+id: "pages/scenarios/robotaxi.html"
+slug: "robotaxi"
+title: "Robotaxi 出行服务 · 驶向未来百科"
+description: "Robotaxi 无人驾驶出租车专题：商业模式、成本结构、远程介入、全球运营进展与挑战。"
+accent: "accent-scenarios"
+nav_active: "scenarios"
+hero_kicker: "落地与产业 · 专题一"
+hero_h1: "Robotaxi：无人驾驶出租车"
+hero_lead: "当“打到一辆没有司机的出租车”从新闻变成日常，Robotaxi 就成了大众感知自动驾驶最直接的窗口。它是 L4 技术皇冠上的明珠，也是商业化最难啃的硬骨头。"
+crumb: "首页|../../index.html"
+crumb: "落地与产业|../../pages/scenarios.html"
+crumb: "Robotaxi 出行服务|"
+---
+
+<section class="sec scroll-target" id="what">
+        <div class="sec-head"><span class="no">01</span><h2>Robotaxi 是什么</h2></div>
+        <p>Robotaxi = Robot + Taxi：以 L4/L5 级自动驾驶系统替代人类驾驶员，向乘客提供按次计费的出行服务。与普通网约车相比，它带来三个结构性变化：</p>
+        <div class="grid g3">
+          <div class="card reveal"><h3>💺 没有司机</h3><p>最直接的差异。但注意“无人”分两档：<b>安全员在车内</b>（早期试运营）与<b>完全无安全员</b>（远程监控 + 车端兜底），后者才是商业化的关键里程碑。</p></div>
+          <div class="card reveal"><h3>🕐 7×24 可用</h3><p>车不会疲劳、不需要轮班，理论上利用率可从网约车的日均 5–8 小时提升到 15 小时以上——这是单位经济模型的核心。</p></div>
+          <div class="card reveal"><h3>🚕 无需购车</h3><p>对用户是“出行即服务”；对运营商则是“资产运营”，需要把车队管理做到极致精细化。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="biz">
+        <div class="sec-head"><span class="no">02</span><h2>商业模式：先算清“单车经济账”</h2></div>
+        <p>Robotaxi 商业化的全部秘密，是让<b>每公里总成本 &lt; 每公里收入</b>。成本项包括：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>成本项</th><th>说明</th><th>下降路径</th></tr></thead>
+            <tbody>
+              <tr><td>整车与传感器</td><td>L4 套件曾是“豪华选装”，现大幅下降</td><td>传感器国产化、规模化、平台车型定制（去掉方向盘/踏板）</td></tr>
+              <tr><td>远程介入团队</td><td>早期 1 台车配多名安全员，成本直逼司机</td><td>“一人监控多车”远程介入 + 减少介入频率（1:N，N 逐步增大）</td></tr>
+              <tr><td>能源与维保</td><td>电费/燃料、清洁、轮胎、保险</td><td>电动化 + 集中式车队保养 + 数据驱动的预测性维护</td></tr>
+              <tr><td>保险与安全准备金</td><td>无人驾驶责任险、事故准备金</td><td>随安全数据积累而定价合理化</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <section class="sec scroll-target" id="form">
+        <div class="sec-head"><span class="no">03</span><h2>一台 Robotaxi 长什么样</h2></div>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🚙 车辆平台</h3><p>两代产品并存：早期为“改装车”（在量产车上加装传感器与计算平台，保留方向盘）；新一代为“定制车”，从设计上取消方向盘与后视镜、优化座舱与车门，专为无人运营打造。</p></div>
+          <div class="card reveal"><h3>🔭 传感器套件</h3><p>典型为“瞭望塔”式车顶套件：360° 机械/半固态激光雷达 + 多目摄像头 + 毫米波雷达，互为冗余，覆盖 360° 无死角，冗余设计见 <a href="../tech/perception/fusion.html">多传感器融合</a>。</p></div>
+          <div class="card reveal"><h3>🧠 计算与软件</h3><p>数百到上千 TOPS 的车载计算平台运行感知、预测、规划、控制全栈；软件支持 OTA 持续升级，车队共享同一个“驾驶大脑”。</p></div>
+          <div class="card reveal"><h3>🛰️ 冗余底盘</h3><p>线控转向/制动双备份、双电源、独立安全监控单元，确保单点故障也能安全靠边，见 <a href="../tech/control.html">控制执行</a>。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="ops">
+        <div class="sec-head"><span class="no">04</span><h2>运营体系：Robotaxi 的另一半技术</h2></div>
+        <ol class="steps">
+          <li><h3>远程介入中心</h3><p>无安全员车内值守后，由远程监控员 1 对多车值守：平时不干预，系统“求助”时接管处理（如事故现场、施工绕行、乘客纠纷）。</p></li>
+          <li><h3>云端调度</h3><p>根据实时供需调度车辆、安排充电与维保，让车辆利用率与用户体验达到平衡。</p></li>
+          <li><h3>高精地图运营</h3><p>运营区域要维护精确地图并同步更新（施工、改道），地图团队与“开城”节奏强相关，见 <a href="../tech/mapping.html">定位与高精地图</a>。</p></li>
+          <li><h3>数据回环</h3><p>每辆车的每次介入与异常都被记录、聚类、仿真复现，变成下一次 OTA 的训练素材——车队本身就是“数据飞轮”。</p></li>
+        </ol>
+      </section>
+
+      <section class="sec scroll-target" id="progress">
+        <div class="sec-head"><span class="no">05</span><h2>全球进展：从“围栏”到“城市”</h2></div>
+        <p>Robotaxi 的推进节奏清晰可辨：先是<b>固定路线/小范围</b>免费试乘，再到<b>限定区域收费运营</b>，最后逐步<b>扩大运营区域与时段</b>：</p>
+        <ul>
+          <li><b>美国</b>：Waymo 在凤凰城、旧金山等城市开展完全无人收费运营多年，成为全球样本；部分早期参与者因成本或安全事故收缩，行业进入“剩者为王”阶段。</li>
+          <li><b>中国</b>：百度“萝卜快跑”、小马智行、文远知行、AutoX 等先后在武汉、北京亦庄、上海、广州、深圳等地拿到无人化示范应用/收费许可，Robotaxi 数量与订单量快速增长。</li>
+          <li><b>其他地区</b>：中东（阿布扎比、迪拜）、韩国、新加坡等也在引进测试与运营，中国车企与技术公司的“出海”成为新看点。</li>
+        </ul>
+
+      </section>
+
+      <section class="sec scroll-target" id="hard">
+        <div class="sec-head"><span class="no">06</span><h2>Robotaxi 的拦路虎</h2></div>
+        <div class="grid g2">
+          <div class="card reveal"><h3>🌧️ 极端天气与长尾</h3><p>暴雨、积雪、重度雾霾下系统常被迫停运或缩小区域，而人类网约车“风雨无阻”。要全面替代出租车，必须在恶劣天气下同样可靠，见 <a href="../challenges.html#longtail">长尾难题</a>。</p></div>
+          <div class="card reveal"><h3>🏛️ 监管与准入</h3><p>每座城市、每个区域都要单独申请许可，涉及安全评估、保险、事故报告与数据合规，跨城复制成本高，见 <a href="../regulation.html">法规与伦理</a>。</p></div>
+          <div class="card reveal"><h3>💬 公众信任</h3><p>一次伤亡事故的舆论冲击，可能超过一万次安全行驶积累的口碑。透明沟通与事故调查机制至关重要。</p></div>
+          <div class="card reveal"><h3>📈 盈利压力</h3><p>前期投入巨大（研发、车队、地图、运维），需要长期“烧钱”换数据；若订单密度不足或介入率居高不下，单位经济模型难以转正。</p></div>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="future">
+        <div class="sec-head"><span class="no">07</span><h2>演进方向</h2></div>
+        <ul>
+          <li><b>从“有人”到“无人”再到“去方向盘”</b>：定制车型进一步降低成本、提升乘客空间体验；</li>
+          <li><b>从“单城”到“多城复制”</b>：一套可复制的“开城工具链”（地图、审批、运维）成为核心竞争力；</li>
+          <li><b>与传统出行平台融合</b>：Robotaxi 接入主流出行 App，与网约车互补——高峰期/夜间由无人车补位，形成混合车队；</li>
+          <li><b>技术外溢</b>：Robotaxi 打磨出的系统能力向干线物流、环卫、巡逻等场景复用，摊薄研发成本。</li>
+        </ul>
+      </section>
+
+      <section class="sec scroll-target" id="unit">
+        <div class="sec-head"><span class="no">08</span><h2>单位经济模型：一辆车一天赚不赚钱</h2></div>
+        <p>Robotaxi 的商业可行性可以用一个简单的日收支模型判断。收入侧取决于“每天有效运营里程 × 每公里单价”，成本侧包含折旧、能源、运维、保险与远程支持：</p>
+        <div class="math math-left">日毛利 = 里程 × 单价 × 载客率 − 折旧 − 能源 − 运维 − 保险 − 远程支持<br>回本周期 ≈ 车辆总成本 / 日毛利</div>
+        <p>关键杠杆有三个：① <b>载客率</b>（有客里程 / 总里程），空驶越多越亏；② <b>车辆成本</b>，含传感器与计算平台，规模化后显著下降；③ <b>远程支持比</b>，一名安全员 / 远程操作员能看多少辆车，直接决定人力成本。行业共识是：当无人化率足够高、单车成本下降到一定水平，Robotaxi 才可能接近或低于网约车成本。</p>
+      </section>
