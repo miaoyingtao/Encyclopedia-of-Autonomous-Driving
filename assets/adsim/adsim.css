@@ -1,0 +1,147 @@
+/* ADSim 浏览器界面样式（配合 assets/adsim/ui.js） */
+.adsim {
+  display: block;
+  margin: 18px 0 30px;
+  font-size: 14px;
+}
+.adsim-bar,
+.adsim-layers,
+.adsim-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.adsim-btn {
+  font: inherit;
+  padding: 6px 12px;
+  color: var(--fg, #c9d1d9);
+  background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.adsim-btn:hover { border-color: var(--accent, #2f81f7); }
+.adsim-sel {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--muted, #8b949e);
+}
+.adsim-sel select {
+  font: inherit;
+  padding: 5px 8px;
+  color: var(--fg, #c9d1d9);
+  background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 6px;
+}
+.adsim-clock {
+  margin-left: auto;
+  color: var(--muted, #8b949e);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+.adsim-layers label {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px 9px;
+  color: var(--muted, #8b949e);
+  background: var(--panel, #0d1117);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.adsim-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 14px;
+  align-items: start;
+}
+.adsim-canvas {
+  display: block;
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid var(--border, #30363d);
+  border-radius: 10px;
+}
+.adsim-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.adsim-card {
+  padding: 10px 12px;
+  background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 8px;
+}
+.adsim-card h5 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--fg, #c9d1d9);
+}
+.adsim-kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 0;
+  color: var(--muted, #8b949e);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+.adsim-kv b { color: var(--fg, #c9d1d9); font-weight: 600; }
+.adsim-link { font-size: 12.5px; }
+.adsim-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(47,129,247,0.16);
+  color: #79c0ff;
+  font-size: 12px;
+}
+.adsim-foot { margin-top: 12px; }
+.adsim-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.adsim-stage {
+  padding: 5px 10px;
+  background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 6px;
+  color: var(--muted, #8b949e);
+}
+.adsim-stage b {
+  margin-left: 6px;
+  color: #79c0ff;
+  font-weight: 600;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+.adsim-arrow { color: var(--muted, #484f58); }
+.adsim-note {
+  color: var(--muted, #8b949e);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+.adsim-report {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  overflow: auto;
+  color: var(--fg, #c9d1d9);
+  background: var(--panel-2, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+@media (max-width: 900px) {
+  .adsim-wrap { grid-template-columns: minmax(0, 1fr); }
+  .adsim-clock { margin-left: 0; }
+}

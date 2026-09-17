@@ -66,9 +66,11 @@ def build_head(meta, rel_out):
            '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
            '<title>%s</title>' % esc(meta.get("title", "")),
            '<meta name="description" content="%s">' % esc(meta.get("description", "")),
-           '<link rel="stylesheet" href="%sassets/style.css">' % p,
-           '  <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">' % p,
-           '</head>']
+           '<link rel="stylesheet" href="%sassets/style.css">' % p]
+    for href in (meta.get("styles") or []):
+        out.append('<link rel="stylesheet" href="%s%s">' % (p, href))
+    out.append('  <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">' % p)
+    out.append('</head>')
     return "\n".join(out)
 
 
@@ -136,6 +138,8 @@ def build_footer(meta, rel_out):
              '<script>window.SITE_PREFIX = "%s";</script>' % p,
              '<script src="%sassets/search.js"></script>' % p,
              '  <script src="%sassets/site-update.js"></script>' % p]
+    for src in (meta.get("scripts") or []):
+        rows.append('<script src="%s%s"></script>' % (p, src))
     return "\n".join(rows)
 
 
@@ -311,6 +315,13 @@ def render_page(topic, content, page, rel_out):
                                 page.get("related_title") or "下一步怎么读"))
 
     inner = "\n".join(x for x in parts if x)
+    if meta.get("layout") == "full":
+        return "\n".join([
+            build_head(meta, rel_out), build_header(meta, rel_out), build_hero(meta, rel_out), '',
+            '<main>', '  <div class="wrap">',
+            indent(inner, 4),
+            '  </div>', '</main>', '',
+            build_footer(meta, rel_out), '</body>', '</html>', ''])
     toc_html = build_toc_from_data(page["toc"]) if page.get("toc") else build_toc(inner)[0]
 
     return "\n".join([
