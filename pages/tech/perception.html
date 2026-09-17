@@ -205,6 +205,12 @@
         <p>后果不只是"框对不上"：3D 检测框投影到图像上会明显偏移，融合时可能被判为"两个不同目标"或直接关联失败；若此时恰好有相邻车辆，就可能出现"把 A 车的速度贴到 B 车上"的误融合。<b>所以硬件触发或时间戳对齐 + 运动补偿，是融合的前置条件。</b></p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">IoU(A, B) = |A ∩ B| / |A ∪ B|　　（交并比：检测框与真值的重合程度）<br>BEV 栅格列号 i = floor((x − x_min) / r)　　（世界坐标 → 栅格索引）</div>
+        <p>量纲：x、x_min 为米（m），r 为栅格分辨率（m/格，常见 0.1–0.5 m），i 为整数列号。要点：<b>所有“坐标 ↔ 栅格”互转都应收敛到同一个函数并配单元测试</b>——这是感知代码里最常见的低级错误来源。评测指标（IoU、mAP、NDS、MOTA）的定义见 <a href="../glossary.html#metrics">指标字典</a>。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">11</span><h2>关于感知的高频疑问</h2></div>
         <div class="panel info">

@@ -155,6 +155,12 @@
         <p>若零偏更大（如 2°/s），10 秒后航向偏差可达 20°，横向误差会迅速到十几米。结论：<b>隧道/地库里的定位不能只靠惯性推算</b>，必须用视觉或点云特征持续校正，并监控协方差是否已经超出可信范围。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">ρ = c·(t_r − t_s) + c·δt_r − c·δt_s + I + T + ε　　（伪距：含钟差、电离层、对流层与多径）<br>双差 ∇Δρ：同时消去接收机钟差与大部分公共传播误差</div>
+        <p>量纲：ρ 为米（m），t 为秒（s），钟差项与 I（电离层）、T（对流层）常等效换算成米；ε 为残差。要点：<b>单点定位的瓶颈不是"信号不好"，而是公共误差无法自消</b>——差分与双差就是在消它，这也是 RTK 必须有基准站的原因。完整推导见 <a href="../tutorial/04-loc-sim-test.html#gnss">教程第 3 章 · GNSS 与 RTK</a>。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="panel info">

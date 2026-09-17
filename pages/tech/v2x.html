@@ -156,6 +156,12 @@
         <p>这些要求对应 ISO 21434（汽车网络安全）与各国 V2X 安全证书体系（美国 SCMS、欧洲 C-ITS 信任模型、中国的车联网身份认证体系）。</p>
       </section>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">T_total = T_sense + T_comm + T_compute + T_actuate　　（端到端时延预算）<br>d_extra = v · ΔT　　（每多 ΔT 时延，需要多留的安全距离）</div>
+        <p>量纲：T 为秒（s），v 为 m/s，d_extra 为米（m）。要点：<b>V2X 的作用是降低 T_sense 与扩大信息覆盖（超视距）</b>，但它无法替代车端闭环——因为 T_comm 在拥塞与盲区里不可控。这也解释了为什么 V2X 被定位为"增强"而非"前提"。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="faq">

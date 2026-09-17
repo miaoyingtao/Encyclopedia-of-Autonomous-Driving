@@ -199,6 +199,12 @@
         <div class="panel info"><span class="pt">工程现实</span><p>量产系统通常不追求“全程形式化可证明”，而是分层：核心安全规则用可验证模型（RSS / 规则层）兜底，能力上限交给学习型规划，并用仿真与影子模式持续验证两者的一致性。</p></div>
       </section>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">Frenet 坐标：(s, d) = 沿参考线的弧长 + 横向偏移<br>J = ∫ ( w_d · d² + w_j · jerk² ) dt　　（横向偏移与舒适性的折中代价）</div>
+        <p>量纲：s、d 为米（m），jerk 为 m/s³，w_d 与 w_j 为权重（无量纲）。要点：<b>Frenet 把弯道"拉直"，让规划退化成一维问题</b>；但曲率过大时坐标映射会出现奇异，必须回退到笛卡尔坐标或先平滑参考线，见 <a href="../tutorial/03-planning-control.html">教程第 2 章</a>。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">10</span><h2>关于决策规划的高频疑问</h2></div>
         <div class="panel info">

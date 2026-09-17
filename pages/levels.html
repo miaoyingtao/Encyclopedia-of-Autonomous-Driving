@@ -223,6 +223,13 @@
         <p>UN R157（ALKS）是目前最具体的 L3 法规之一，限定了车速、道路类型与接管流程；中国的 L3 试点也在逐步明确类似边界。相关安全论证见 <a href="challenges/safety.html">功能安全与 SOTIF</a>。</p>
       </section>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <p>接管需要多长的安全距离：</p>
+        <div class="math math-left">d = v · t_r + v² / (2 · a_max)<br>例：v = 20 m/s（72 km/h）、t_r = 4 s（驾驶员恢复情境意识的时间）、a_max = 6 m/s² → d ≈ 80 + 33 = <b>113 m</b></div>
+        <p>量纲：v 为 m/s，t_r 为秒（s），a_max 为 m/s²（最大减速度）。要点：<b>接管窗口越长，需要预留的距离越大</b>——这就是"L3 是否可行"的量化本质：如果系统无法在 t_r 内让分心的驾驶员重新接管，就必须自己兜底（MRM），否则安全论证不成立。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>关于分级的高频疑问</h2></div>
         <div class="panel info">

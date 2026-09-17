@@ -170,6 +170,12 @@
         <p>因此工程上必须做两件事：把轨迹按时刻切片，控制端按"将要执行的时刻"插值取目标点；再用状态外推（如 Smith 预估器）预估 150 ms 后的位姿。<b>每 50 ms 的延迟，在 20 m/s 下就对应 1 m 的位置误差</b>——这就是延迟补偿必须进控制环的原因。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">ẋ = v·cos θ，　ẏ = v·sin θ，　θ̇ = v · tan δ / L　　（运动学自行车模型）<br>J = Σ (x_k − x_ref)ᵀ Q (x_k − x_ref) + u_kᵀ R u_k　　（MPC 代价函数）</div>
+        <p>量纲：v 为 m/s，θ、δ 为弧度（rad），L 为轴距（m）；Q 为状态权重矩阵、R 为控制权重矩阵（均为正定）。要点：<b>运动学模型假设"无侧滑"，只在低速成立</b>；高速时必须换动力学模型，否则会低估失稳风险。推导与代码见 <a href="../tutorial/03-planning-control.html">教程第 2 章</a>。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="panel info">

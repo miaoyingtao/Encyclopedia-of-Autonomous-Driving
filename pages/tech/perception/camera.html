@@ -169,6 +169,13 @@
         <p>结论：双目在中近距离可用，远距离必须靠激光雷达或毫米波雷达补充——这也解释了量产方案为什么普遍做"视觉 + 雷达/激光"的组合。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <p>针孔成像与双目深度：</p>
+        <div class="math math-left">u = f · X / Z + c_x　　（像素坐标 = 焦距 × 横向距离 ÷ 深度 + 主点）<br>Z = f · B / d　　（双目深度 = 焦距 × 基线 ÷ 视差）</div>
+        <p>量纲：f、c_x、u、d 为像素（pixel），X、Z、B 为米（m）。要点：<b>深度与视差成反比，视差的 1 px 量化误差会在远处被放大成很大的深度误差</b>（误差近似与 Z² 成正比）。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="faq">

@@ -142,6 +142,12 @@
         <p>距离是按时延乘声速算出来的，所以声速估计偏低 5.4%，测出的距离也就偏低 5.4%：测 2 m 会差约 <b>11 cm</b>，测 0.5 m 会差约 2.7 cm。对泊车这类"厘米级贴脸"的应用，这个偏差必须补偿——因此探头附近通常集成温度传感器。</p>
       </div>
 
+      <div class="panel tip">
+        <span class="pt">▪ 进阶：关键公式</span>
+        <div class="math math-left">d = c(T) · t / 2，　c(T) ≈ 331.4 + 0.6 · T　　（声速随温度线性变化）</div>
+        <p>量纲：t 为声波往返时间（s），T 为摄氏温度（℃），c 为声速（m/s，20 ℃ 时约 343 m/s，常温下常见 340 m/s 的近似值）。要点：<b>距离是按"时延 × 声速"算出来的，声速估错多少，距离就错多少</b>——这就是必须做温度补偿的原因。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="faq">
