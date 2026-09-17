@@ -23,6 +23,13 @@
   cursor: pointer;
 }
 .adsim-btn:hover { border-color: var(--accent, #2f81f7); }
+.adsim-btn--run {
+  color: #04260f;
+  background: #3fb950;
+  border-color: #3fb950;
+  font-weight: 700;
+}
+.adsim-btn--run:hover { background: #56d364; border-color: #56d364; }
 .adsim-sel {
   display: inline-flex;
   gap: 6px;

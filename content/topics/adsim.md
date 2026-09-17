@@ -21,7 +21,7 @@ scripts: ["assets/adsim/core/math.js", "assets/adsim/core/world.js", "assets/ads
   <p>左边是闭环的实时画面，右边是每个模块当步的真实输出（含实测耗时）。上方按钮可以播放/暂停、单步推进、切换场景与倍速；图层开关让你只看某一层的中间结果。每个面板右下角的“深入阅读”指向对应的正本页面。</p>
 </div>
 
-<div id="adsim-root"></div>
+<div id="adsim-root" data-scene="cut-in"></div>
 
 <div class="panel tip">
   <span class="pt">算法是真的，输入是仿真的</span>

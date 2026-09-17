@@ -34,6 +34,7 @@
     let scene = A.scenarios.get(options.scene || sceneIds[0]);
     let sim = A.Sim.createSimulation(scene, { dt: 0.05, seed: 20260917 });
     let playing = false, speed = options.speed, acc = 0, lastTs = 0;
+    let started = false;
     let frame = null, selfTestResult = null;
     const layers = {};
     LAYERS.forEach(function (l) { layers[l.id] = l.on; });
@@ -45,7 +46,7 @@
     const bar = document.createElement("div");
     bar.className = "adsim-bar";
     bar.innerHTML =
-      '<button class="adsim-btn" data-act="play">▶ 播放</button>' +
+      '<button class="adsim-btn adsim-btn--run" data-act="play">▶ 开始运行</button>' +
       '<button class="adsim-btn" data-act="step">⏭ 单步</button>' +
       '<button class="adsim-btn" data-act="reset">↺ 重置</button>' +
       '<label class="adsim-sel">场景<select data-act="scene">' +
@@ -227,6 +228,20 @@
       }
       // 自车（最后绘制）
       drawBox(ego, ego.x, ego.y, ego.length, ego.width, ego.yaw, COLORS.ego, "#f0f6fc");
+      // 未启动时的引导遮罩
+      if (!started) {
+        ctx.fillStyle = "rgba(13,17,23,0.74)";
+        ctx.fillRect(0, view.h * 0.5 - 48, view.w, 96);
+        ctx.textAlign = "center";
+        ctx.fillStyle = COLORS.planBest;
+        ctx.font = "600 18px ui-sans-serif, system-ui, sans-serif";
+        ctx.fillText("点击左上角「▶ 开始运行」启动闭环仿真", view.w / 2, view.h * 0.5 - 8);
+        ctx.fillStyle = COLORS.text;
+        ctx.font = "13px ui-sans-serif, system-ui, sans-serif";
+        ctx.fillText("感知 → 预测 → 决策 → 规划 → 控制，每步 20 ms；可暂停、可单步、可逐层查看中间结果",
+          view.w / 2, view.h * 0.5 + 22);
+        ctx.textAlign = "left";
+      }
       // 画布上的关键读数
       if (frame) {
         ctx.fillStyle = COLORS.text;
@@ -301,22 +316,26 @@
     }
     /* ---------- 交互与主循环 ---------- */
     const DT = 0.05;
-    let lastTs = 0, frameCount = 0, reportText = "";
+    let frameCount = 0, reportText = "";
     function syncBar() {
-      bar.querySelector('[data-act="play"]').textContent = playing ? "⏸ 暂停" : "▶ 播放";
+      bar.querySelector('[data-act="play"]').textContent = playing
+        ? "⏸ 暂停" : (started ? "▶ 继续运行" : "▶ 开始运行");
       bar.querySelector('[data-out="clock"]').textContent =
         "t = " + (frame ? frame.time.toFixed(2) : "0.00") + " s　" + scene.title;
     }
     function setScene(id) {
       scene = A.scenarios.get(id);
       sim = A.Sim.createSimulation(scene, { dt: DT, seed: 20260917 });
-      playing = false; acc = 0; frame = sim.step();
+      playing = false; started = false; acc = 0; frame = sim.step();
       bar.querySelector('[data-act="scene"]').value = scene.id;
       syncBar(); updateSide(frame);
     }
-    function stepOnce() { frame = sim.step(); syncBar(); updateSide(frame); }
-    function reset() { sim.reset(); frame = sim.step(); acc = 0; syncBar(); updateSide(frame); }
-    function togglePlay() { playing = !playing; syncBar(); }
+    function stepOnce() { started = true; frame = sim.step(); syncBar(); updateSide(frame); }
+    function reset() {
+      sim.reset(); frame = sim.step(); acc = 0; started = false; playing = false;
+      syncBar(); updateSide(frame);
+    }
+    function togglePlay() { playing = !playing; if (playing) started = true; syncBar(); }
 
     function runSelfTest() {
       const el = rootEl.querySelector('[data-out="selftest"]');
@@ -373,7 +392,7 @@
     panel.addEventListener("click", onControlClick);
     bar.addEventListener("change", onControlChange);
     layerBox.addEventListener("change", onControlChange);
-    root.addEventListener("resize", fitCanvas);
+    if (root.addEventListener) root.addEventListener("resize", fitCanvas);
 
     function loop(ts) {
       const dts = lastTs ? Math.min(0.1, (ts - lastTs) / 1000) : 0;
@@ -410,4 +429,16 @@
   }
 
   A.UI = { mount: mount, LAYERS: LAYERS, COLORS: COLORS, fmt: fmt };
+
+  /* 页面存在 #adsim-root 时自动启动（脚本位于页尾，DOM 通常已就绪） */
+  if (typeof document !== "undefined") {
+    const boot = function () {
+      const el = document.getElementById("adsim-root");
+      if (el && !el.adsimApi) {
+        A.UI.mount(el, { scene: (el.getAttribute && el.getAttribute("data-scene")) || null });
+      }
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+    else boot();
+  }
 }(typeof window !== "undefined" ? window : globalThis));
