@@ -164,6 +164,12 @@
         <p>标定通常在“仿真回归 → 封闭场地（ISO 3888 双移线、ISO 4138 稳态回转）→ 公开道路”三级完成，并用统一的数据采集与指标计算脚本保证可复现。</p>
       </section>
 
+      <div class="panel warn">
+        <span class="pt">算一算：150 ms 的执行延迟意味着什么</span>
+        <p>示意性估算：车速 72 km/h（20 m/s）、执行器延迟 150 ms → <b>指令生效时车辆已前进 3 m</b>。如果控制器按"当前位置"计算转向，就会形成滞后转弯（高速下表现为"画龙"）。</p>
+        <p>因此工程上必须做两件事：把轨迹按时刻切片，控制端按"将要执行的时刻"插值取目标点；再用状态外推（如 Smith 预估器）预估 150 ms 后的位姿。<b>每 50 ms 的延迟，在 20 m/s 下就对应 1 m 的位置误差</b>——这就是延迟补偿必须进控制环的原因。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="panel info">

@@ -90,6 +90,41 @@
           </table>
         </div>
       </section>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);overflow-x:auto;margin:18px 0">
+        <svg viewBox="0 0 920 250" role="img" aria-label="四种传感器的强项与短板，以及它们如何形成互补与冗余" style="min-width:760px;width:100%;height:auto;font-family:inherit">
+          <g text-anchor="middle">
+            <rect x="20" y="26" width="190" height="84" rx="12" fill="#e0f2fe" stroke="#0ea5e9"/>
+            <text x="115" y="52" font-size="14" font-weight="700" fill="#075985">摄像头</text>
+            <text x="115" y="74" font-size="11.5" fill="#0c4a6e">强项：语义（颜色 / 文字）</text>
+            <text x="115" y="92" font-size="11.5" fill="#b45309">短板：眩光、夜间</text>
+
+            <rect x="250" y="26" width="190" height="84" rx="12" fill="#dcfce7" stroke="#16a34a"/>
+            <text x="345" y="52" font-size="14" font-weight="700" fill="#14532d">毫米波雷达</text>
+            <text x="345" y="74" font-size="11.5" fill="#166534">强项：测速、全天候</text>
+            <text x="345" y="92" font-size="11.5" fill="#b45309">短板：角分辨率低</text>
+
+            <rect x="480" y="26" width="190" height="84" rx="12" fill="#ede9fe" stroke="#7c3aed"/>
+            <text x="575" y="52" font-size="14" font-weight="700" fill="#4c1d95">激光雷达</text>
+            <text x="575" y="74" font-size="11.5" fill="#5b21b6">强项：高精度三维几何</text>
+            <text x="575" y="92" font-size="11.5" fill="#b45309">短板：雨雾、脏污遮挡</text>
+
+            <rect x="710" y="26" width="190" height="84" rx="12" fill="#fef3c7" stroke="#d97706"/>
+            <text x="805" y="52" font-size="14" font-weight="700" fill="#78350f">超声波</text>
+            <text x="805" y="74" font-size="11.5" fill="#92400e">强项：贴身的最后几米</text>
+            <text x="805" y="92" font-size="11.5" fill="#b45309">短板：量程极短（0.15–5 m）</text>
+
+            <line x1="115" y1="112" x2="350" y2="176" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="345" y1="112" x2="420" y2="176" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="575" y1="112" x2="500" y2="176" stroke="#94a3b8" stroke-width="1.6"/>
+            <line x1="805" y1="112" x2="570" y2="176" stroke="#94a3b8" stroke-width="1.6"/>
+
+            <rect x="300" y="180" width="320" height="52" rx="12" fill="#f1f5f9" stroke="#475569"/>
+            <text x="460" y="202" font-size="13" font-weight="700" fill="#0f172a">融合与冗余：不是叠加，而是互相补盲</text>
+            <text x="460" y="221" font-size="11.5" fill="#334155">任意单路退化时，其余通道仍能支撑降级运行</text>
+          </g>
+        </svg>
+      </div>
+
       <section class="sec scroll-target" id="fatal">
         <div class="sec-head"><span class="no">03</span><h2>每种传感器的“一票否决”</h2></div>
         <p>所谓"冗余"，本质是<b>用一个传感器的长处去补另一个的致命短板</b>。所以选型时最该问的不是"它有多强"，而是"它什么时候会彻底失效，那时谁来接"。</p>

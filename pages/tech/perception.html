@@ -199,6 +199,12 @@
         <p>更重要的是<b>分层评测</b>：公开数据集看通用能力，自建 ODD 场景库看“关键场景召回”，实车影子模式看“与人类驾驶的一致性”。离线指标高但长尾漏检，是量产中真实存在的陷阱，详见 <a href="../challenges/testing.html">测试与评价</a>。</p>
       </section>
 
+      <div class="panel warn">
+        <span class="pt">算一算：时间不同步的代价</span>
+        <p>示意性估算：相机帧与激光雷达帧的时间戳偏差 <b>100 ms</b>，车速 72 km/h（20 m/s）→ 同一目标在两种数据里的位置会相差约 <b>2 m</b>。</p>
+        <p>后果不只是"框对不上"：3D 检测框投影到图像上会明显偏移，融合时可能被判为"两个不同目标"或直接关联失败；若此时恰好有相邻车辆，就可能出现"把 A 车的速度贴到 B 车上"的误融合。<b>所以硬件触发或时间戳对齐 + 运动补偿，是融合的前置条件。</b></p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">11</span><h2>关于感知的高频疑问</h2></div>
         <div class="panel info">

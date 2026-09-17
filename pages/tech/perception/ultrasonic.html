@@ -136,6 +136,12 @@
         <div class="panel info"><span class="pt">深入阅读</span><p>声速补偿与回波检测（阈值法、包络峰值、相关检测）见 <a href="../../tutorial/01-math-sensors.html#sensor">第 0 章 · 传感器几何建模</a>。</p></div>
       </section>
 
+      <div class="panel warn">
+        <span class="pt">算一算：不做温度补偿会差多少</span>
+        <p>声速随温度变化：c ≈ 331.4 + 0.6·T m/s。0 ℃ 时约 <b>331 m/s</b>，30 ℃ 时约 <b>349 m/s</b>，两者相差约 <b>5.4%</b>。</p>
+        <p>距离是按时延乘声速算出来的，所以声速估计偏低 5.4%，测出的距离也就偏低 5.4%：测 2 m 会差约 <b>11 cm</b>，测 0.5 m 会差约 2.7 cm。对泊车这类"厘米级贴脸"的应用，这个偏差必须补偿——因此探头附近通常集成温度传感器。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">08</span><h2>常见疑问</h2></div>
         <div class="faq">

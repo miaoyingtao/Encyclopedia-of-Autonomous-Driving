@@ -92,6 +92,35 @@
         <p>有趣的是：主流技术正从“后融合”走向“前融合/特征融合”——因为深度学习让“在更早阶段合并数据”变得可行，BEV 鸟瞰视角就是前融合的典型载体。</p>
       </section>
 
+      <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);overflow-x:auto;margin:18px 0">
+        <svg viewBox="0 0 920 240" role="img" aria-label="三路传感器帧率不同，必须对齐到统一时基" style="min-width:760px;width:100%;height:auto;font-family:inherit">
+          <g font-size="12">
+            <text x="20" y="54" fill="#0f172a" font-weight="700">相机 30 fps</text>
+            <text x="20" y="104" fill="#0f172a" font-weight="700">毫米波 20 fps</text>
+            <text x="20" y="154" fill="#0f172a" font-weight="700">激光雷达 10 fps</text>
+
+            <line x1="170" y1="50" x2="870" y2="50" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="170" y1="100" x2="870" y2="100" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="170" y1="150" x2="870" y2="150" stroke="#cbd5e1" stroke-width="1.5"/>
+
+            <circle cx="170" cy="50" r="5" fill="#0ea5e9"/><circle cx="277" cy="50" r="5" fill="#0ea5e9"/><circle cx="384" cy="50" r="5" fill="#0ea5e9"/><circle cx="491" cy="50" r="5" fill="#0ea5e9"/><circle cx="598" cy="50" r="5" fill="#0ea5e9"/><circle cx="705" cy="50" r="5" fill="#0ea5e9"/><circle cx="812" cy="50" r="5" fill="#0ea5e9"/>
+
+            <circle cx="170" cy="100" r="5" fill="#16a34a"/><circle cx="332" cy="100" r="5" fill="#16a34a"/><circle cx="494" cy="100" r="5" fill="#16a34a"/><circle cx="656" cy="100" r="5" fill="#16a34a"/><circle cx="818" cy="100" r="5" fill="#16a34a"/>
+
+            <circle cx="170" cy="150" r="5" fill="#7c3aed"/><circle cx="495" cy="150" r="5" fill="#7c3aed"/><circle cx="820" cy="150" r="5" fill="#7c3aed"/>
+
+            <text x="170" y="176" fill="#64748b" text-anchor="middle">0 ms</text>
+            <text x="495" y="176" fill="#64748b" text-anchor="middle">100 ms</text>
+            <text x="820" y="176" fill="#64748b" text-anchor="middle">200 ms</text>
+
+            <line x1="494" y1="34" x2="494" y2="164" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <text x="494" y="24" fill="#b91c1c" font-weight="700" text-anchor="middle">统一时基 t_k（三路都要插值到这个时刻）</text>
+
+            <text x="20" y="212" fill="#334155" font-size="12.5">未对齐的代价：100 ms 的时间偏差，在 72 km/h 下相当于约 2 m 的空间错位——同一目标会在不同传感器里"落在两个位置"。</text>
+          </g>
+        </svg>
+      </div>
+
       <section class="sec scroll-target" id="steps">
         <div class="sec-head"><span class="no">03</span><h2>融合的工程四步走</h2></div>
         <ol class="steps">
@@ -149,6 +178,12 @@
         <p>多传感器融合必须回答“哪个观测对应哪条航迹”，这就是数据关联：目标稀疏时用最近邻，工程主流是全局最近邻（匈牙利算法），密集模糊场景可用 JPDA 或多假设跟踪（MHT）。关联之外还要做航迹管理，避免虚假目标与 ID 闪烁。</p>
         <div class="panel info"><span class="pt">深入阅读</span><p>数据关联算法与多目标跟踪的完整流程见 <a href="../../tutorial/02-perception.html#track">第 1 章 · 多目标跟踪</a>。</p></div>
       </section>
+
+      <div class="panel warn">
+        <span class="pt">算一算：多一路传感器到底提升多少可用性</span>
+        <p>示意性估算：假设某类恶劣天气下单路传感器的有效探测率降到 <b>60%</b>（即 40% 时间受限）。若两路在统计上独立，则"至少一路可用"的概率为 1 − 0.4² = <b>84%</b>；三路为 1 − 0.4³ = <b>93.6%</b>。</p>
+        <p>但这里有个关键前提：<b>两路不能共因失效</b>。大雨会让摄像头与激光雷达同时退化——此时它们看起来是"两路冗余"，实际却是"一起失效"。所以设计冗余时，要先问"它们在哪些场景下会一起变差"。</p>
+      </div>
 
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>

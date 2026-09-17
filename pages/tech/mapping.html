@@ -149,6 +149,12 @@
         <div class="panel info"><span class="pt">深入阅读</span><p>ICP / NDT、激光 SLAM 与位姿图优化的实现见 <a href="../tutorial/04-loc-sim-test.html#map">第 3 章 · 高精地图与点云匹配</a>。</p></div>
       </section>
 
+      <div class="panel warn">
+        <span class="pt">算一算：RTK 失锁后能撑多久</span>
+        <p>示意性估算：假设航向零偏 0.5°/s（典型 MEMS 陀螺量级），车速 15 m/s。失锁 10 秒后航向偏差约 <b>5°</b>，按这段时间行进约 150 m 估算，<b>横向漂移可达数米</b>——足以跨进相邻车道。</p>
+        <p>若零偏更大（如 2°/s），10 秒后航向偏差可达 20°，横向误差会迅速到十几米。结论：<b>隧道/地库里的定位不能只靠惯性推算</b>，必须用视觉或点云特征持续校正，并监控协方差是否已经超出可信范围。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
         <div class="panel info">

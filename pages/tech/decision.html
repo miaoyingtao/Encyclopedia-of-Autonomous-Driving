@@ -73,6 +73,26 @@
           <a href="../frontier.html">大模型与智驾前沿</a> 去跟踪。</p>
       </section>
 
+      <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);overflow-x:auto;margin:18px 0">
+        <svg viewBox="0 0 920 220" role="img" aria-label="决策规划的三层结构：时间尺度越往下越短、颗粒度越细" style="min-width:760px;width:100%;height:auto;font-family:inherit">
+          <g font-size="12.5">
+            <text x="20" y="48" fill="#0f172a" font-weight="700">全局路径规划</text>
+            <rect x="150" y="30" width="700" height="26" rx="8" fill="#dbeafe" stroke="#2563eb"/>
+            <text x="500" y="48" fill="#1e40af" text-anchor="middle">秒 – 分钟级：从 A 到 B 走哪条路（路网搜索、车道级拓扑）</text>
+
+            <text x="20" y="108" fill="#0f172a" font-weight="700">行为决策</text>
+            <rect x="150" y="90" width="380" height="26" rx="8" fill="#dcfce7" stroke="#16a34a"/>
+            <text x="340" y="108" fill="#14532d" text-anchor="middle">百毫秒级：跟车 / 变道 / 让行 / 等待</text>
+
+            <text x="20" y="168" fill="#0f172a" font-weight="700">运动规划</text>
+            <rect x="150" y="150" width="220" height="26" rx="8" fill="#ede9fe" stroke="#7c3aed"/>
+            <text x="260" y="168" fill="#4c1d95" text-anchor="middle">10–100 ms：生成可行轨迹</text>
+
+            <text x="150" y="204" fill="#334155">越往下：刷新频率越高、颗粒度越细、对时延越敏感。三层通过"途经点 → 驾驶模式 → 轨迹"衔接。</text>
+          </g>
+        </svg>
+      </div>
+
       <section class="sec scroll-target" id="predict">
         <div class="sec-head"><span class="no">02</span><h2>预测：最难的是“别人会怎么做”</h2></div>
         <p>自动驾驶的行车安全不只取决于自己开得好，还取决于能否预判他人。预测模块吃进感知输出，吐出每个交通参与者未来 1–5 秒的候选轨迹与概率：</p>

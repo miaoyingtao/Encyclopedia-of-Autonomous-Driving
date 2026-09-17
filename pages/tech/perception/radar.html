@@ -162,6 +162,13 @@
         <p>这也是“幽灵刹车”问题的根源之一：雷达把金属护栏、井盖或干扰回波误判为前方障碍，AEB 误触发。工程上通过提高角度分辨率、多帧一致性校验与融合来降低误报。</p>
       </section>
 
+      <div class="panel warn">
+        <span class="pt">算一算：雷达的“速度模糊”在哪出现</span>
+        <p>FMCW 雷达的最大不模糊速度约为 v_max = λ / (4·T)，λ 为波长、T 为单个 chirp 的时长。取车载常见值 λ = 4 mm（76–81 GHz）、T = 50 μs：</p>
+        <p>v_max = 4×10⁻³ / (4 × 50×10⁻⁶) = <b>20 m/s ≈ 72 km/h</b>。</p>
+        <p>也就是说，速度超过约 72 km/h（相对速度）时读数会"折叠"到错误值上。工程解法是用多种 chirp 斜率做多组测量，通过一致性比对解开模糊——这也是不同厂商波形设计差异的来源。</p>
+      </div>
+
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">10</span><h2>常见疑问</h2></div>
         <div class="faq">
