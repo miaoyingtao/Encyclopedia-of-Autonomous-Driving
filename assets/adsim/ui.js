@@ -468,3 +468,27 @@
     fail('MOUNT ERROR: ' + (err ? err.message : '') + ' ; ' + (err ? err.stack : '') + ' ; keys: ' + keys.join(','));  
   }  
 }());  
+  
+/* --- adsim namespace repair + remount (ASCII only) --- */  
+(function () {  
+  if (typeof document === 'undefined') return;  
+  var A = window.ADSim;  
+  if (!A) return;  
+  if (!A.UI) return;  
+  function pick(src, ks) { var o = {}; for (var i in ks) { o[ks[i]] = src[ks[i]]; } return o; }  
+  if (!A.World) A.World = pick(A, ['DEFAULT_VEHICLE','createVehicle','createActor','createWorld','idmAccel']);  
+  if (!A.Perception) A.Perception = pick(A, ['SCAN_DEFAULT','TRACK_DEFAULT','scan','cluster','toDetections','pcaYaw','createTracker','_mat']);  
+  if (!A.Prediction) A.Prediction = pick(A, ['PREDICT_DEFAULT','rollout','laneChangeRollout','trackPose','modeWeights','predict','toFootprints']);  
+  if (!A.Decision) A.Decision = pick(A, ['STATES','DECISION_DEFAULT','computeTTC','selectLead','checkLaneChange','createDecider']);  
+  if (!A.Planning) A.Planning = pick(A, ['PLAN_DEFAULT','generateCandidates','poseAt','checkCollision','cost','plan']);  
+  if (!A.Control) A.Control = pick(A, ['CONTROL_DEFAULT','purePursuit','speedController','createController']);  
+  if (!A.Metrics) A.Metrics = pick(A, ['createMetrics','rectDistance','COLLISION_DEPTH']);  
+  if (!A.Sim) A.Sim = pick(A, ['SIM_DEFAULT','createSimulation','_now']);  
+  if (!A.scenarios) A.scenarios = pick(A, ['straightRoad','LIDAR','list','get','ids','build']);  
+  var el = document.getElementById('adsim-root');  
+  if (!el) return;  
+  el.innerHTML = '';  
+  el.adsimApi = null;  
+  try { A.UI.mount(el, { scene: el.getAttribute('data-scene') }); }  
+  catch (err) { el.textContent = 'MOUNT ERROR: ' + (err ? err.message : ''); }  
+}());  
