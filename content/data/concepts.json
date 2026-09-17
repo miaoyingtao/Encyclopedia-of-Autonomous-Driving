@@ -116,6 +116,84 @@
       "prereq": ["odd"],
       "extends": ["unit-economics"],
       "contrasts": []
+    },
+    "camera-depth": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["camera-hdr-isp"],
+      "contrasts": []
+    },
+    "camera-hdr-isp": {
+      "group": "perception",
+      "prereq": ["camera-depth"],
+      "extends": [],
+      "contrasts": []
+    },
+    "lidar-tof": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["lidar-wavelength", "lidar-compensation"],
+      "contrasts": []
+    },
+    "lidar-wavelength": {
+      "group": "perception",
+      "prereq": ["lidar-tof"],
+      "extends": [],
+      "contrasts": []
+    },
+    "lidar-compensation": {
+      "group": "perception",
+      "prereq": ["lidar-tof"],
+      "extends": ["calibration"],
+      "contrasts": []
+    },
+    "radar-fmcw": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["radar-ambiguity", "radar-ghost-brake"],
+      "contrasts": []
+    },
+    "radar-ambiguity": {
+      "group": "perception",
+      "prereq": ["radar-fmcw"],
+      "extends": [],
+      "contrasts": []
+    },
+    "radar-ghost-brake": {
+      "group": "perception",
+      "prereq": ["radar-fmcw"],
+      "extends": ["recall-first"],
+      "contrasts": []
+    },
+    "ultrasonic-physics": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["ultrasonic-temperature"],
+      "contrasts": []
+    },
+    "ultrasonic-temperature": {
+      "group": "perception",
+      "prereq": ["ultrasonic-physics"],
+      "extends": [],
+      "contrasts": []
+    },
+    "sensor-fusion": {
+      "group": "perception",
+      "prereq": ["time-alignment", "calibration"],
+      "extends": ["data-association"],
+      "contrasts": []
+    },
+    "data-association": {
+      "group": "perception",
+      "prereq": ["sensor-fusion"],
+      "extends": [],
+      "contrasts": []
+    },
+    "recall-first": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["sensor-fusion"],
+      "contrasts": []
     }
   }
 }
