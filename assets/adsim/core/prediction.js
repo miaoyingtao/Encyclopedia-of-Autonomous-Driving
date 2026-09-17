@@ -72,19 +72,37 @@
     };
   }
 
-  /** 行为假设权重（越符合当前运动学证据的假设权重越高） */
+  /** 最近的参考线车道中心（Frenet 横向坐标 d） */
+  function nearestLaneCenter(road, d) {
+    if (!road || !road.laneCenters || !road.laneCenters.length) return d;
+    let best = road.laneCenters[0], bestDiff = Math.abs(best - d);
+    for (let i = 1; i < road.laneCenters.length; i++) {
+      const diff = Math.abs(road.laneCenters[i] - d);
+      if (diff < bestDiff) { bestDiff = diff; best = road.laneCenters[i]; }
+    }
+    return best;
+  }
+
+  /** 行为假设权重（越符合当前运动学证据的假设权重越高）
+   *  修复：原先读的 tr.laneCenter 从未被赋值，导致 lateralOffset ≡ 0、
+   *  变道模态永不触发；现在按参考线车道中心就近计算，并加入横向速度证据。 */
   function modeWeights(tr, road) {
     const v = Math.hypot(tr.vx, tr.vy);
-    const proj = road ? M.projectOnPath({ x: tr.x, y: tr.y }, road.ref) : { d: 0 };
-    const lateralOffset = proj.d - (tr.laneCenter !== undefined ? tr.laneCenter : proj.d);
-    const movingTowardSide = Math.abs(lateralOffset) > 0.45;
+    const proj = road ? M.projectOnPath({ x: tr.x, y: tr.y }, road.ref) : { d: 0, tangent: { x: 1, y: 0 } };
+    const laneCenterD = (tr.laneCenter !== undefined) ? tr.laneCenter : nearestLaneCenter(road, proj.d);
+    const lateralOffset = proj.d - laneCenterD;
+    // 横向速度（相对参考线法向）：正在向侧向漂移 = 变道证据
+    const tan = proj.tangent || { x: 1, y: 0 };
+    const vLong = tr.vx * tan.x + tr.vy * tan.y;
+    const vLat = -tr.vx * tan.y + tr.vy * tan.x;
+    const drifting = Math.abs(vLat) > 0.25 && Math.abs(vLat) > Math.abs(vLong) * 0.4;
     const fastEnough = v > 3.0;
     const w = { keep: 1.0, decel: v > 5 ? 0.35 : 0.15, laneChange: 0 };
-    if (movingTowardSide && fastEnough) w.laneChange = 0.5;
+    if ((Math.abs(lateralOffset) > 0.45 || drifting) && fastEnough) w.laneChange = 0.5;
     const sum = w.keep + w.decel + w.laneChange;
     return {
       keep: w.keep / sum, decel: w.decel / sum, laneChange: w.laneChange / sum,
-      lateralOffset: lateralOffset
+      lateralOffset: lateralOffset, lateralSpeed: vLat
     };
   }
   /** 多模态预测：返回 [{trackId, modes:[{name, prob, traj}], primary, sigma}] */

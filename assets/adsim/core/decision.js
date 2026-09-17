@@ -179,8 +179,8 @@
         // ③ 变道 / 跟车 / 巡航判定（仅在未被强制状态占用时执行）
         if (!forced) {
           const slowLead = lead && (lead.v < ego.v - c.laneChangeSpeedGain || lead.v < 0.5);
-          // 前方是静止障碍（围挡/锥桶）时不受“期望间距”限制：早变道，别等到停下
-          const staticBlock = lead && lead.v < 0.5 && lead.ds < 60;
+          // 前方是静止障碍（围挡/锥桶）时不受“期望间距”限制：提前变道，留足横向移动时间
+          const staticBlock = lead && lead.v < 0.5 && lead.ds < 110;
           const blocked = lead && (gap < Math.min(desiredGap, 30) || staticBlock);
           let candidate = -1;
           if (c.allowLaneChange !== false && slowLead && blocked) {

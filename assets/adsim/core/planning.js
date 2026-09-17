@@ -18,14 +18,14 @@
     lateralOffsets: [-1.75, -0.875, 0, 0.875, 1.75],  // 相对“目标车道中心”的横向偏移（m）
     speedOffsets: [-3.0, -1.5, 0, 1.5],           // 相对决策目标速度的偏移（m/s）
     egoRadiusMargin: 0.25, // 自车碰撞圆的额外膨胀（m）
-    clearanceWarn: 1.2,    // 最小间隙告警阈值（m）
+    clearanceWarn: 0.5,    // 最小间隙告警阈值（m）：越小则越少为“避险”而牺牲车道一致性
     lateralTime: 2.0,      // 横向到达目标车道所需时间（s）
     weights: {
       safety: 12.0,        // 安全（间隙越小惩罚越大；侵入即重罚）
-      lateral: 0.6,        // 横向偏移（舒适/贴线）
+      lateral: 0.25,       // 横向加速度（舒适；权重过大将压过决策的变道意图）
       jerk: 0.4,           // 纵向冲击（舒适）
       efficiency: 1.0,     // 与目标速度的偏差
-      laneBias: 0.9,       // 偏离决策目标车道的惩罚
+      laneBias: 2.5,       // 偏离决策目标车道的惩罚（要足够强，否则变道会“爬行”）
       boundary: 8.0        // 越过道路边界
     }
   };
@@ -36,6 +36,7 @@
     const road = ctx.road, ego = ctx.ego;
     const proj = M.projectOnPath({ x: ego.x, y: ego.y }, road.ref);
     const s0 = proj.s, d0 = proj.d;
+    const d0v = ctx.lateralSpeed || 0;   // 当前横向速度：否则每步都从 0 重新起步，变道会“爬行”
     const v0 = ego.v, a0 = ego.a || 0;
     const T = c.horizon;
     const steps = Math.round(T / c.dt);
@@ -52,7 +53,7 @@
         // 横向到达时间短于纵向时域，避免滚动重规划导致的横向收敛过慢
         const dTarget = laneCenterD + c.lateralOffsets[li];
         const Td = Math.min(T, c.lateralTime || 2.0);
-        const dPoly = M.quintic(d0, 0, 0, dTarget, 0, 0, Td);
+        const dPoly = M.quintic(d0, d0v, 0, dTarget, 0, 0, Td);
 
         const traj = [];
         for (let k = 0; k <= steps; k++) {
@@ -121,8 +122,12 @@
     let aLatMax = 0, jerkSum = 0, prevA = null, vDevSum = 0;
     for (let i = 0; i < tr.length; i++) {
       const v = tr[i].v;
-      const curv = Math.abs(M.polyEval(M.polyDeriv2([tr[i].d, 0, 0]), 0));   // 近似
-      const aLat = v * v * 0.02;                                            // 横向加速度的温和近似
+      // 横向加速度 a_lat ≈ d²d/dt²（中心差分）：与横向偏移真正相关，
+      // 保持车道与变道 3.5 m 会得到不同的代价（旧实现是常数近似，形同虚设）
+      let aLat = 0;
+      if (i > 0 && i + 1 < tr.length) {
+        aLat = Math.abs(tr[i + 1].d - 2 * tr[i].d + tr[i - 1].d) / (c.dt * c.dt);
+      }
       if (aLat > aLatMax) aLatMax = aLat;
       if (prevA !== null) jerkSum += Math.abs(tr[i].a - prevA) / c.dt;
       prevA = tr[i].a;

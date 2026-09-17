@@ -84,9 +84,14 @@
 
       // ⑤ 规划：Frenet 采样 + 碰撞检查 + 代价评估
       const t3 = now();
+      // 当前横向速度（相对参考线）：供规划作为横向轨迹的初速度，避免变道爬行
+      const egoProj = M.projectOnPath({ x: egoEstimate.x, y: egoEstimate.y }, world.road.ref);
+      const egoTanYaw = Math.atan2(egoProj.tangent.y, egoProj.tangent.x);
+      const egoLateralSpeed = egoEstimate.v * Math.sin(M.angleDiff(egoEstimate.yaw, egoTanYaw));
       const plan = A.Planning.plan({
         ego: { x: egoEstimate.x, y: egoEstimate.y, yaw: egoEstimate.yaw, v: egoEstimate.v, a: egoEstimate.a, width: world.ego.width },
         road: world.road, targetSpeed: decision.targetSpeed, targetLane: decision.targetLane,
+        lateralSpeed: egoLateralSpeed,
         footprints: footprints
       }, scene.planning || {});
       const tPlanning = now() - t3;

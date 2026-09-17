@@ -58,6 +58,11 @@
       [0.5, 1, 2, 4].map(function (s) {
         return '<option value="' + s + '"' + (s === 1 ? " selected" : "") + '>' + s + "×</option>";
       }).join("") + '</select></label>' +
+      '<label class="adsim-sel">缩放<select data-act="zoom">' +
+      [3.5, 5, 6.5, 9, 13].map(function (z) {
+        return '<option value="' + z + '"' + (z === options.pxPerM ? " selected" : "") + '>' +
+          z + ' px/m</option>';
+      }).join("") + '</select></label>' +
       '<span class="adsim-clock" data-out="clock">t = 0.00 s</span>';
 
     const layerBox = document.createElement("div");
@@ -137,16 +142,51 @@
     function drawRoad(ego) {
       const road = sim.world.road;
       const halfW = road.laneWidth * road.laneCenters.length;
-      pathPoly([{ x: ego.x - 45, y: 0 }, { x: ego.x + 130, y: 0 },
-                { x: ego.x + 130, y: halfW }, { x: ego.x - 45, y: halfW }], ego, true);
+      const ref = road.ref;
+      const proj = M.projectOnPath({ x: ego.x, y: ego.y }, ref);
+      // 只绘制自车附近的参考线段（ref 已按约 2 m 均匀采样）
+      const i0 = Math.max(0, proj.idx - 30);
+      const i1 = Math.min(ref.length - 1, proj.idx + 70);
+
+      // 路面带：右边缘（d=0）正向 → 左边缘（d=halfW）反向
+      ctx.beginPath();
+      for (let i = i0; i <= i1; i++) {
+        const q = toScreen(ref[i], ego);
+        if (i === i0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+      }
+      for (let i = i1; i >= i0; i--) {
+        const p = ref[i];
+        const nx = -Math.sin(p.yaw === undefined ? 0 : segYaw(ref, i)), ny = Math.cos(segYaw(ref, i));
+        const q = toScreen({ x: p.x + nx * halfW, y: p.y + ny * halfW }, ego);
+        ctx.lineTo(q.x, q.y);
+      }
+      ctx.closePath();
       ctx.fillStyle = COLORS.road; ctx.fill();
       ctx.strokeStyle = COLORS.edge; ctx.lineWidth = 1.5; ctx.stroke();
-      for (let i = 1; i < road.laneCenters.length; i++) {
-        const d = road.laneWidth * i;
-        pathPoly([{ x: ego.x - 45, y: d }, { x: ego.x + 130, y: d }], ego, false);
-        ctx.strokeStyle = COLORS.laneLine; ctx.lineWidth = 1.4;
-        ctx.setLineDash([9, 7]); ctx.stroke(); ctx.setLineDash([]);
+
+      // 车道分隔线（沿参考线法向偏移，虚线）
+      ctx.setLineDash([9, 7]);
+      ctx.strokeStyle = COLORS.laneLine; ctx.lineWidth = 1.4;
+      for (let k = 1; k < road.laneCenters.length; k++) {
+        const d = road.laneWidth * k;
+        ctx.beginPath();
+        for (let i = i0; i <= i1; i++) {
+          const p = ref[i];
+          const yaw = segYaw(ref, i);
+          const nx = -Math.sin(yaw), ny = Math.cos(yaw);
+          const q = toScreen({ x: p.x + nx * d, y: p.y + ny * d }, ego);
+          if (i === i0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+        }
+        ctx.stroke();
       }
+      ctx.setLineDash([]);
+    }
+    /** 参考线第 i 点处的切线方向（用相邻点差分，折线也适用） */
+    function segYaw(ref, i) {
+      const a = ref[Math.max(0, i - 1)], b = ref[Math.min(ref.length - 1, i + 1)];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      if (Math.abs(dx) < 1e-9 && Math.abs(dy) < 1e-9) return 0;
+      return Math.atan2(dy, dx);
     }
     function drawScene() {
       const ego = sim.world.ego, road = sim.world.road;
@@ -387,6 +427,7 @@
       if (layer) { layers[layer] = e.target.checked; return; }
       if (act === "scene") setScene(e.target.value);
       else if (act === "speed") speed = parseFloat(e.target.value) || 1;
+      else if (act === "zoom") { view.scale = parseFloat(e.target.value) || 6.5; }
     }
     bar.addEventListener("click", onControlClick);
     panel.addEventListener("click", onControlClick);

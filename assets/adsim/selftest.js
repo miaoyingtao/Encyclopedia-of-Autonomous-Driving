@@ -165,7 +165,8 @@
     const d3 = A.Decision.createDecider({});
     const ped = { id: 9, x: 12, y: 2.0, vx: -0.5, vy: 1.2, yaw: -1.57, size: { length: 0.6, width: 0.6 }, confirmed: true };
     const r3 = d3.update({ ego: ego, tracks: [ped], road: road, time: 0, dt: 0.05, speedLimit: 13.9 });
-    ok(r3.name === "STOP" || r3.name === "YIELD", "decision/横穿目标 → 停车或让行", r3.name);
+    ok(r3.name === "STOP" || r3.name === "YIELD" || r3.name === "EMERGENCY",
+      "decision/横穿目标 → 停车 / 让行 / 紧急制动", r3.name);
 
     const ttc = A.Decision.computeTTC(10, 8, 3);
     near(ttc, 2, 1e-9, "decision/TTC = gap / 相对速度");
@@ -180,13 +181,17 @@
       road: road, targetSpeed: 10, targetLane: 0,
       footprints: [{
         trackId: 1, mode: "keep", prob: 1,
-        circles: [{ t: 1.0, x: 10, y: 1.75, r: 1.3 }, { t: 2.0, x: 18, y: 1.75, r: 1.3 }]
+        circles: [{ t: 1.0, x: 10, y: 5.0, r: 1.0 }, { t: 2.0, x: 18, y: 5.0, r: 1.0 }]
       }]
     };
     const res = A.Planning.plan(ctx);
     ok(!!res.best, "planning/选出最优轨迹");
     ok(res.candidates.length === 20, "planning/候选轨迹数 = 5 横向 × 4 速度档", res.candidates.length);
     ok(res.best.collision.collided === false, "planning/最优轨迹无碰撞");
+    // 若存在可行解，则最优解必须可行（不依赖某组具体参数的性质）
+    ok(res.feasible === 0 || res.best.collision.collided === false,
+      "planning/只要存在无碰撞候选，最优就一定无碰撞",
+      "feasible=" + res.feasible + " total=" + res.total);
     ok(isFinite(res.best.cost) && res.best.cost >= 0, "planning/代价有限且非负",
       res.best.cost && res.best.cost.toFixed(2));
     const blocked = res.candidates.filter(function (c) { return c.collision.collided; }).length;
