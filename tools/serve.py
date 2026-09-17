@@ -26,11 +26,14 @@ import sys
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 FETCHER = os.path.join(TOOLS, "news_fetcher.py")
-DATA_FILE = os.path.join(ROOT, "assets", "news-data.js")
+DATA_FILE = os.path.join(ROOT_REPO, "assets", "news-data.js")
+SITE = os.path.join(ROOT_REPO, "site")
 INDEX = "index.html"
+# 托管根目录：优先构建产物 site/，没有则退回仓库根（迁移前状态）
+ROOT = SITE if os.path.isdir(SITE) else ROOT_REPO
 
 sys.path.insert(0, TOOLS)
 
@@ -161,7 +164,11 @@ def main():
     ap = argparse.ArgumentParser(description="本站托管 + 一键刷新服务")
     ap.add_argument("--host", default="127.0.0.1", help="监听地址（默认 127.0.0.1，仅本机可访问）")
     ap.add_argument("--port", type=int, default=8765, help="监听端口（默认 8765）")
+    ap.add_argument("--root", default=None, help="托管根目录（默认 site/，不存在则用仓库根）")
     args = ap.parse_args()
+    global ROOT
+    if args.root:
+        ROOT = os.path.abspath(args.root)
     server = ThreadingHTTPServer((args.host, args.port), SiteHandler)
     url = "http://%s:%d/pages/news.html" % (args.host, args.port)
     print("自动驾驶百科本地服务已启动：")

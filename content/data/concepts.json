@@ -1,22 +1,84 @@
 {
   "groups": [
+    { "id": "core", "title": "分级与责任" },
     { "id": "perception", "title": "感知与传感器" },
     { "id": "planning", "title": "决策与控制" },
     { "id": "safety", "title": "安全与合规" },
     { "id": "business", "title": "场景与商业" }
   ],
   "cards": {
+    "bev": {
+      "group": "perception",
+      "prereq": [],
+      "extends": ["occupancy-network", "time-alignment"],
+      "contrasts": []
+    },
+    "occupancy-network": {
+      "group": "perception",
+      "prereq": ["bev"],
+      "extends": [],
+      "contrasts": []
+    },
     "time-alignment": {
       "group": "perception",
       "prereq": ["bev"],
       "extends": [],
       "contrasts": []
     },
-    "bev": {
+    "gnss-rtk-ppp": {
       "group": "perception",
       "prereq": [],
-      "extends": ["time-alignment"],
+      "extends": [],
+      "contrasts": []
+    },
+    "odd": {
+      "group": "core",
+      "prereq": [],
+      "extends": ["mrm", "sotif"],
+      "contrasts": []
+    },
+    "ttc": {
+      "group": "safety",
+      "prereq": [],
+      "extends": ["mrm"],
+      "contrasts": []
+    },
+    "sotif": {
+      "group": "safety",
+      "prereq": ["odd"],
+      "extends": ["asil"],
+      "contrasts": []
+    },
+    "asil": {
+      "group": "safety",
+      "prereq": [],
+      "extends": ["sotif", "mrm"],
+      "contrasts": []
+    },
+    "mrm": {
+      "group": "safety",
+      "prereq": ["odd"],
+      "extends": [],
+      "contrasts": []
+    },
+    "mpc": {
+      "group": "planning",
+      "prereq": [],
+      "extends": ["rss"],
+      "contrasts": []
+    },
+    "rss": {
+      "group": "planning",
+      "prereq": [],
+      "extends": ["mrm"],
+      "contrasts": []
+    },
+    "unit-economics": {
+      "group": "business",
+      "prereq": [],
+      "extends": [],
       "contrasts": []
     }
   }
 }
+

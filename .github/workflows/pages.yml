@@ -21,16 +21,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rebuild search index and verify links
+      - name: Build the site from content source
         run: |
-          python tools/build_search_index.py
-          python tools/check_links.py --quiet
+          python tools/build.py --check
+          python tools/build.py
+
+      - name: Verify built site
+        run: |
+          python tools/check_links.py --root site --quiet
 
       - name: Assemble publishable site
         run: |
           rm -rf _site
           mkdir -p _site
-          cp -r index.html favicon.svg pages assets _site/
+          cp -r site/. _site/
           touch _site/.nojekyll
 
       - name: Upload Pages artifact

@@ -327,6 +327,131 @@ def indent(block, spaces):
     return "\n".join(pad + line if line.strip() else line for line in block.split("\n"))
 
 
+def build_utility(content, rel_out, title, kicker, h1, lead, sections, toc_items=None):
+    """生成工具类页面（概念地图 / 学习路径 / 速览层）。"""
+    meta = {
+        "title": title,
+        "description": re.sub(r"\s+", " ", lead)[:150],
+        "accent": "accent-overview",
+        "nav_active": "overview",
+        "hero_kicker": kicker,
+        "hero_h1": h1,
+        "hero_lead": lead,
+        "crumb": [{"text": "首页", "href": "index.html"}, {"text": h1, "href": ""}],
+    }
+    inner = "\n".join(x for x in sections if x)
+    toc_html = build_toc_from_data(toc_items) if toc_items else ""
+    return "\n".join([
+        build_head(meta, rel_out), build_header(meta, rel_out),
+        build_hero(meta, rel_out), '',
+        '<main>', '  <div class="wrap layout2">',
+        indent(toc_html, 4), '',
+        '    <div>', indent(inner, 6), '    </div>',
+        '  </div>', '</main>', '',
+        build_footer(meta, rel_out), '</body>', '</html>', ''])
+
+
+def card_relations(content, cid):
+    parts = []
+    for key, label in (("prereq", "前置"), ("extends", "延伸"), ("contrasts", "对比")):
+        ids = content.links(cid, key)
+        if ids:
+            names = []
+            for i in ids:
+                c = content.cards.get(i)
+                if c:
+                    names.append('<a href="#card-%s">%s</a>' % (i, c.get("title", i)))
+            if names:
+                parts.append("%s %s" % (label, "、".join(names)))
+    return " ｜ ".join(parts)
+
+
+def concept_map_sections(content):
+    """概念地图：按分组列出卡片、一句话与关系。"""
+    sections, toc, n = [], [], 0
+    for g in content.groups:
+        cids = content.cards_in_group(g["id"])
+        if not cids:
+            continue
+        n += 1
+        toc.append({"href": "#g-%s" % g["id"], "cls": "", "text": g["title"]})
+        rows = ['<section class="sec scroll-target" id="g-%s">' % g["id"],
+                '  <div class="sec-head"><span class="no">%02d</span><h2>%s</h2></div>' % (n, g["title"]),
+                '  <div class="grid g3">']
+        for cid in cids:
+            card = content.cards[cid]
+            rel = card_relations(content, cid)
+            rows.append('    <div class="card reveal" id="card-%s">' % cid)
+            rows.append('      <h3><a href="%s">%s</a></h3>'
+                        % (card.get("canonical", ""), card.get("title", cid)))
+            rows.append('      <p>%s</p>' % card.get("one_liner", ""))
+            if rel:
+                rows.append('      <p class="sec-sub">%s</p>' % rel)
+            rows.append('    </div>')
+        rows += ['  </div>', '</section>']
+        sections.append("\n".join(rows))
+    return sections, toc
+
+
+def path_sections(content):
+    """学习路径：按难度分层 + 按依赖顺序排列。"""
+    def order(ids):
+        seen, out = set(), []
+
+        def visit(cid):
+            if cid in seen or cid not in content.cards:
+                return
+            seen.add(cid)
+            for p in content.prereq(cid):
+                visit(p)
+            out.append(cid)
+        for cid in ids:
+            visit(cid)
+        return out
+
+    levels = [(1, "速览层", "只读一句话，建立印象"),
+              (2, "理解层", "知道它是什么、为什么重要、常见误解"),
+              (3, "工程层", "含实现要点与量化约束")]
+    sections, toc = [], []
+    for level, name, desc in levels:
+        cids = [cid for cid, c in content.cards.items() if int(c.get("level", 2)) == level]
+        if not cids:
+            continue
+        cids = order(cids)
+        toc.append({"href": "#lvl-%d" % level, "cls": "", "text": "%s（%d 张）" % (name, len(cids))})
+        rows = ['<section class="sec scroll-target" id="lvl-%d">' % level,
+                '  <div class="sec-head"><span class="no">L%d</span><h2>%s</h2></div>' % (level, name),
+                '  <p class="sec-sub">%s；按依赖顺序排列，前置在前。</p>' % desc,
+                '  <ol class="steps">']
+        for cid in cids:
+            card = content.cards[cid]
+            nums = card.get("key_numbers") or []
+            num_html = ('　<span class="tag">%s</span>' % nums[0]) if nums else ""
+            rows.append('    <li><h3><a href="%s">%s</a></h3><p>%s%s</p></li>'
+                        % (card.get("canonical", ""), card.get("title", cid),
+                           card.get("one_liner", ""), num_html))
+        rows += ['  </ol>', '</section>']
+        sections.append("\n".join(rows))
+    return sections, toc
+
+
+def quick_sections(content):
+    """速览层：全部卡片的一句话 + 关键数字。"""
+    rows = ['<section class="sec scroll-target" id="all">',
+            '  <div class="sec-head"><span class="no">速览</span><h2>全部知识点 · 一句话版</h2></div>',
+            '  <div class="tbl-wrap">', '    <table>',
+            '      <thead><tr><th>知识点</th><th>一句话</th><th>关键数字</th></tr></thead>',
+            '      <tbody>']
+    for cid in sorted(content.cards):
+        card = content.cards[cid]
+        nums = card.get("key_numbers") or []
+        rows.append('        <tr><td><a href="%s">%s</a></td><td>%s</td><td>%s</td></tr>'
+                    % (card.get("canonical", ""), card.get("title", cid),
+                       card.get("one_liner", ""), "；".join(str(x) for x in nums)))
+    rows += ['      </tbody>', '    </table>', '  </div>', '</section>']
+    return ["\n".join(rows)], [{"href": "#all", "cls": "", "text": "全部知识点"}]
+
+
 def copy_tree(src, dst, skip_html=False):
     import shutil
     if not os.path.isdir(src):
@@ -410,6 +535,24 @@ def build(content, site_dir, report=False):
             r = similarity(os.path.join(ROOT, rel_out.replace("/", os.sep)), out_path)
             if r is not None:
                 ratios.append((rel_out, r))
+
+    # 工具页：概念地图 / 学习路径 / 速览层
+    util = [
+        ("concept-map.html", "概念地图 · 驶向未来百科", "入门 · 工具", "概念地图",
+         "按分组浏览全部知识点，并看清它们之间的前置与延伸关系。点标题进正本页，点关系跳到相关卡片。",
+         concept_map_sections),
+        ("paths.html", "学习路径 · 驶向未来百科", "入门 · 工具", "学习路径",
+         "按难度分层（速览 / 理解 / 工程）排列全部知识点，并自动按依赖顺序排好——前置永远排在被依赖项之前。",
+         path_sections),
+        ("quick.html", "速览 · 驶向未来百科", "入门 · 工具", "五分钟速览",
+         "全部知识点的一句话版本，附关键数字。想快速了解全貌时，先读这一页。",
+         quick_sections),
+    ]
+    for rel, title, kicker, h1, lead, fn in util:
+        sections, toc_items = fn(content)
+        html = build_utility(content, rel, title, kicker, h1, lead, sections, toc_items)
+        with io.open(os.path.join(site_dir, rel), "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(html)
 
     # 特殊布局页：index.html 与 news.html 沿用旧文件
     for name in ("index.html", os.path.join("pages", "news.html")):

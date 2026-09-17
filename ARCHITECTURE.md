@@ -68,47 +68,60 @@ python tools\import_html.py            # 从旧 HTML 重新导入内容源（迁
 
 | 项 | 状态 |
 | --- | --- |
-| Markdown / front-matter / 数据模型 | ✅ 完成（`tools/md.py`、`tools/content_model.py`） |
-| HTML → 内容源 自动导入 | ✅ 完成：**40 页 / 253 个面板 / 265 条 FAQ / 385 KB 正文** |
-| 构建器（模板 + 渲染 + 搜索索引 + 相似度报告） | ✅ 完成（`tools/build.py`） |
-| 构建产物质检 | ✅ `check_links.py --root site`：40 页，0 错 0 警 |
-| 与原站文本相似度 | ✅ 平均 **0.927**（39 页；最低 one-trip 0.739） |
-| 知识卡（`content/cards/*.md`） | ⏳ 待建（清单见下） |
-| 主题页改写为卡片引用 | ⏳ 待做（需先有卡片） |
-| 概念图谱页 / 学习路径页 / 速览层 | ⏳ 待做（数据结构已就绪：`concepts.json` 的关系字段） |
-| `serve.py` / CI 指向 `site/` | ⏳ 待做 |
+| Markdown / front-matter / 数据模型 | ✅ |
+| HTML → 内容源 自动导入 | ✅ 40 页 / 253 面板 / 265 FAQ / 385 KB |
+| 构建器（模板 + 渲染 + 搜索索引 + 相似度报告） | ✅ |
+| 构建产物质检 | ✅ `check_links.py --root site`：**43 页，0 错 0 警** |
+| 与原站文本相似度 | ✅ 平均 **0.927** |
+| 知识卡 | 🟡 **12 / 90**（首批高优先级已完成：`bev` `occupancy-network` `time-alignment` `gnss-rtk-ppp` `odd` `ttc` `sotif` `asil` `mrm` `mpc` `rss` `unit-economics`） |
+| 概念地图 / 学习路径 / 速览层 | ✅ `site/concept-map.html`、`site/paths.html`、`site/quick.html`（由卡片关系自动生成） |
+| `serve.py` 托管 `site/` | ✅（默认 site/，`--root` 可覆盖） |
+| CI 构建 + 部署 | ✅ `pages.yml` 已改为 `build.py` → `check_links --root site` → 部署 `site/` |
+| 主题页改写为卡片引用 | ⏳ 目前正文仍是导入的 HTML 透传（零信息损失），待逐段替换为 `{{card:…}}` |
 
-## 待建卡片清单（按优先级）
+## 待建卡片（剩余 78 张）
 
-> 这些知识点目前分散在多个页面（同一表述出现在 2–5 处）。建成卡片后，各页改为引用即可根治重复。
+**感知组**：`camera-depth` `camera-hdr-isp` `lidar-tof` `lidar-wavelength` `lidar-compensation`
+`radar-fmcw` `radar-ambiguity` `radar-ghost-brake` `ultrasonic-physics` `ultrasonic-temperature`
+`sensor-fusion` `data-association` `recall-first` `calibration-drift`
 
-**第一优先（被引用最多）**
-`time-alignment`（时间同步，现出现于 perception/fusion/sensors/camera/one-trip）
-`bev`（BEV 表征）、`occupancy-network`（占用网络）、`ttc`（碰撞时间）
-`odd`（运行设计条件）、`sotif`、`asil`、`mrm`（最小风险状态）
-`gnss-rtk-ppp`、`mpc`、`rss`、`unit-economics`
+**定位组**：`imu-dead-reckoning` `icp-ndt` `slam` `hdmap-layers` `map-freshness`
+`crowdsourced-update` `map-less-debate` `localization-integrity` `lane-level-accuracy`
 
-**第二优先（域内复用）**
-感知组：`camera-depth`、`lidar-tof`、`radar-fmcw`、`radar-ghost-brake`、`ultrasonic-temperature`、
-`data-association`、`recall-first`、`calibration-drift`
-定位组：`imu-dead-reckoning`、`icp-ndt`、`hdmap-layers`、`map-freshness`、`localization-integrity`
-决策组：`planning-layers`、`prediction`、`behavior-decision`、`frenet`、`end-to-end`、`actuator-latency`
-工程组：`latency-budget`、`compute-platform`、`fail-operational`、`data-loop`、`shadow-mode`
+**决策组**：`planning-layers` `prediction` `behavior-decision` `motion-planning` `frenet`
+`vehicle-model` `end-to-end` `actuator-latency` `safety-fallback`
 
-**第三优先（标准、资源与案例）**
-`sae-j3016` / `gb-t-40429` / `un-r157` / `iso-34502`；`nuscenes` / `waymo-open` / `kitti` /
-`autoware` / `apollo` / `carla`；10 个 `case-*`（失效案例）
+**工程组**：`latency-budget` `compute-platform` `middleware` `fail-safe-operational`
+`two-out-of-three` `data-loop` `shadow-mode` `ota-update` `sil-hil` `thermal-power`
+
+**安全组**：`iso-26262` `iso-21434` `tara` `un-r155-r156` `ul-4600` `residual-risk`
+`safety-target-per-hour` `cyber-data-privacy` `ddsad` `takeover-window` `liability-rule`
+
+**AI 前沿**：`llm-vlm-vla` `world-model` `attention-complexity` `quantization` `diffusion-flow`
+`onboard-deploy` `hallucination-risk` `sim-vs-real`
+
+**场景与商业**：`load-factor` `remote-support-ratio` `payback` `robotaxi-ops` `freight-platoon`
+`port-shovel-ratio` `delivery-density` `avp` `odd-expansion` `subsidy-debate` `safety-data-premium`
+
+**标准与资源**：`sae-j3016` `gb-t-40429` `un-r157` `iso-34502` `nuscenes` `waymo-open`
+`kitti` `autoware` `apollo` `carla`
+
+**失效案例**：`case-white-trailer` `case-cone-miss` `case-construction` `case-soiling`
+`case-weather-exit` `case-tunnel-glare` `case-remote-timeout` `case-l3-window`
+`case-ghost-brake` `case-calibration-regression`
 
 ## 新增一页的流程
 
-1. 在 `content/topics/` 新建 `<slug>.md`，写 front-matter（`id` 为 URL 路径，如 `pages/foo.html`）
+1. 在 `content/topics/` 新建 `<slug>.md`，front-matter 的 `id` 即 URL 路径（如 `pages/foo.html`）
 2. 正文用 Markdown 写叙事，重复性知识用 `{{card:…}}` 引用
 3. FAQ / 延伸阅读 / 相关阅读写入 `content/data/pages/<slug>.json`
 4. `python tools\build.py --check` → `python tools\build.py` → `python tools\check_links.py --root site`
 
 ## 已知限制
 
-- `index.html` 与 `pages/news.html` 目前仍直接沿用旧文件（布局特殊），未纳入模板
+- **根目录下的旧 HTML 仍然存在**，作为迁移前快照与回滚点；它们**不再是权威内容**，
+  权威内容在 `content/`。`index.html` 与 `pages/news.html` 目前仍由旧文件直接复制进产物。
 - `content/topics/*.md` 的正文是导入的 HTML 透传块（保证零信息损失），尚未改写成卡片引用
-- 相似度差异主要来自空白与结构细节（如面包屑换行），正文内容无丢失
-- `site/` 不入库（`.gitignore`），由构建生成；如需提交产物请先移除该忽略项
+- 相似度差异主要来自空白与结构细节，正文内容无丢失
+- `site/` 不入库（`.gitignore`），由构建生成；CI 中同样先构建再部署
+
