@@ -56,6 +56,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/02-perception.html">第 1 章 · 感知与状态估计</a> 一起读。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“为什么一颗传感器不够”</b>：读 ★ 三节（为什么必须融合、三个层级、传感器吵架时听谁的）。<b>做工程</b>：◆ 讲四步走流程、工程挑战与未来方向，▪ 两节贝叶斯/卡尔曼与数据关联供深挖。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>相机 30 fps / 雷达 20 fps / 激光 10 fps → 必须统一到同一时基 ｜ 100 ms 对齐误差 ≈ 2 m ｜ 融合三层级：后融合（可解释）/ 前融合（精度高）/ 特征级（折中）｜ 设计目标：任意单路失效时其余通道仍可支撑降级运行</p>
+      </div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么必须做融合</h2></div>
         <p>回顾前四个专题，每种传感器都有“一票否决”的盲区：</p>

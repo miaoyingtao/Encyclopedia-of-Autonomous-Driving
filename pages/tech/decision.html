@@ -57,6 +57,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/03-planning-control.html">第 2 章 · 决策规划与控制</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step3">环节 3 · 无保护左转</a>。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么决定往哪走”</b>：读 ★ 四节（三层结构、行为决策、运动规划、安全兜底）。<b>做规划算法</b>：◆ 讲预测、全局路径、数学形式与端到端，▪ RSS 与形式化验证供深挖。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>全局路径规划：秒–分钟级 ｜ 行为决策：百毫秒级 ｜ 运动规划：10–100 ms ｜ 预测时域：未来 1–5 s 的候选轨迹与概率 ｜ 危险事件阈值：TTC &lt; 1.5–2 s 通常记为危险事件</p>
+      </div>
       <section class="sec scroll-target" id="layers">
         <div class="sec-head"><span class="no">01</span><h2>决策与规划的三层结构</h2></div>
         <p>决策规划通常按“时间尺度”分成三层，越往下刷新越快、颗粒度越细：</p>

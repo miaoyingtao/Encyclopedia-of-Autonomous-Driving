@@ -55,6 +55,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/01-math-sensors.html">第 0 章 · 数学与传感器建模</a> 一起读。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“超声波在车上干什么”</b>：读 ★ 三节（原理、用在哪些功能、局限）。<b>做泊车相关开发</b>：◆ 讲探头布局与智能泊车的演进方向，▪ 参数与信号处理细节供查阅。四种传感器的横向对照见 <a href="../sensors.html">传感器横评</a>。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>工作频率 40–58 kHz ｜ 有效距离 0.15–5 m，盲区 15–30 cm ｜ 声速 c ≈ 331.4 + 0.6·T（不做温度补偿约有 6% 测距误差）｜ 单车 8–12 颗，只用于低速近距补盲</p>
+      </div>
       <section class="sec scroll-target" id="principle">
         <div class="sec-head"><span class="no">01</span><h2>原理：声呐的汽车版</h2></div>
         <p>超声波雷达发射约 40–60kHz 的超声波脉冲，计算声波碰到障碍物后返回的时间，按声速（约 340m/s）换算距离：</p>

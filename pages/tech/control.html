@@ -56,6 +56,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/03-planning-control.html">第 2 章 · 决策规划与控制</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a>（时延预算与执行器延迟）。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么把决策变成动作”</b>：读 ★ 三节（控制层的位置、线控底盘、控制算法）。<b>做车辆工程</b>：◆ 讲车辆模型、轨迹跟踪与冗余降级，▪ 标定参数供查阅。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>控制环 50–100 Hz ｜ 执行器响应 100–300 ms（必须在轨迹中前馈补偿）｜ MPC 每个控制周期在线求解一次二次规划，常配合"热启动"减少迭代 ｜ 横纵向解耦控制</p>
+      </div>
       <section class="sec scroll-target" id="position">
         <div class="sec-head"><span class="no">01</span><h2>控制层在整个链条中的位置</h2></div>
         <p>完整链路是：<b>感知 → 决策与规划 →（轨迹）→ 控制 →（指令）→ 执行器 → 车辆运动</b>。其中：</p>

@@ -56,6 +56,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/01-math-sensors.html">第 0 章 · 数学与传感器建模</a> 一起读。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“激光雷达是什么、值不值”</b>：读 ★ 四节（原理、三条技术路线、参数怎么看、局限与挑战）。<b>做选型或工程</b>：◆ 讲降本路径与装机现状，▪ 两节测距模型与点云流水线供深挖。四种传感器的横向对照见 <a href="../sensors.html">传感器横评</a>。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>帧率约 10 fps（一帧扫描期间车可能前进 &gt; 1 m，因此必须去畸变）｜ 波长主流 905 nm，长距方案用 1550 nm ｜ 人眼安全需达 IEC 60825 Class 1 ｜ 路线演进：机械旋转 → 半固态 → 固态</p>
+      </div>
       <section class="sec scroll-target" id="principle">
         <div class="sec-head"><span class="no">01</span><h2>原理：向空间“发问”并计算回声</h2></div>
         <p>激光雷达（Light Detection and Ranging）的测距原理与“蝙蝠声呐”同构，只是把声波换成激光。主流有两种调制方式：</p>

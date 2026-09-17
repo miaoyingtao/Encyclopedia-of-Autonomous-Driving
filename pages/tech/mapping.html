@@ -56,6 +56,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/04-loc-sim-test.html">第 3 章 · 定位建图与仿真测试</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step0">环节 0 · 上车出发</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>（地图鲜度）。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么知道自己在哪”</b>：读 ★ 三节（为什么需要车道级定位、高精地图里有什么、定位技术全家桶）。<b>关注工程权衡</b>：◆ 讲组合定位与“轻地图/无图化”之争，是路线选型的核心。▪ 两节定位技术细节（GNSS/RTK、点云配准与 SLAM）供需要时深挖。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>高精地图相对精度 10–20 cm ｜ 定位偏差 30 cm 即可导致"把邻车道当成自己车道" ｜ RTK 固定解可达厘米级，失锁后靠 IMU/轮速推算（误差随时间累积，几十秒即明显漂移）｜ 量产要求"车道级正确"（误差 &lt; 50 cm 且判断对车道）</p>
+      </div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>自动驾驶为什么需要“知道自己在哪”</h2></div>
         <p>规划的轨迹、感知的目标、高精地图的车道，全部要转换到同一坐标系才能使用。如果车把自己定位偏了 30 厘米，就可能：把相邻车道的车当成自己车道的障碍、提前或压线变道、在错误的道口转弯。因此：</p>

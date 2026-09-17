@@ -56,6 +56,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../../tutorial/01-math-sensors.html">第 0 章 · 数学与传感器建模</a> 一起读。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“摄像头在智驾里干什么”</b>：读 ★ 四节（为什么离不开、参数怎么看、如何测距、光照与天气难题）。<b>做选型或工程</b>：◆ 讲装车布局与技术趋势，▪ 两节成像模型与深度估计供深挖。四种传感器的横向对照见 <a href="../sensors.html">传感器横评</a>。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>帧率约 30 fps（33 ms/帧；72 km/h 时前进约 0.67 m）｜ 单帧深度公式 Z = f·B / d，误差随距离平方增长 ｜ 乘用车环视 5–11 颗 ｜ 逆光与夜间是最大短板，靠 HDR 与雷达/激光补位</p>
+      </div>
       <section class="sec scroll-target" id="why">
         <div class="sec-head"><span class="no">01</span><h2>为什么自动驾驶离不开摄像头</h2></div>
         <p>激光雷达能测距、毫米波雷达能测速，但它们都“认不出”世界上的语义信息。只有摄像头能告诉系统：</p>

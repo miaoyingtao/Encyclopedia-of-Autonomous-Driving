@@ -58,6 +58,10 @@
     <div>
       <div class="panel info"><span class="pt">阅读提示</span><p>本页讲清“是什么、为什么、怎么权衡”；公式推导、代码与实现细节请配合 <a href="../tutorial/02-perception.html">第 1 章 · 感知与状态估计</a> 一起读。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>。</p></div>
       <div class="panel tip"><span class="pt">本页读法</span><p><b>只想搞懂“车怎么看见世界”</b>：读 ★ 四节（感知要回答什么、传感器方案、算法流水线、BEV 与占用网络）。<b>做工程或做选型</b>：◆ 四节讲融合、算力、检测跟踪与标定同步，是量产落地的关键。▪ 评价指标供对照。它在主线中的位置：<a href="../one-trip.html#step1">环节 1 · 主路跟车</a> 与 <a href="../one-trip.html#step2">环节 2 · 施工区</a>。</p></div>
+      <div class="panel info">
+        <span class="pt">关键数字</span>
+        <p>传感器帧率：相机约 30 fps、毫米波雷达约 20 fps、激光雷达约 10 fps ｜ 感知输出频率 10–30 Hz ｜ 时间同步误差 100 ms ≈ 2 m 错位 ｜ 感知是车载算力最大消耗方（多路 8MP 视频 + 点云 + 多网络并行）</p>
+      </div>
       <section class="sec scroll-target" id="q">
         <div class="sec-head"><span class="no">01</span><h2>感知层要回答哪些问题</h2></div>
         <p>如果把驾驶比作写作，感知就是“读题”。一台自动驾驶车每秒都要回答：</p>
