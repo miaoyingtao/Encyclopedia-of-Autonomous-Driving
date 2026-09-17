@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>教程资源库 · 课程·教材·开源与数据集 · 驶向未来</title>
+<meta name='description' content='自动驾驶系统教程外部资源总览：公开课程、教材、开源栈（Autoware/Apollo/CARLA）、数据集与基准（nuScenes/Waymo/KITTI/NAVSIM/Bench2Drive）、工具链与安全标准。'>
+<link rel='stylesheet' href='../../assets/style.css'>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class='accent-tech'>
+<header class='topbar'>
+  <div class='wrap'>
+    <a class='brand' href='../../index.html'><span class='brand-logo'>🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class='nav-toggle' aria-label='展开菜单' aria-expanded='false'>☰</button>
+    <nav class='main-nav'>
+      <a href='../../index.html'>首页</a>
+      <a href='../../pages/overview.html'>入门</a>
+      <a href='../../pages/tech.html'>技术</a>
+      <a href='../../pages/challenges.html'>安全与验证</a>
+      <a href='../../pages/scenarios.html'>落地与产业</a>
+      <a href='../../pages/frontier.html'>AI 前沿</a>
+      <a href='../../pages/tutorial/index.html' class='active'>系统教程</a>
+      <a href='../../pages/news.html'>领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class='hero hero--inner'>
+  <div class='wrap'>
+    <span class='kicker'>系统教程 · 资源库</span>
+    <h1>教程资源库：外部课程、教材与开源实现</h1>
+    <p class='lead'>本页把教程各章会用到（以及想继续深入时该看）的公开资源集中起来：公开课程、教材、开源代码、数据集与基准、工具链与标准、竞赛榜单。所有链接均在整理时逐一验证可访问，标注了用途与适合的章节。</p>
+    <nav class='crumb'>
+      <a href='../../index.html'>首页</a><span class='sep'>/</span><a href='index.html'>系统教程</a><span class='sep'>/</span><span>资源库</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class='wrap layout2'>
+    <aside class='toc' aria-label='本页目录'>
+      <h4>本页目录</h4>
+      <a href='#courses'>01 公开课程与教程仓库</a>
+      <a href='#books'>02 教材与书</a>
+      <a href='#oss'>03 开源栈与代码库</a>
+      <a href='#data'>04 数据集与基准</a>
+      <a href='#tools'>05 工具链与规范</a>
+      <a href='#comp'>06 竞赛与榜单</a>
+      <a href='#how'>07 怎么用这份清单</a>
+    </aside>
+
+    <div>
+      <div class='panel info'><span class='pt'>使用说明</span><p>资源按“上手成本从低到高”排序：先看课程建立直觉，再用教材补数学，最后照着开源仓库复现。每章末尾的“学习资源地图”会给该章的精选子集，方便按需跳转。</p></div>
+
+      <section class='sec scroll-target' id='courses'>
+        <div class='sec-head'><span class='no'>01</span><h2>公开课程与教程仓库</h2></div>
+        <p>系统性强、有作业可做的课程优先。没有时间刷完课程时，直接看仓库里的作业代码也很有价值。</p>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>资源</th><th>类型</th><th>学什么</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://www.coursera.org/specializations/self-driving-cars'>Coursera · Self-Driving Cars（多伦多大学）</a></td><td>视频课程 + 编程作业</td><td>感知、状态估计、运动规划、控制四条主线</td><td>0–3 章</td></tr>
+              <tr><td><a href='https://github.com/qiaoxu123/Self-Driving-Cars'>Self-Driving-Cars 课程作业与笔记</a></td><td>作业代码/笔记</td><td>卡尔曼滤波、车辆控制、路径规划的最小可运行实现</td><td>0、2 章</td></tr>
+              <tr><td><a href='https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013'>Udacity · Self-Driving Car Engineer</a></td><td>项目制课程</td><td>车道线检测、传感器融合、预测与规划工程实践</td><td>1–3 章</td></tr>
+              <tr><td><a href='https://github.com/microsoft/AutonomousDrivingCookbook'>微软 AutonomousDrivingCookbook</a></td><td>教程 + 场景代码</td><td>用仿真做端到端驾驶的最小闭环</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/yandexdataschool/sdc_course'>Yandex SDC 短课程</a></td><td>讲义 + 习题</td><td>感知与规划的核心算法速览</td><td>1–2 章</td></tr>
+              <tr><td><a href='https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python'>Kalman and Bayesian Filters in Python</a></td><td>交互式 Jupyter 书</td><td>KF/EKF/UKF/粒子滤波，含全部练习解答</td><td>0 章</td></tr>
+              <tr><td><a href='https://github.com/datawhalechina/every-embodied'>动手学具身智能（中文）</a></td><td>中文教程</td><td>从零构建 VLA/OpenVLA/SmolVLA/π0</td><td>4 章</td></tr>
+              <tr><td><a href='https://zh.d2l.ai/'>动手学深度学习（中文）</a></td><td>教材 + 代码</td><td>Transformer、扩散模型、强化学习基础</td><td>4–5 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='books'>
+        <div class='sec-head'><span class='no'>02</span><h2>教材与书</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🧮 估计与滤波</h3><p>Thrun et al., <i>Probabilistic Robotics</i>；Bar-Shalom et al., <i>Estimation with Applications to Tracking and Navigation</i>；Sola, <a href='https://arxiv.org/abs/1711.02508'>Quaternion kinematics for the error-state Kalman filter</a>。</p></div>
+          <div class='card reveal'><h3>👁️ 视觉与几何</h3><p>Hartley &amp; Zisserman, <i>Multiple View Geometry in Computer Vision</i>（相机模型、标定、多视图几何的标准参考）。</p></div>
+          <div class='card reveal'><h3>🧭 导航与优化</h3><p>Groves, <i>Principles of GNSS, Inertial, and Multisensor Integrated Navigation Systems</i>；Nocedal &amp; Wright, <i>Numerical Optimization</i>。</p></div>
+          <div class='card reveal'><h3>🚗 车辆与控制</h3><p>Rajamani, <i>Vehicle Dynamics and Control</i>（自行车模型到侧偏动力学的完整推导）。</p></div>
+          <div class='card reveal'><h3>🤖 学习与决策</h3><p>Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i>（策略梯度、值函数与 MDP 的标准教材）。</p></div>
+          <div class='card reveal'><h3>🏗️ 机器人总览</h3><p>Siciliano &amp; Khatib, <i>Springer Handbook of Robotics</i>（按主题查手册的用法，不必通读）。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='oss'>
+        <div class='sec-head'><span class='no'>03</span><h2>开源栈与代码库</h2></div>
+        <h3>整车与全栈</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>项目</th><th>说明</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://github.com/autowarefoundation/autoware'>Autoware</a> / <a href='https://autowarefoundation.github.io/autoware-documentation/'>官方文档</a></td><td>开源自动驾驶全栈（ROS 2 原生），感知→规划→控制完整可跑</td><td>1–3 章</td></tr>
+              <tr><td><a href='https://github.com/ApolloAuto/apollo'>Apollo</a> / <a href='https://apollo.baidu.com/'>开发者社区</a></td><td>百度开源平台，工程体系与标定/仿真工具完备</td><td>2–3 章</td></tr>
+              <tr><td><a href='https://github.com/autowarefoundation/autoware_universe'>autoware_universe</a></td><td>Autoware 各功能模块的集合仓库，适合按模块读代码</td><td>1–3 章</td></tr>
+              <tr><td><a href='https://github.com/carla-simulator/carla'>CARLA</a></td><td>最常用的开源驾驶仿真器，配套 leaderboard 生态</td><td>3–4 章</td></tr>
+              <tr><td><a href='https://github.com/erdos-project/pylot'>Pylot</a></td><td>模块化自动驾驶平台（感知/预测/规划），代码可读性好</td><td>1–2 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>感知</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>项目</th><th>说明</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://github.com/open-mmlab/OpenPCDet'>OpenPCDet</a> / <a href='https://github.com/open-mmlab/mmdetection3d'>MMDetection3D</a></td><td>激光/多模态 3D 检测工具箱，含 PointPillars、CenterPoint 等复现</td><td>1 章</td></tr>
+              <tr><td><a href='https://github.com/fundamentalvision/BEVFormer'>BEVFormer</a> / <a href='https://github.com/OpenDriveLab/Birds-eye-view-Perception'>BEV 感知综述仓库</a></td><td>多相机 BEV 感知的代表实现与论文索引</td><td>1 章</td></tr>
+              <tr><td><a href='https://github.com/weiyithu/SurroundOcc'>SurroundOcc</a> / <a href='https://github.com/astra-vision/MonoScene'>MonoScene</a></td><td>3D 占用预测（多相机/单目）实现</td><td>1 章</td></tr>
+              <tr><td><a href='https://github.com/sshaoshuai/PointRCNN'>PointRCNN</a> / <a href='https://github.com/facebookresearch/votenet'>VoteNet</a> / <a href='https://github.com/maudzung/SFA3D'>SFA3D</a></td><td>点云 3D 检测的经典路线（点级提议、霍夫投票、鸟瞰图编码）</td><td>1 章</td></tr>
+              <tr><td><a href='https://github.com/FoundationVision/ByteTrack'>ByteTrack</a> / <a href='https://github.com/mikel-brostrom/boxmot'>BoxMOT</a> / <a href='https://github.com/xinshuoweng/AB3DMOT'>AB3DMOT</a></td><td>2D/3D 多目标跟踪，含数据关联与卡尔曼跟踪实现</td><td>1 章</td></tr>
+              <tr><td><a href='https://github.com/ankitdhall/lidar_camera_calibration'>lidar_camera_calibration</a> / <a href='https://github.com/koide3/direct_visual_lidar_calibration'>direct_visual_lidar_calibration</a></td><td>激光-相机外参标定（目标法/无目标法）</td><td>0–1 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>规划与控制</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>项目</th><th>说明</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://github.com/erdos-project/frenet_optimal_trajectory_planner'>frenet_optimal_trajectory_planner</a> / <a href='https://github.com/TUM-AVS/Frenetix-Motion-Planner'>Frenetix</a></td><td>Frenet 坐标下的轨迹采样与优化规划器</td><td>2 章</td></tr>
+              <tr><td><a href='https://github.com/zhaohaojie1998/Path-Planning'>Path-Planning（中文注释）</a></td><td>A*/Hybrid A*/Dijkstra 等路径规划算法合集</td><td>2 章</td></tr>
+              <tr><td><a href='https://github.com/bark-simulator/bark'>BARK</a></td><td>行为决策的仿真与基准框架（含 MDP/POMDP 实验）</td><td>2 章</td></tr>
+              <tr><td><a href='https://github.com/s7ev3n/MPC_Code'>MPC_Code</a> / <a href='https://github.com/DhruvaKumar/model-predictive-control'>model-predictive-control</a></td><td>车辆轨迹跟踪 MPC 的可运行示例</td><td>2 章</td></tr>
+              <tr><td><a href='https://github.com/ethz-adrl/towr'>towr</a></td><td>轨迹优化库（理解“优化式规划”如何建模）</td><td>2 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>定位与建图</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>项目</th><th>说明</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://github.com/TixiaoShan/LIO-SAM'>LIO-SAM</a> / <a href='https://github.com/hku-mars/FAST_LIO'>FAST-LIO</a> / <a href='https://github.com/hku-mars/FAST-LIVO2'>FAST-LIVO2</a></td><td>激光-惯性（-视觉）紧耦合里程计，因子图与迭代 EKF 两条路线</td><td>3 章</td></tr>
+              <tr><td><a href='https://github.com/PRBonn/kiss-icp'>KISS-ICP</a> / <a href='https://github.com/RobustFieldAutonomyLab/LeGO-LOAM'>LeGO-LOAM</a></td><td>轻量激光里程计，代码短、适合入门读源码</td><td>3 章</td></tr>
+              <tr><td><a href='https://github.com/rpng/MINS'>MINS</a> / <a href='https://github.com/Aceinna/gnss-ins-sim'>gnss-ins-sim</a></td><td>多传感器组合导航与 GNSS/INS 仿真</td><td>3 章</td></tr>
+              <tr><td><a href='https://github.com/koide3/fast_gicp'>fast_gicp</a> / <a href='https://github.com/MIT-SPARK/TEASER-plusplus'>TEASER++</a></td><td>点云配准：GICP 精配准与鲁棒全局配准</td><td>0、3 章</td></tr>
+              <tr><td><a href='https://github.com/tomojitakasu/RTKLIB'>RTKLIB</a></td><td>开源 GNSS/RTK 解算库，理解差分与模糊度固定的最佳入口</td><td>3 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>端到端、VLA 与世界模型</h3>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>项目</th><th>说明</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://github.com/OpenDriveLab/End-to-end-Autonomous-Driving'>End-to-end-Autonomous-Driving</a></td><td>端到端驾驶论文与代码总览（IEEE T-PAMI 版综述配套）</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/OpenDriveLab/UniAD'>UniAD</a> / <a href='https://github.com/hustvl/VAD'>VAD</a> / <a href='https://github.com/swc-17/SparseDrive'>SparseDrive</a></td><td>规划导向的端到端模型与其稀疏化改进</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/autonomousvision/transfuser'>TransFuser</a> / <a href='https://github.com/hustvl/DiffusionDrive'>DiffusionDrive</a></td><td>模仿学习基线（Transformer 融合）与扩散式实时规划</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/Tsinghua-MARS-Lab/DriveVLM'>DriveVLM</a> / <a href='https://github.com/OpenDriveLab/DriveLM'>DriveLM</a></td><td>视觉语言模型用于驾驶推理与问答数据</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/openvla/openvla'>OpenVLA</a> / <a href='https://github.com/Physical-Intelligence/openpi'>openpi（π0）</a></td><td>开源 VLA 基座模型与训练/微调代码</td><td>4 章</td></tr>
+              <tr><td><a href='https://github.com/danijar/dreamerv3'>DreamerV3</a> / <a href='https://github.com/JeffWang987/DriveDreamer'>DriveDreamer</a> / <a href='https://github.com/wzzheng/OccWorld'>OccWorld</a></td><td>潜空间世界模型、视频世界模型、占用世界模型三条路线</td><td>5 章</td></tr>
+              <tr><td><a href='https://github.com/NVIDIA/cosmos'>NVIDIA Cosmos</a> / <a href='https://github.com/LMD0311/Awesome-World-Model'>Awesome-World-Model</a></td><td>世界基础模型平台与论文索引</td><td>5 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='data'>
+        <div class='sec-head'><span class='no'>04</span><h2>数据集与基准</h2></div>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>数据集 / 基准</th><th>内容</th><th>常用指标</th><th>适合章节</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://www.nuscenes.org/nuscenes'>nuScenes</a> / <a href='https://github.com/nutonomy/nuscenes-devkit'>devkit</a></td><td>1000 段城市驾驶，6 相机 + 5 雷达 + 激光雷达，3D 框与跟踪标注</td><td>mAP、NDS、AMOTA</td><td>1 章</td></tr>
+              <tr><td><a href='https://waymo.com/open/'>Waymo Open Dataset</a></td><td>大规模激光雷达 + 相机，含检测、跟踪、运动预测与端到端子集</td><td>mAP、minADE/minFDE、miss rate</td><td>1–2 章</td></tr>
+              <tr><td><a href='http://www.cvlibs.net/datasets/kitti/'>KITTI</a></td><td>经典自动驾驶数据集（双目、激光、里程计、目标检测）</td><td>3D AP、里程计误差</td><td>0–3 章</td></tr>
+              <tr><td><a href='https://github.com/autonomousvision/navsim'>NAVSIM</a></td><td>基于真实数据的非反应式仿真规划基准（数据驱动规划评测）</td><td>PDMS 等规划指标</td><td>2、4 章</td></tr>
+              <tr><td><a href='https://arxiv.org/abs/2106.11810'>nuPlan</a></td><td>闭环规划基准（大规模真实驾驶日志 + 反应式仿真）</td><td>闭环评分、碰撞率、舒适度</td><td>2 章</td></tr>
+              <tr><td><a href='https://commonroad.in.tum.de/'>CommonRoad</a></td><td>场景库 + 规划算法基准，附带大量可复现实验</td><td>可行率、舒适度、求解时间</td><td>2 章</td></tr>
+              <tr><td><a href='https://github.com/Thinklab-SJTU/Bench2Drive'>Bench2Drive</a></td><td>CARLA 闭环端到端评测（44 类场景、220 条路线）</td><td>驾驶分数 DS、成功率</td><td>4 章</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='tools'>
+        <div class='sec-head'><span class='no'>05</span><h2>工具链与规范</h2></div>
+        <div class='grid g3'>
+          <div class='card reveal'><h3>🧰 优化求解</h3><p><a href='http://ceres-solver.org/'>Ceres Solver</a>（非线性最小二乘）、<a href='https://gtsam.org/'>GTSAM</a>（因子图/流形）、<a href='https://osqp.org/'>OSQP</a>（凸 QP）、<a href='https://web.casadi.org/'>CasADi</a> 与 <a href='https://docs.acados.org/'>acados</a>（非线性 MPC 与嵌入式代码生成）。</p></div>
+          <div class='card reveal'><h3>🧪 仿真与场景</h3><p><a href='https://carla.readthedocs.io/en/latest/'>CARLA 文档</a>、<a href='https://eclipse.dev/sumo/'>Eclipse SUMO</a>（交通流）、<a href='https://github.com/carla-simulator/scenario_runner'>ScenarioRunner</a>、<a href='https://github.com/pyoscx/scenariogeneration'>scenariogeneration</a>（Python 生成 OpenDRIVE/OpenSCENARIO）。</p></div>
+          <div class='card reveal'><h3>🗺️ 地图与定位</h3><p><a href='https://github.com/fzi-forschungszentrum-informatik/lanelet2'>Lanelet2</a>（开源高精地图格式与工具）、<a href='https://github.com/tomojitakasu/RTKLIB'>RTKLIB</a>（GNSS/RTK 解算）。</p></div>
+          <div class='card reveal'><h3>📐 标准与规范</h3><p><a href='https://www.asam.net/standards/detail/openscenario/'>ASAM OpenSCENARIO</a>（场景描述）、ASAM OpenDRIVE（道路描述）、<a href='https://www.iso.org/standard/68383.html'>ISO 26262</a>（功能安全）、<a href='https://www.iso.org/standard/77490.html'>ISO 21448 SOTIF</a>（预期功能安全）、UL 4600（自动驾驶安全论证）。</p></div>
+          <div class='card reveal'><h3>🚀 计算平台与工具</h3><p><a href='https://developer.nvidia.com/drive'>NVIDIA DRIVE</a>（车端算力与工具链）、<a href='https://developer.nvidia.com/isaac'>Isaac</a>（机器人仿真）。训练侧常识：先确认数据管线和评测脚本可复现，再谈模型。</p></div>
+          <div class='card reveal'><h3>📚 论文检索</h3><p><a href='https://arxiv.org/list/cs.RO/recent'>arXiv cs.RO</a>（机器人）、cs.CV（视觉）每日新论文；配合各章“学习资源地图”里的综述定位研究脉络。</p></div>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='comp'>
+        <div class='sec-head'><span class='no'>06</span><h2>竞赛与榜单</h2></div>
+        <div class='tbl-wrap'>
+          <table>
+            <thead><tr><th>竞赛/榜单</th><th>考什么</th><th>怎么用</th></tr></thead>
+            <tbody>
+              <tr><td><a href='https://leaderboard.carla.org/'>CARLA Autonomous Driving Leaderboard</a></td><td>闭环驾驶能力：路线完成、违规、碰撞</td><td>读榜单论文，能快速看出各方法在闭环下的真实差距</td></tr>
+              <tr><td><a href='https://github.com/Thinklab-SJTU/Bench2Drive'>Bench2Drive</a></td><td>端到端模型在 44 类场景下的闭环表现</td><td>评测自己的端到端模型，或用其场景集做回归测试</td></tr>
+              <tr><td><a href='https://github.com/autonomousvision/navsim'>NAVSIM</a></td><td>规划质量（安全、舒适、进度）非反应式评测</td><td>训练成本低、迭代快，适合做规划方案快速对比</td></tr>
+              <tr><td><a href='https://commonroad.in.tum.de/'>CommonRoad 竞赛</a></td><td>典型场景下的运动规划</td><td>有标准输入输出格式，适合教学与算法公平比较</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class='sec scroll-target' id='how'>
+        <div class='sec-head'><span class='no'>07</span><h2>怎么用这份清单</h2></div>
+        <div class='steps'>
+          <ol>
+            <li><h3>先定方向</h3><p>算法/规划方向：优先“第 0–2 章 + Frenet/MPC 开源实现 + CommonRoad/nuPlan”；感知与端到端方向：优先“第 0–1 章 + OpenPCDet/MMDetection3D + nuScenes + Bench2Drive”；系统与安全方向：优先“第 3 章 + CARLA/SUMO + ISO 26262/21448”。</p></li>
+            <li><h3>一周一个小题目</h3><p>例如：手写 EKF 跟踪一辆车 → 用 Open3D 做点云配准 → 用 OSQP 解一个 10 步 MPC → 在 CARLA 里跑通一个场景。每完成一个，回到对应章节做自测题。</p></li>
+            <li><h3>读代码胜过读论文</h3><p>选一个开源仓库，顺着“输入消息 → 算法模块 → 输出消息”读完整条链路，比只读论文更快建立工程直觉。KISS-ICP、Pylot、Apollo 的规划模块都是很好的起点。</p></li>
+            <li><h3>记住数据与评测的地位</h3><p>真正的瓶颈常是数据质量、场景覆盖与评测可信度。把仿真、回放、闭环三套评测工具都用一遍，再谈模型提升。</p></li>
+          </ol>
+        </div>
+        <div class='panel info'><span class='pt'>链接维护</span><p>外部资源会随时间失效或更新。本页链接在整理时均通过可访问性检查；若发现失效，欢迎按“章节 → 资源名”记录，下次维护时统一替换。</p></div>
+      </section>
+
+      <section class='related'>
+        <h3>回到教程</h3>
+        <p style='margin-bottom:10px'>资源库与各章页面的“学习资源地图”互补：这里是全集，章节页是精选。</p>
+        <div class='rel-links'>
+          <a href='index.html'>课程地图</a>
+          <a href='01-math-sensors.html'>第 0 章 数学与传感器建模</a>
+          <a href='02-perception.html'>第 1 章 感知与状态估计</a>
+          <a href='03-planning-control.html'>第 2 章 决策规划与控制</a>
+          <a href='04-loc-sim-test.html'>第 3 章 定位·仿真·测试</a>
+          <a href='05-llm-vla.html'>第 4 章 LLM 与 VLA</a>
+          <a href='06-worldmodel.html'>第 5 章 世界模型</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class='site-footer'>
+  <div class='wrap'>
+    <div class='footer-grid'>
+      <div>
+        <p class='footer-title'>驶向未来 · 自动驾驶百科</p>
+        <p style='max-width:520px'>聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
+      </div>
+      <nav class='footer-links'>
+        <a href='../../index.html'>首页</a>
+        <a href='../../pages/overview.html'>入门</a>
+        <a href='../../pages/tech.html'>技术</a>
+        <a href='../../pages/challenges.html'>安全与验证</a>
+        <a href='../../pages/scenarios.html'>落地与产业</a>
+        <a href='../../pages/frontier.html'>AI 前沿</a>
+        <a href='../../pages/tutorial/index.html'>系统教程</a>
+        <a href='../../pages/news.html'>领域动态</a>
+      </nav>
+    </div>
+    <div class='footer-bar'><span>© 2026 驶向未来 · 自动驾驶百科</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class='btt' aria-label='返回顶部'>↑</button>
+<script src='../../assets/main.js'></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>

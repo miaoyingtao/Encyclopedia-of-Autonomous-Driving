@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业化与单位经济 · 四个场景的成本账 · 驶向未来百科</title>
+<meta name="description" content="自动驾驶商业化的统一口径：每公里总成本 < 每公里收入。收入侧（里程 × 单价 × 载客率）、成本侧六项、四个场景（Robotaxi/干线物流/港口矿区/末端配送）横向对照与关键杠杆。">
+<link rel="stylesheet" href="../../assets/style.css">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="accent-scenarios">
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../../index.html"><span class="brand-logo">🚗</span><span>驶向未来 · 自动驾驶百科</span></a>
+    <button class="nav-toggle" aria-label="展开菜单" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      <a href="../../index.html">首页</a>
+      <a href="../../pages/overview.html">入门</a>
+      <a href="../../pages/tech.html">技术</a>
+      <a href="../../pages/challenges.html">安全与验证</a>
+      <a href="../../pages/scenarios.html" class="active">落地与产业</a>
+      <a href="../../pages/frontier.html">AI 前沿</a>
+      <a href="../../pages/tutorial/index.html">系统教程</a>
+      <a href="../../pages/news.html">领域动态</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--inner">
+  <div class="wrap">
+    <span class="kicker">落地与产业 · 商业视角</span>
+    <h1>商业化与单位经济：四个场景的成本账</h1>
+    <p class="lead">技术能不能落地，最终要回答一个问题：<b>这门生意的每公里成本，能不能低于每公里收入？</b>这一页把四个场景（Robotaxi、干线物流、港口矿区、末端配送）的账本收进同一个框架，并说明为什么"降本"比"提价"更现实。</p>
+    <nav class="crumb">
+      <a href="../../index.html">首页</a><span class="sep">/</span><a href="../../pages/scenarios.html">落地与产业</a><span class="sep">/</span><span>商业化与单位经济</span>
+    </nav>
+  </div>
+</section>
+
+<main>
+  <div class="wrap layout2">
+    <aside class="toc" aria-label="本页目录">
+      <h4>本页目录</h4>
+      <a href="#inequality">1. ★ 一个不等式</a>
+      <a href="#revenue">2. ★ 收入侧：三个乘数</a>
+      <a href="#cost">3. ★ 成本侧：六项开支</a>
+      <a href="#compare">4. ★ 四个场景横向对照</a>
+      <a href="#levers">5. ◆ 关键杠杆与降本路径</a>
+      <a href="#caveat">6. ▪ 口径说明</a>
+      <a href="#faq">7. 常见疑问</a>
+      <a href="#refs">8. 延伸阅读</a>
+      <a href="#next" class="lv2-child">下一步怎么读</a>
+    </aside>
+
+    <div>
+      <section class="sec scroll-target" id="inequality">
+        <div class="sec-head"><span class="no">01</span><h2>一个不等式</h2></div>
+        <div class="math">每公里总成本 &lt; 每公里收入</div>
+        <p>所有自动驾驶商业模式，本质都在解这一个不等式。它把"技术炫酷"翻译成两个可核验的数字：<b>一边是车能挣多少，一边是车要花多少</b>。行业的现状是——技术已经能在限定场景里跑通，但多数场景的收入一侧被现有价格锚定（网约车价、物流运价），因此胜负手几乎全部落在<b>成本一侧</b>。</p>
+        <p>与传统模式相比，无人化做的事是<b>"用资产与技术成本替换人力成本"</b>：省下司机，但多了传感器、计算平台、高精地图、远程支持与折旧。<b>只有当"多出来的技术成本"小于"省下的人力"，模型才成立</b>——这就是为什么最先跑通的场景（港口、矿区）都有共同特征：人力成本高、工作环境差、作业强度大。</p>
+        <div class="panel tip"><span class="pt">两个必看的财务量</span><p><b>日毛利</b> = 里程 × 单价 × 载客率 − 折旧 − 能源 − 运维 − 保险 − 远程支持；<b>回本周期</b> ≈ 车辆总成本 ÷ 日毛利。前者告诉你"一天赚不赚"，后者告诉你"多久能回本"。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="revenue">
+        <div class="sec-head"><span class="no">02</span><h2>收入侧：三个乘数</h2></div>
+        <div class="math math-left">出行服务：日均收入 = 有效运营里程 × 每公里单价 × 载客率（载客率 = 有客里程 ÷ 总里程）<br>货运服务：日均收入 = 趟次 × 单趟运费 × 装载率</div>
+        <ul>
+          <li><b>单价</b>：受现有出行/物流价格锚定与监管约束，很难靠"无人"涨上去。<b>无人化的定价逻辑通常是"比人类司机更便宜"</b>，而不是更贵。</li>
+          <li><b>载客率 / 装载率</b>：最容易被忽视、影响却最大的乘数。空驶里程翻倍，收入就腰斩——而空驶恰恰是无人车队的常见问题（派单效率、充电/回库时间）。</li>
+          <li><b>有效运营里程</b>：不是"总里程"，而是"能产生收入的里程"。无人车理论上可以 7×24 运行，因此<b>利用率</b>（每天真正在营运的小时数）是收入侧的核心变量。</li>
+        </ul>
+        <p>对货运而言，收入侧还多两个变量：<b>装载率</b>（空载返程是最大浪费）与<b>时效达成率</b>（决定能否拿到高价值货源）。这也是"枢纽到枢纽"模式被看好的原因：固定线路更容易匹配双向货流。</p>
+      </section>
+
+      <section class="sec scroll-target" id="cost">
+        <div class="sec-head"><span class="no">03</span><h2>成本侧：六项开支</h2></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>成本项</th><th>包含什么</th><th>降本路径</th><th>下降速度</th></tr></thead>
+            <tbody>
+              <tr><td><b>车辆折旧</b></td><td>整车 + 传感器套件 + 计算平台</td><td>规模化前装、传感器国产化、平台化车型（去掉方向盘/踏板重新布置）</td><td>快</td></tr>
+              <tr><td><b>能源</b></td><td>电费 / 油费</td><td>电动化、编队行驶（公开研究显示节油约 5%–10%）、路线优化</td><td>中</td></tr>
+              <tr><td><b>运维</b></td><td>清洁、保养、换件、轮胎损耗</td><td>可靠性提升、自动清洁、传感器脏污自检</td><td>中</td></tr>
+              <tr><td><b>保险</b></td><td>按里程/责任主体定价</td><td>安全数据积累后费率下降；从"人险"转向"产品责任险"</td><td>慢</td></tr>
+              <tr><td><b>远程支持</b></td><td>远程安全员 / 操作员人力</td><td>提高 1:N（一人看更多车）、降低介入频率（算法变强最直接）</td><td>快</td></tr>
+              <tr><td><b>地图与云服务</b></td><td>高精地图采集/审图/更新、云端存储与训练</td><td>轻地图路线、众包更新、算法迭代降低算力需求</td><td>中</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel info"><span class="pt">为什么"远程支持"是关键</span><p>早期无人车队常见配置是"一人看一辆"甚至"一人一车加后台"，人力成本与雇司机相差无几——这时候无人化在经济上并不成立。<b>从 1:1 走向 1:10 的过程，才是真正的成本革命</b>，而它取决于系统的接管率与异常处理能力。</p></div>
+      </section>
+      <section class="sec scroll-target" id="compare">
+        <div class="sec-head"><span class="no">04</span><h2>四个场景横向对照</h2></div>
+        <p class="sec-sub">四个场景用同一套框架拆解。<b>注意它们在"当前阶段"一列差异巨大</b>——有的已经在赚钱，有的还在烧钱换数据。</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>收入结构</th><th>主要成本项</th><th>关键杠杆</th><th>当前阶段</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>Robotaxi</b><br>城市出行</td>
+                <td>里程 × 单价 × 载客率</td>
+                <td>车辆折旧、能源、运维、保险、远程支持（+ 高精地图）</td>
+                <td>载客率、无人化率、远程支持比 1:N、日均利用率</td>
+                <td>有限区域收费运营</td>
+              </tr>
+              <tr>
+                <td><b>干线物流</b><br>高速货运</td>
+                <td>趟次 × 运费 × 装载率</td>
+                <td>车辆折旧、燃油/电费、运维、保险、安全员或远程支持</td>
+                <td>替代司机成本（占干线成本 20%–40%）、编队节油 5%–10%、周转率</td>
+                <td>有人监督的商业试运营、编队试验</td>
+              </tr>
+              <tr>
+                <td><b>港口 / 矿区</b><br>封闭作业</td>
+                <td>按作业量结算（吞吐量 / 运量）</td>
+                <td>车辆与改造折旧、能源、运维、调度系统与场地改造</td>
+                <td>7×24 利用率、招工难度带来的替代价值、安全成本</td>
+                <td><b>已规模化无人运营</b>（最先跑通）</td>
+              </tr>
+              <tr>
+                <td><b>末端配送 + AVP</b><br>低速近场</td>
+                <td>单件配送费 × 日均单量</td>
+                <td>车辆折旧（传感器方案较轻）、电费、运维、远程支持</td>
+                <td>订单密度、单车成本（目标 ≈ 一名配送员年成本）</td>
+                <td>园区 / 校园 / 社区试点</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel warn"><span class="pt">一条规律：越"封闭"，越早赚钱</span><p>四个场景的落地顺序与"环境可控度"高度相关：<b>封闭（港口矿区）→ 半封闭（园区接驳、末端配送）→ 结构化道路（高速干线）→ 开放城区（Robotaxi）</b>。原因不在技术强弱，而在经济性：环境越可控，安全论证越便宜、单位经济越容易成立。详见 <a href="../scenarios.html#ladder">落地难度光谱</a>。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="levers">
+        <div class="sec-head"><span class="no">05</span><h2>关键杠杆与降本路径</h2></div>
+        <p>把不等式拆开，只有五个可以拧的旋钮：</p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>杠杆</th><th>为什么关键</th><th>怎么改善</th></tr></thead>
+            <tbody>
+              <tr><td><b>载客率 / 装载率</b></td><td>它直接乘在收入上，且常被忽视</td><td>更好的调度与派单、双向货流匹配、减少回库与充电空驶</td></tr>
+              <tr><td><b>单车成本</b></td><td>决定折旧与回本周期</td><td>规模化前装、传感器国产化、平台化车型</td></tr>
+              <tr><td><b>远程支持比 1:N</b></td><td>直接决定"人力是否真的被省掉"</td><td>降低接管率与异常率（算法）、把常见异常自动化处理</td></tr>
+              <tr><td><b>日均利用率</b></td><td>无人车的天然优势，能不能兑现</td><td>充电/加注调度、清洁与运维的并行化、夜间运营</td></tr>
+              <tr><td><b>回本周期</b></td><td>= 车辆总成本 ÷ 日毛利，是投资决策的核心</td><td>上面四项的合力；也是融资与租赁模式设计的基础</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><b>降本的四条现实路径：</b>① <b>规模化前装</b>（把传感器与线控做进整车，而不是后装改造）；② <b>国产化</b>（激光雷达、芯片、域控价格快速下探）；③ <b>平台化车型</b>（一个底盘适配多种场景，摊薄研发）；④ <b>算法提升</b>（接管率下降既省人力又提高利用率——<b>这是唯一"越用越便宜"的路径</b>）。</p>
+        <div class="panel info"><span class="pt">一个容易忽略的反向成本</span><p>扩大 ODD（更多城市、更复杂路况、更恶劣天气）会同时推高三类成本：传感器与算力、地图与数据、安全论证与保险。因此正确顺序是<b>"先窄后宽、边跑边扩"</b>——先用小范围把单位经济跑正，再用同一套体系复制。</p></div>
+      </section>
+
+      <section class="sec scroll-target" id="caveat">
+        <div class="sec-head"><span class="no">06</span><h2>口径说明</h2></div>
+        <p class="sec-sub">同一个"每公里成本"，各家算法可能差一倍。<b>本页只提供框架与口径，不列具体公司的数字</b>——因为脱离口径与阶段谈数字，等于误导。</p>
+        <ul>
+          <li><b>成本含哪些？</b>有的口径只算运营现金支出（能源、运维、远程人力），不含车辆折旧；有的把折旧摊销、地图与研发也摊进每公里。</li>
+          <li><b>里程算哪一段？</b>总里程 / 运营里程 / 载客里程三者差别巨大：用总里程做分母，成本会被"摊薄"得很好看。</li>
+          <li><b>是否含安全员？</b>"有人监督"与"车内无人"是两个完全不同的成本结构，比较时必须对齐。</li>
+          <li><b>哪个阶段？</b>试点期（车辆少、人力多、无规模效应）与规模化运营期的单位成本可能相差数倍。</li>
+        </ul>
+        <p>看到任何"每公里只要 X 元"的说法，建议追问三件事：<b>含不含折旧？分母是哪段里程？车里还有没有安全员？</b>这三个问题的答案，往往比数字本身更说明问题。</p>
+      </section>
+      <section class="sec scroll-target" id="faq">
+        <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="faq">
+          <details><summary>无人化真的能省钱吗？</summary><p>能省的是<b>人力</b>，但同时增加了<b>资产与技术成本</b>（传感器、计算平台、地图、远程支持、折旧）。所以答案取决于两个数孰大孰小——这正是"高人力成本 + 恶劣环境"的场景（港口、矿区、长途干线）先跑通的原因，见 <a href="#inequality">一个不等式</a>。</p></details>
+          <details><summary>为什么现在的 Robotaxi 往往还比网约车贵？</summary><p>因为三项成本尚未摊薄：<b>车辆与传感器成本高</b>、<b>远程支持比还停留在较低水平</b>、<b>日均利用率与载客率不足</b>。这三项都会随规模与算法提升而改善，见 <a href="#levers">关键杠杆</a>。</p></details>
+          <details><summary>为什么港口、矿区最先跑通？</summary><p>三个条件同时满足：<b>人力成本高且招工难</b>、<b>作业强度大或环境恶劣</b>、<b>环境封闭可控（安全论证成本低）</b>。再加上 7×24 作业把车辆利用率拉满，单位经济自然最先成立，见 <a href="port-mining.html">港口与矿区</a>。</p></details>
+          <details><summary>无人配送为什么离不开“订单密度”？</summary><p>因为单件成本 = 固定成本 ÷ 日均单量。园区、校园里包裹集中、路线固定，分母大且稳定；放到社会化道路上，单量分散、往返距离长，模型立刻算不过来，见 <a href="delivery-avp.html#eco">末端配送的单位经济</a>。</p></details>
+          <details><summary>保险费用会降下来吗？</summary><p>会，但速度慢。它是唯一"靠数据积累才降"的成本项：安全里程越多、接管率越低，产品责任险的费率才越有下降空间。这也是企业与监管都强调<b>公开安全数据</b>的经济动机之一，见 <a href="../regulation.html#insurance">保险体系的重构</a>。</p></details>
+          <details><summary>怎么判断一家公司讲的单位经济是真是假？</summary><p>三个追问即可过滤大部分水分：<b>① 成本里含不含车辆折旧与地图成本？② 每公里成本的分母是总里程还是载客里程？③ 车里还有没有安全员、后台人力比是多少？</b>答不上来的数字，通常是把最贵的部分排除在外的"漂亮账"，见 <a href="#caveat">口径说明</a>。</p></details>
+        </div>
+      </section>
+
+      <section class="sec scroll-target" id="refs">
+        <div class="sec-head"><span class="no">08</span><h2>延伸阅读</h2></div>
+        <div class="paper"><h4>四个场景的正本页</h4><p><a href="robotaxi.html">Robotaxi</a>（含单位经济模型的展开）、<a href="freight.html">干线物流</a>（含量化成本账与编队节油）、<a href="port-mining.html">港口与矿区</a>（最先跑通的商业闭环）、<a href="delivery-avp.html">末端配送与自动泊车</a>（订单密度与单件成本）。</p></div>
+        <div class="paper"><h4>配套阅读</h4><p><a href="../scenarios.html#eval">场景评估框架</a>（ODD 复杂度 / 单位经济 / 监管成熟度 / 技术复用度）；<a href="../glossary.html#metrics">指标字典 · 商业化组</a>；<a href="../future.html#horizon">未来展望 · 时间表</a>。</p></div>
+      </section>
+
+      <section class="related scroll-target" id="next">
+        <h3>接下来怎么读</h3>
+        <p style="margin-bottom:10px">本页是"钱的视角"，回到场景或往前看趋势：</p>
+        <div class="rel-links">
+          <a href="../scenarios.html">落地与产业总览</a>
+          <a href="robotaxi.html">Robotaxi 专题</a>
+          <a href="freight.html">干线物流</a>
+          <a href="port-mining.html">港口与矿区</a>
+          <a href="delivery-avp.html">末端配送与 AVP</a>
+          <a href="../regulation.html#insurance">保险体系的重构</a>
+          <a href="../glossary.html">概念 · 指标 · 标准 索引</a>
+        </div>
+        <nav class="chapter-nav" aria-label="页面翻页">
+          <a class="chapter-link prev" href="../scenarios.html">
+            <span class="chapter-dir">← 上一篇</span>
+            <b>落地与产业总览</b>
+          </a>
+          <a class="chapter-link map" href="robotaxi.html">
+            <b>Robotaxi 专题</b>
+          </a>
+          <a class="chapter-link next" href="../future.html">
+            <span class="chapter-dir">下一篇 →</span>
+            <b>未来展望</b>
+          </a>
+        </nav>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">驶向未来 · 自动驾驶百科</p>
+        <p style="max-width:520px">聚焦自动驾驶的技术原理、工程实践与产业落地，兼顾科普与系统教程。仅供学习交流。</p>
+      </div>
+      <nav class="footer-links">
+        <a href="../../index.html">首页</a>
+        <a href="../../pages/overview.html">入门</a>
+        <a href="../../pages/tech.html">技术</a>
+        <a href="../../pages/challenges.html">安全与验证</a>
+        <a href="../../pages/scenarios.html">落地与产业</a>
+        <a href="../../pages/frontier.html">AI 前沿</a>
+        <a href="../../pages/tutorial/index.html">系统教程</a>
+        <a href="../../pages/news.html">领域动态</a>
+      </nav>
+    </div>
+    <div class="footer-bar"><span>© 2026 驶向未来 · 自动驾驶百科</span>
+      <span id="site-stamp" class="site-stamp"></span>
+    </div>
+  </div>
+</footer>
+
+<button class="btt" aria-label="返回顶部">↑</button>
+<script src="../../assets/main.js"></script>
+<button class="search-fab" id="searchFab" type="button" aria-label="站内搜索" title="站内搜索（按 / 或 Esc）">🔍</button>
+<script>window.SITE_PREFIX = "../../";</script>
+<script src="../../assets/search.js"></script>
+  <script src="../../assets/site-update.js"></script>
+</body>
+</html>
