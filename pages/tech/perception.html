@@ -201,6 +201,11 @@
 
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">11</span><h2>关于感知的高频疑问</h2></div>
+        <div class="panel info">
+          <span class="pt">边界与争议：这几个问题行业还没有定论</span>
+          <p><b>① 纯视觉还是多传感器？</b>一派主张用海量数据与算法换取成本优势，另一派坚持异构冗余才能保证安全下限。难有定论的关键在于：<b>两者的结论都绑定在各自 ODD 与数据规模上，不能互相迁移</b>。</p>
+          <p><b>② 统一表征（BEV/占用）会不会吞掉模块化？</b>联合学习能提升上限，但可解释性与“逐项验证”变难。目前的实际答案是混合：<b>能力层融合、安全层独立</b>。</p>
+        </div>
         <div class="faq">
           <details><summary>摄像头能被太阳或强光“晃瞎”吗？</summary><p>会。逆光、眩光、隧道口明暗突变是真实挑战。量产方案用 HDR、偏振片、多曝光融合与算法滤波缓解，必要时把控制权交给对光照不敏感的雷达/激光雷达或让系统降级。</p></details>
           <details><summary>激光雷达在雨雪天会失效吗？</summary><p>会衰减但不一定失效。雨滴会造成噪点、浓雾会缩短有效探测距离，这是激光雷达的物理短板；所以 L4 车队会限制恶劣天气下的 ODD，或依靠毫米波雷达兜底，见 <a href="perception/radar.html">毫米波雷达</a>。</p></details>

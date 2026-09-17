@@ -152,6 +152,11 @@
 
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">07</span><h2>常见疑问</h2></div>
+        <div class="panel info">
+          <span class="pt">边界与争议：这几个问题行业还没有定论</span>
+          <p><b>① 激光雷达会成为“安全件标配”吗？</b>成本已降到千元级，但纯视觉阵营认为算法与数据能补上。真正分歧在于：<b>“单路失效”要不要用物理冗余兜住</b>——这取决于等级与是否有人在车里。</p>
+          <p><b>② 传感器数量有没有上限？</b>每增加一路就多一个标定漂移点与失效组合。目前没有公认的“最优配置”，只有“适配 ODD 的配置”。</p>
+        </div>
         <div class="faq">
           <details><summary>为什么 L4 车要装这么多传感器？</summary><p>因为没人兜底。<b>L4 必须自己证明"任意一路失效也能安全停下来"</b>，所以需要异构冗余（不同物理原理互为备份）+ 独立故障检测。L2 车可以用驾驶员当最后兜底，因此传感器更少、成本更低。</p></details>
           <details><summary>激光雷达会取代摄像头吗？</summary><p>不会。激光雷达给不出颜色与文字（红绿灯、路牌、交警手势），摄像头给不出高精度几何。二者是互补的，见 <a href="perception/lidar.html#faq">激光雷达常见疑问</a>。</p></details>

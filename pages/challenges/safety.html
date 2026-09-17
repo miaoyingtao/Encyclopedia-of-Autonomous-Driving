@@ -167,6 +167,11 @@
 
       <section class="sec scroll-target" id="faq">
         <div class="sec-head"><span class="no">09</span><h2>常见疑问</h2></div>
+        <div class="panel info">
+          <span class="pt">边界与争议：这几个问题行业还没有定论</span>
+          <p><b>① 残余风险的可接受阈值由谁定？</b>工程上可以算出残余风险，但“多少算可接受”是<b>社会与监管的选择</b>，不是技术问题。目前缺少跨国统一的量化基准，各国监管尺度也不一致。</p>
+          <p><b>② SOTIF 要求的“证明未知场景足够少”能做到吗？</b>严格意义上不能证明，只能通过场景库覆盖、参数化测试与运营监控不断逼近。<b>因此它是一条持续收敛的曲线，而不是一次性的验收项。</b></p>
+        </div>
         <div class="faq">
           <details><summary>ISO 26262 能保证 AI 不出错吗？</summary><p>不能。26262 针对“已知的失效模式”，而 AI 的错误往往是“未知的泛化失败”，这属于 SOTIF 范畴。所以现在的认证思路是“26262 管失效 + 21448 管边界 + 数据驱动持续验证”。</p></details>
           <details><summary>ASIL D 是不是意味着绝对可靠？</summary><p>不是。ASIL D 代表“按当前工业方法能做到的最高安全要求”，仍需要配合冗余、监控与降级策略共同作用。它降低的是“系统性漏洞”的概率，不是把它清零。</p></details>
