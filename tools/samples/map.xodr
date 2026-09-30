@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="4" name="Zhongxing_Interchange" version="1.0" date="2024-05-21" north="30.2100" south="30.1950" east="120.2250" west="120.2100">
+        <geoReference><![CDATA[+proj=tmerc +lat_0=30.2 +lon_0=120.2 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs]]></geoReference>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 1. 高架道路：时代高架 (南北向，主干道) -->
+    <!-- 高程：从 0m 爬坡至 6m，维持，再下坡 -->
+    <!-- ========================================== -->
+    <road name="Shidai_Elevated" length="1000.0" id="1" junction="-1">
+        <planView>
+            <!-- 起点在 (0, -500)，航向正北 (1.5708) -->
+            <geometry s="0.0" x="0.0" y="-500.0" hdg="1.570796" length="1000.0">
+                <line/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <!-- 0-150m 爬坡 -->
+            <elevation s="0.0" a="0.0" b="0.04" c="0.0" d="0.0"/>
+            <!-- 150-850m 保持 6m 高度 -->
+            <elevation s="150.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+            <!-- 850-1000m 下坡 -->
+            <elevation s="850.0" a="6.0" b="-0.04" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <left>
+                    <lane id="1" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                    <lane id="2" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                </left>
+                <center><lane id="0" type="none" level="true"/></center>
+                <right>
+                    <lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                    <lane id="-2" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 2. 高架道路：江南大道 (东西向，斜交) -->
+    <!-- 注意：航向角设为 0.12 弧度，模拟地图中的倾斜 -->
+    <!-- ========================================== -->
+    <road name="Jiangnan_Elevated" length="1000.0" id="2" junction="-1">
+        <planView>
+            <!-- 起点在 (-500, -60)，向东偏北方向延伸 -->
+            <geometry s="0.0" x="-500.0" y="-60.0" hdg="0.12" length="1000.0">
+                <line/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="0.0" b="0.04" c="0.0" d="0.0"/>
+            <elevation s="150.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+            <elevation s="850.0" a="6.0" b="-0.04" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <left>
+                    <lane id="1" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                    <lane id="2" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                </left>
+                <center><lane id="0" type="none" level="true"/></center>
+                <right>
+                    <lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                    <lane id="-2" type="driving" level="true"><width sOffset="0.0" a="3.75" b="0.0" c="0.0" d="0.0"/></lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 3. 地面辅路：时代大道 (紧随高架) -->
+    <!-- ========================================== -->
+    <road name="Shidai_Ground" length="1000.0" id="3" junction="-1">
+        <planView>
+            <geometry s="0.0" x="30.0" y="-500.0" hdg="1.570796" length="1000.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></left>
+                <center><lane id="0" type="none" level="false"/></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 4. 地面辅路：江南大道 (紧随高架) -->
+    <!-- ========================================== -->
+    <road name="Jiangnan_Ground" length="1000.0" id="4" junction="-1">
+        <planView>
+            <geometry s="0.0" x="-500.0" y="-90.0" hdg="0.12" length="1000.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></left>
+                <center><lane id="0" type="none" level="false"/></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 5. 周边道路：滨盛路 (南侧东西向) -->
+    <!-- ========================================== -->
+    <road name="Binsheng_Road" length="1000.0" id="5" junction="-1">
+        <planView>
+            <geometry s="0.0" x="-500.0" y="-250.0" hdg="0.12" length="1000.0"><line/></geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></left>
+                <center><lane id="0" type="none" level="false"/></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 6. 周边道路：滨康路 (北侧东西向) -->
+    <!-- ========================================== -->
+    <road name="Binkang_Road" length="1000.0" id="6" junction="-1">
+        <planView>
+            <geometry s="0.0" x="-500.0" y="150.0" hdg="0.12" length="1000.0"><line/></geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></left>
+                <center><lane id="0" type="none" level="false"/></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 7. 周边道路：江晖路 (东侧南北向) -->
+    <!-- ========================================== -->
+    <road name="Jianghui_Road" length="1000.0" id="7" junction="-1">
+        <planView>
+            <geometry s="0.0" x="250.0" y="-500.0" hdg="1.570796" length="1000.0"><line/></geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <left><lane id="1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></left>
+                <center><lane id="0" type="none" level="false"/></center>
+                <right><lane id="-1" type="driving" level="false"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 8. 立交匝道：重点复现西南角大型环形匝道 -->
+    <!-- 使用 ARC 模拟大曲率环岛 -->
+    <!-- ========================================== -->
+    <road name="Ramp_SW_Loop" length="300.0" id="8" junction="-1">
+        <planView>
+            <!-- 起点在时代高架西侧，向南绕行，最终接入江南大道 -->
+            <geometry s="0.0" x="-30.0" y="-200.0" hdg="-1.570796" length="300.0">
+                <!-- 大曲率圆弧，模拟环岛匝道 -->
+                <arc curvature="0.025"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <!-- 匝道高程从 6m 渐变为 0m 接地 -->
+            <elevation s="0.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+            <elevation s="300.0" a="0.0" b="0.0" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <center><lane id="0" type="none" level="true"/></center>
+                <right><lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 9. 立交匝道：东北角定向匝道 -->
+    <!-- ========================================== -->
+    <road name="Ramp_NE" length="200.0" id="9" junction="-1">
+        <planView>
+            <!-- 起点在江南大道高架，向北绕行接入时代高架 -->
+            <geometry s="0.0" x="150.0" y="50.0" hdg="0.12" length="200.0">
+                <arc curvature="-0.02"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+            <elevation s="200.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <center><lane id="0" type="none" level="true"/></center>
+                <right><lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 10. 立交匝道：东南角右转匝道 -->
+    <!-- ========================================== -->
+    <road name="Ramp_SE" length="150.0" id="10" junction="-1">
+        <planView>
+            <geometry s="0.0" x="100.0" y="-100.0" hdg="0.12" length="150.0">
+                <arc curvature="-0.025"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+            <elevation s="150.0" a="0.0" b="0.0" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <center><lane id="0" type="none" level="true"/></center>
+                <right><lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- ========================================== -->
+    <!-- 11. 立交匝道：西北角左转匝道 -->
+    <!-- ========================================== -->
+    <road name="Ramp_NW" length="250.0" id="11" junction="-1">
+        <planView>
+            <geometry s="0.0" x="-100.0" y="50.0" hdg="0.12" length="250.0">
+                <arc curvature="0.015"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0" a="0.0" b="0.0" c="0.0" d="0.0"/>
+            <elevation s="250.0" a="6.0" b="0.0" c="0.0" d="0.0"/>
+        </elevationProfile>
+        <lanes>
+            <laneSection s="0.0">
+                <center><lane id="0" type="none" level="true"/></center>
+                <right><lane id="-1" type="driving" level="true"><width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/></lane></right>
+            </laneSection>
+        </lanes>
+    </road>
+</OpenDRIVE>

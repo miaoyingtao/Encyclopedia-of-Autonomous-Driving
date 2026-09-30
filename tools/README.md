@@ -18,7 +18,7 @@
 | `check_links.py` | 全站质检：内部链接/锚点/资源/组件/编码检查；`--stamp` 写维护日期并自动补全页脚标记与 favicon |
 | `build_search_index.py` | 站内离线搜索索引生成器：内容变更后运行一次，🔍 即可搜到最新文本 |
 | `update_news.ps1` / `update_news.bat` | 定时/一键更新入口（调用 `news_fetcher.py`） |
-| `samples/` | 示例数据文件（如 OpenDRIVE 路网样例 `road-with-ramp.xodr`，含地面道路→上坡匝道→高架），供仿真相关章节参考 |
+| `samples/` | 示例数据文件（OpenDRIVE 路网样例）：`road-with-ramp.xodr`（地面道路→上坡匝道→高架）、`map.xodr`（11 条 road，含高程）、`approximate_elevated_interchange.xodr` 与 `closer_reference_grade_separated_interchange.xodr`（两份立交样例，含 junction）。均由 `assets/adsim/opendrive.js` 解析：junction 只按几何拼接、高程被忽略 |
 | `README.md` | 本文档 |
 
 > 站点渲染逻辑无需改动：页面每次打开都会读取 `assets/news-data.js`。

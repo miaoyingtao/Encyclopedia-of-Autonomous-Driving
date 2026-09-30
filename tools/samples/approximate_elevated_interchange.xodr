@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenDRIVE>
+  <header revMajor="1" revMinor="6" name="Approximate elevated urban interchange" version="1.00" date="2026-09-18" north="180" south="-180" east="180" west="-180" vendor="Generated schematic model"/>
+  <road name="Ground arterial - west approach" length="158.000000" id="101" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-180.000000" y="0.000000" hdg="0.000000000" length="158.000000">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ground arterial - east approach" length="158.000000" id="102" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="22.000000" y="0.000000" hdg="0.000000000" length="158.000000">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Elevated expressway - north approach" length="156.000000" id="201" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="0.000000" y="180.000000" hdg="-1.570796327" length="156.000000">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="5.500000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="motorway">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Elevated expressway - south approach" length="156.000000" id="202" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="0.000000" y="-24.000000" hdg="-1.570796327" length="156.000000">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="5.500000" b="-0.006410256" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="motorway">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="22.220" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Diagonal surface road - southwest approach" length="177.854933" id="301" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-180.000000" y="-105.000000" hdg="0.481266931" length="101.533246">
+        <line/>
+      </geometry>
+      <geometry s="101.533246" x="-90.000000" y="-58.000000" hdg="0.551654983" length="76.321688">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Diagonal surface road - northeast approach" length="178.256357" id="302" junction="-1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="25.000000" y="18.000000" hdg="0.591292065" length="84.314886">
+        <line/>
+      </geometry>
+      <geometry s="84.314886" x="95.000000" y="65.000000" hdg="0.439842583" length="93.941471">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+          <lane id="-2" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp NW to east" length="236.934328" id="401" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-120.000000" y="120.000000" hdg="-0.785398163" length="59.396970">
+        <line/>
+      </geometry>
+      <geometry s="59.396970" x="-78.000000" y="78.000000" hdg="-0.785398163" length="60.811183">
+        <line/>
+      </geometry>
+      <geometry s="120.208153" x="-35.000000" y="35.000000" hdg="-0.172190815" length="116.726175">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.021102894" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp east to SW" length="192.817026" id="402" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="100.000000" y="-5.000000" hdg="-2.782821983" length="42.720019">
+        <line/>
+      </geometry>
+      <geometry s="42.720019" x="60.000000" y="-20.000000" hdg="-2.638749443" length="45.650849">
+        <line/>
+      </geometry>
+      <geometry s="88.370868" x="20.000000" y="-42.000000" hdg="-2.609383149" length="104.446158">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.000000000" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp north to west" length="150.029110" id="403" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-8.000000" y="95.000000" hdg="-2.115660242" length="38.587563">
+        <line/>
+      </geometry>
+      <geometry s="38.587563" x="-28.000000" y="62.000000" hdg="-2.418613300" length="45.343136">
+        <line/>
+      </geometry>
+      <geometry s="83.930699" x="-62.000000" y="32.000000" hdg="-2.834195180" length="66.098411">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="5.500000" b="-0.036659552" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp west to south" length="140.807791" id="404" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-105.000000" y="-10.000000" hdg="-0.396441283" length="46.615448">
+        <line/>
+      </geometry>
+      <geometry s="46.615448" x="-62.000000" y="-28.000000" hdg="-0.753151281" length="43.863424">
+        <line/>
+      </geometry>
+      <geometry s="90.478872" x="-30.000000" y="-58.000000" hdg="-1.205049026" length="50.328918">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.034089023" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp south to east" length="156.273691" id="405" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="10.000000" y="-105.000000" hdg="1.147942401" length="43.863424">
+        <line/>
+      </geometry>
+      <geometry s="43.863424" x="28.000000" y="-65.000000" hdg="0.722979353" length="45.343136">
+        <line/>
+      </geometry>
+      <geometry s="89.206561" x="62.000000" y="-35.000000" hdg="0.350044888" length="67.067131">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="4.800000" b="-0.030715343" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp east to north" length="156.766898" id="406" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="125.000000" y="12.000000" hdg="2.819842099" length="63.245553">
+        <line/>
+      </geometry>
+      <geometry s="63.245553" x="65.000000" y="32.000000" hdg="2.432966381" length="46.097722">
+        <line/>
+      </geometry>
+      <geometry s="109.343275" x="30.000000" y="62.000000" hdg="2.006149602" length="47.423623">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.035083937" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp west to north" length="157.489085" id="407" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-125.000000" y="12.000000" hdg="0.291456794" length="62.641839">
+        <line/>
+      </geometry>
+      <geometry s="62.641839" x="-65.000000" y="30.000000" hdg="0.740651932" length="47.423623">
+        <line/>
+      </geometry>
+      <geometry s="110.065462" x="-30.000000" y="62.000000" hdg="1.135443052" length="47.423623">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="0.000000" b="0.034923055" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road name="Ramp south to west" length="156.860673" id="408" junction="1" rule="RHT">
+    <planView>
+      <geometry s="0.000000" x="-10.000000" y="-105.000000" hdg="2.034443936" length="44.721360">
+        <line/>
+      </geometry>
+      <geometry s="44.721360" x="-30.000000" y="-65.000000" hdg="2.356194490" length="49.497475">
+        <line/>
+      </geometry>
+      <geometry s="94.218834" x="-65.000000" y="-30.000000" hdg="2.850135859" length="62.641839">
+        <line/>
+      </geometry>
+    </planView>
+    <elevationProfile>
+      <elevation s="0.0" a="4.800000" b="-0.030600404" c="0.0" d="0.0"/>
+    </elevationProfile>
+    <type s="0.0" type="town">
+      <speed max="60" unit="km/h"/>
+    </type>
+    <lanes>
+      <laneSection s="0.0">
+        <center>
+          <lane id="0" type="none" level="false"/>
+        </center>
+        <left>
+          <lane id="1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </left>
+        <right>
+          <lane id="-1" type="driving" level="false">
+            <width sOffset="0.0" a="3.5" b="0" c="0" d="0"/>
+            <speed max="16.670" unit="m/s"/>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <junction name="Central grade-separated interchange" id="1">
+    <connection id="1" incomingRoad="101" connectingRoad="401" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="2" incomingRoad="102" connectingRoad="402" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="3" incomingRoad="201" connectingRoad="403" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="4" incomingRoad="202" connectingRoad="404" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="5" incomingRoad="101" connectingRoad="407" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="6" incomingRoad="202" connectingRoad="408" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="7" incomingRoad="102" connectingRoad="406" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+    <connection id="8" incomingRoad="201" connectingRoad="405" contactPoint="start">
+      <laneLink from="-1" to="-1"/>
+    </connection>
+  </junction>
+  <userData>
+    <!--Schematic reconstruction from a map image. Coordinates are local and not georeferenced.-->
+  </userData>
+</OpenDRIVE>
