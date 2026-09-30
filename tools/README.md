@@ -59,9 +59,11 @@ python tools\news_fetcher.py
 
 仓库已内置两个工作流：
 
-- `.github/workflows/pages.yml` —— push 到 `main` 即发布静态站（先重建搜索索引并跑 `check_links.py`）。
+- `.github/workflows/pages.yml` —— push 到 `main` 即发布静态站（`build.py` 构建 → `check_links.py --root site`
+  质检 → 部署 `site/`），并每天北京时间 09:45 / 21:45 兜底重建一次。
 - `.github/workflows/refresh.yml` —— 每天北京时间 09:00 / 21:00 运行
-  `python tools/news_fetcher.py`，提交变化后的 `assets/news-data.js`，从而触发重新发布；抓取失败时不会覆盖旧数据。
+  `python tools/news_fetcher.py`，提交变化后的 `assets/news-data.js`，并显式派发 `pages.yml` 重新部署
+  （用 `GITHUB_TOKEN` 提交不会触发其它工作流）；抓取失败时不会覆盖旧数据。
 
 部署到 GitHub Pages 的完整步骤见仓库根目录 `README.md`。部署版为纯静态，无 Python 服务，新闻页
 “刷新动态”按钮会自动变为禁用并提示改为自动更新。
@@ -71,12 +73,14 @@ python tools\news_fetcher.py
 内容增删改之后建议按下面顺序维护一次：
 
 ```powershell
-python tools\build_search_index.py   # ① 重建站内搜索索引（会显示“indexed pages: 40”）
-python tools\check_links.py          # ② 全站质检：应输出“错误 0 个，警告 0 个”
-python tools\check_links.py --stamp  # ③ 写入今日日期到 assets/site-update.js（页脚显示“内容维护于 …”）
+python tools\build.py --check               # ① 内容结构校验（卡片引用、canonical、前置关系无环）
+python tools\build.py                       # ② 由 content/ 生成 site/
+python tools\check_links.py --root site     # ③ 产物质检：应输出“错误 0 个，警告 0 个”
+python tools\check_links.py --stamp         # ④ 旧站快照质检，并写入今日日期到 assets/site-update.js
+python tools\build_search_index.py          # （可选）重建仓库根旧站的搜索索引 assets/search-data.js
 ```
 
-- `check_links.py` 每次检查 40 个页面：内部链接与锚点、静态资源、主导航/页脚完整性、重复 id、常见标签配对、BOM/CRLF、搜索索引是否过期。
+- `check_links.py` 默认检查仓库根旧站 40 页，加 `--root site` 检查构建产物 44 页：内部链接与锚点、静态资源、主导航/页脚完整性、重复 id、常见标签配对、BOM/CRLF、搜索索引是否过期。
 - `--stamp` 是幂等的：自动生成 `assets/site-update.js`，并给每个页面补齐页脚 `<span id="site-stamp">`、`site-update.js` 引用与 `<link rel="icon">`（站点 favicon 为根目录 `favicon.svg`）。
 - 深色模式与移动端样式集中在 `assets/style.css` 末尾的“主题增强”段，改动页面后无需另建样式文件。
 - 其他参数：`--quiet` 只输出错误、`--print-index` 打印搜索索引条数。

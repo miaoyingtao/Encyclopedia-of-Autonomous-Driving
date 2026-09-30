@@ -29,11 +29,11 @@ scripts: ["assets/adsim/core/math.js", "assets/adsim/core/world.js", "assets/ads
 </div>
 
 <div class="panel info">
-  <span class="pt">三个场景各自在考什么</span>
-  <p><b>旁车切入</b>：左侧车辆并线到自车前方并减速，场景不启用变道，只能靠跟车与制动化解——考验跟踪收敛速度与纵向安全策略。<b>行人横穿</b>：行人从路侧横穿本车道，考验小尺寸目标的探测、横穿意图识别与停车让行。<b>施工区收窄</b>：施工围挡沿车道边界布置并侵入空间，考验静止障碍识别与车道内居中通行。</p>
+  <span class="pt">六个场景各自在考什么</span>
+  <p><b>旁车切入</b>：左侧车辆并线到自车前方并减速，场景不启用变道，只能靠跟车与制动化解——考验跟踪收敛速度与纵向安全策略。<b>行人横穿</b>：行人从路侧横穿本车道，考验小尺寸目标的探测、横穿意图识别与停车让行。<b>施工区收窄</b>：施工围挡沿车道边界布置并侵入空间，考验静止障碍识别与车道内居中通行。<b>弯道跟车</b>（R=90 m 圆弧）、<b>S 弯循迹</b>（含回旋线过渡段）、<b>盘山路</b>（连续同向弯 + 一段反弯，混入两处锥桶）：三者把道路从直线换成变曲率曲线，考验 Frenet 投影、横向加速度代价与 Pure Pursuit 的前视自适应。</p>
 </div>
 
 <div class="panel tip">
   <span class="pt">怎么自己复现（不需要浏览器）</span>
-  <p>核心栈与界面完全分离，<code>assets/adsim/core/</code> 下的六个模块都是纯 JavaScript，可直接用 Node 运行：<code>node assets/adsim/selftest.js</code> 会跑 65 条模块级与场景级断言并打印指标；<code>node assets/adsim/run.js</code> 会跑完三个场景并输出碰撞、TTC、加速度、jerk、里程与实时性能。随机种子固定，结果可复现。</p>
+  <p>核心栈与界面完全分离，<code>assets/adsim/core/</code> 下的九个模块（<code>math</code> <code>world</code> <code>perception</code> <code>prediction</code> <code>decision</code> <code>planning</code> <code>control</code> <code>metrics</code> <code>sim</code>）都是纯 JavaScript，可直接用 Node 运行：<code>node assets/adsim/selftest.js</code> 会跑 81 条模块级与场景级断言并打印指标；<code>node assets/adsim/run.js</code> 会跑完六个场景（每个场景跑它自带的 <code>steps</code>，也可用第二个参数覆盖步数）并输出碰撞、TTC、加速度、jerk、里程与实时性能。随机种子固定，结果可复现。</p>
 </div>

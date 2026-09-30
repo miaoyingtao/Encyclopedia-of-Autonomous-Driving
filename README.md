@@ -15,10 +15,12 @@ python tools\serve.py
 
 | 路径 | 说明 |
 | --- | --- |
-| `index.html` / `pages/` | 全站页面（40 个 HTML，全部使用相对路径，可直接放入子目录部署） |
-| `assets/` | 样式、脚本、站内搜索索引、领域动态数据 `news-data.js` |
+| `content/` | **权威内容源**：`cards/` 知识卡 40 张、`topics/` 主题页 40 个、`data/` 结构化数据（概念关系 / FAQ / 算例） |
+| `index.html` / `pages/` | 旧站快照（40 个 HTML，全部使用相对路径，可直接放入子目录部署） |
+| `site/` | 构建产物（`.gitignore` 忽略，由 CI 重建）：**44 个 HTML** = 40 个内容页 + 3 个工具页 + 首页 |
+| `assets/` | 样式、脚本、站内搜索索引、领域动态数据 `news-data.js`、ADSim 仿真实验台（`adsim/`） |
 | `favicon.svg` | 站点图标 |
-| `tools/` | Python 工具：`news_fetcher.py`、`serve.py`、`check_links.py`、`build_search_index.py` |
+| `tools/` | Python 工具：`build.py` 构建内容源、`news_fetcher.py` 抓取、`serve.py` 本地服务、`check_links.py` 质检、`import_html.py` 导入 |
 | `.github/workflows/` | GitHub Pages 部署与自动抓取（见下） |
 
 ## GitHub Pages + Actions 部署（成本 ¥0）
@@ -27,7 +29,8 @@ python tools\serve.py
 
 1. `.github/workflows/pages.yml` —— 每次 push 到 `main` 自动发布；
 2. `.github/workflows/refresh.yml` —— 每天北京时间 09:00 / 21:00 自动抓取新闻并提交 `assets/news-data.js`，
-   提交会再次触发 pages.yml 完成发布；也可在 Actions 页手动 `Run workflow`。
+   并显式派发 `pages.yml` 完成发布（`GITHUB_TOKEN` 的提交不会触发其它工作流）；`pages.yml` 另设每天
+   北京时间 09:45 / 21:45 的兜底重建。也可在 Actions 页手动 `Run workflow`。
 
 ### 第一次部署步骤
 
@@ -63,9 +66,10 @@ https://<你的用户名>.github.io/<仓库名>/
 ### 日常维护
 
 ```powershell
-python tools\build_search_index.py   # 正文变更后重建站内搜索索引
-python tools\check_links.py --stamp  # 全站质检 + 更新页脚维护日期
-python tools\check_links.py          # 应输出：错误 0 个，警告 0 个
+python tools\build.py --check             # 内容结构校验（卡片引用、canonical、前置关系无环）
+python tools\build.py                     # 由 content/ 生成 site/
+python tools\check_links.py --root site   # 产物质检：应输出“错误 0 个，警告 0 个”
+python tools\check_links.py --stamp       # 旧站快照质检 + 更新页脚维护日期
 ```
 
 > 中国大陆访问 GitHub Pages 可能不稳定；若面向国内读者，可把本项目目录原样部署到国内轻量

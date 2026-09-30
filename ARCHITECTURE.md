@@ -64,51 +64,36 @@ python tools\import_html.py            # 从旧 HTML 重新导入内容源（迁
 构建期会强制检查：占位符指向的卡片/算例必须存在；`canonical` 必须指向真实主题页；
 `prereq` 关系不允许成环。**正本唯一性因此从"人工约定"变成"构建期强制"。**
 
-## 迁移进度（2026-09-17）
+## 迁移进度（2026-09-30）
 
 | 项 | 状态 |
 | --- | --- |
 | Markdown / front-matter / 数据模型 | ✅ |
 | HTML → 内容源 自动导入 | ✅ 40 页 / 253 面板 / 265 FAQ / 385 KB |
 | 构建器（模板 + 渲染 + 搜索索引 + 相似度报告） | ✅ |
-| 构建产物质检 | ✅ `check_links.py --root site`：**43 页，0 错 0 警** |
+| 构建产物质检 | ✅ `check_links.py --root site`：**44 页，0 错 0 警** |
 | 与原站文本相似度 | ✅ 平均 **0.927** |
-| 知识卡 | 🟡 **12 / 90**（首批高优先级已完成：`bev` `occupancy-network` `time-alignment` `gnss-rtk-ppp` `odd` `ttc` `sotif` `asil` `mrm` `mpc` `rss` `unit-economics`） |
+| 知识卡 | ✅ **40 张全部落地**（`build.py --check`：cards=40 topics=40，0 错 0 警；分组见下节） |
 | 概念地图 / 学习路径 / 速览层 | ✅ `site/concept-map.html`、`site/paths.html`、`site/quick.html`（由卡片关系自动生成） |
 | `serve.py` 托管 `site/` | ✅（默认 site/，`--root` 可覆盖） |
-| CI 构建 + 部署 | ✅ `pages.yml` 已改为 `build.py` → `check_links --root site` → 部署 `site/` |
-| 主题页改写为卡片引用 | ⏳ 目前正文仍是导入的 HTML 透传（零信息损失），待逐段替换为 `{{card:…}}` |
+| CI 构建 + 部署 | ✅ `pages.yml`：`build.py` → `check_links --root site` → 部署 `site/`，并每日兜底重建；`refresh.yml` 抓取后显式派发部署 |
+| 闭环仿真实验台（ADSim） | ✅ `site/pages/adsim.html` + `assets/adsim/`：6 个场景、81 条自检断言、3 个模块 Lab、OpenDRIVE 导入与场景编辑器 |
+| 主题页改写为卡片引用 | 🟡 仅 `perception.md` / `fusion.md` 共 3 处 `{{card:…}}`；其余 38 页正文仍是导入的 HTML 透传（零信息损失），待逐段替换 |
 
-## 待建卡片（剩余 78 张）
+## 知识卡现状（40 张，按 `content/data/concepts.json` 的 groups 分组）
 
-**感知组**：`camera-depth` `camera-hdr-isp` `lidar-tof` `lidar-wavelength` `lidar-compensation`
-`radar-fmcw` `radar-ambiguity` `radar-ghost-brake` `ultrasonic-physics` `ultrasonic-temperature`
-`sensor-fusion` `data-association` `recall-first` `calibration-drift`
+**分级与责任**（1）：`odd`
+**感知与传感器**（18）：`bev` `occupancy-network` `time-alignment` `gnss-rtk-ppp` `calibration` `camera-depth` `camera-hdr-isp` `lidar-tof` `lidar-wavelength` `lidar-compensation` `radar-fmcw` `radar-ambiguity` `radar-ghost-brake` `ultrasonic-physics` `ultrasonic-temperature` `sensor-fusion` `data-association` `recall-first`
+**决策与控制**（3）：`mpc` `rss` `end-to-end`
+**安全与合规**（4）：`ttc` `sotif` `asil` `mrm`
+**定位与地图**（9）：`imu-dead-reckoning` `icp-ndt` `slam` `hdmap-layers` `map-freshness` `crowdsourced-update` `map-less-debate` `localization-integrity` `lane-level-accuracy`
+**系统与工程**（2）：`redundancy` `data-loop`
+**AI 前沿**（1）：`world-model`
+**场景与商业**（2）：`unit-economics` `takeover-rate`
 
-**定位组**：`imu-dead-reckoning` `icp-ndt` `slam` `hdmap-layers` `map-freshness`
-`crowdsourced-update` `map-less-debate` `localization-integrity` `lane-level-accuracy`
-
-**决策组**：`planning-layers` `prediction` `behavior-decision` `motion-planning` `frenet`
-`vehicle-model` `end-to-end` `actuator-latency` `safety-fallback`
-
-**工程组**：`latency-budget` `compute-platform` `middleware` `fail-safe-operational`
-`two-out-of-three` `data-loop` `shadow-mode` `ota-update` `sil-hil` `thermal-power`
-
-**安全组**：`iso-26262` `iso-21434` `tara` `un-r155-r156` `ul-4600` `residual-risk`
-`safety-target-per-hour` `cyber-data-privacy` `ddsad` `takeover-window` `liability-rule`
-
-**AI 前沿**：`llm-vlm-vla` `world-model` `attention-complexity` `quantization` `diffusion-flow`
-`onboard-deploy` `hallucination-risk` `sim-vs-real`
-
-**场景与商业**：`load-factor` `remote-support-ratio` `payback` `robotaxi-ops` `freight-platoon`
-`port-shovel-ratio` `delivery-density` `avp` `odd-expansion` `subsidy-debate` `safety-data-premium`
-
-**标准与资源**：`sae-j3016` `gb-t-40429` `un-r157` `iso-34502` `nuscenes` `waymo-open`
-`kitti` `autoware` `apollo` `carla`
-
-**失效案例**：`case-white-trailer` `case-cone-miss` `case-construction` `case-soiling`
-`case-weather-exit` `case-tunnel-glare` `case-remote-timeout` `case-l3-window`
-`case-ghost-brake` `case-calibration-regression`
+40 张全部已登记到 `concepts.json`（未登记会触发 `build.py --check` 的“未登记”警告），因此
+概念地图、学习路径与速览层三张工具页覆盖全部知识点。继续扩充卡片时的顺序：先在
+`concepts.json` 登记 `group` 与 `prereq/extends/contrasts`，再写 `content/cards/<id>.md`。
 
 ## 新增一页的流程
 
@@ -124,4 +109,8 @@ python tools\import_html.py            # 从旧 HTML 重新导入内容源（迁
 - `content/topics/*.md` 的正文是导入的 HTML 透传块（保证零信息损失），尚未改写成卡片引用
 - 相似度差异主要来自空白与结构细节，正文内容无丢失
 - `site/` 不入库（`.gitignore`），由构建生成；CI 中同样先构建再部署
+- `build.py` 复制 `assets/` → `site/assets/` 时只增不删：手工放进 `site/` 的临时文件不会被清理
+  （`site/` 本身不入库，删除目录重新构建即恢复干净）
+- `tools/build_search_index.py` 是旧站遗留脚本：它遍历仓库根下所有 HTML（含 `site/`），
+  因此会同时索引旧站快照与构建产物；构建产物自己的索引由 `build.py` 写入 `site/assets/search-data.js`
 
