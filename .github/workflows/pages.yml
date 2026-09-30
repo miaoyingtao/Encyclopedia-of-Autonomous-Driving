@@ -3,6 +3,11 @@ name: Deploy site to GitHub Pages
 on:
   push:
     branches: [main]
+  # 兜底重建：refresh.yml 用 GITHUB_TOKEN 提交时不会触发本工作流（GitHub 会抑制
+  # GITHUB_TOKEN 产生的事件），因此每天在新闻抓取之后排两次重建 ——
+  # UTC 01:45 / 13:45 = 北京时间 09:45 / 21:45（抓取任务 UTC 01:00 / 13:00 启动）。
+  schedule:
+    - cron: '45 1,13 * * *'
   workflow_dispatch:
 
 permissions:

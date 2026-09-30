@@ -2,7 +2,9 @@ name: Auto refresh news
 
 # 定时抓取并提交最新领域动态：
 #   cron 使用 UTC，'0 1,13 * * *' = 北京时间 09:00 与 21:00。
-# 提交会触发 pages.yml（push）自动重新部署。
+# 提交后由本工作流显式派发 pages.yml 重新部署：GITHUB_TOKEN 发起的 push 不会触发
+# 其它工作流（GitHub 有意抑制以防递归），但 workflow_dispatch 是官方例外；
+# pages.yml 另有每日兜底计划（北京时间 09:45 / 21:45），即使派发失败也能重建。
 on:
   schedule:
     - cron: '0 1,13 * * *'
@@ -10,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  actions: write        # 允许用 GITHUB_TOKEN 派发 pages.yml（workflow_dispatch 不受事件抑制限制）
 
 jobs:
   refresh:
@@ -27,6 +30,7 @@ jobs:
           python tools/check_links.py --stamp
 
       - name: Commit and push if changed
+        id: commit
         env:
           TZ: Asia/Shanghai
         run: |
@@ -35,7 +39,22 @@ jobs:
           git add assets/news-data.js assets/site-update.js
           if git diff --cached --quiet; then
             echo "No data change, skip commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore(news): auto refresh $(date +%F)"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # 只有数据真的变了才需要重新部署；派发成功后 pages.yml 会按它自己的 build → check → deploy 流程跑。
+      - name: Dispatch Pages deployment
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/pages.yml/dispatches" \
+            -d '{"ref":"main"}'
