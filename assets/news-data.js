@@ -11,122 +11,442 @@
 
 window.NEWS_DATA = [
   {
-    "date": "2026-09-16",
-    "title": "鸿蒙智行智界RX L3自动驾驶车开启城市快速路实测之旅",
-    "summary": "在自动驾驶技术日新月异的今天，鸿蒙智行智界汽车的最新进展引发了广泛关注。近日，智界RX成功获得L3级自动驾驶道路测试牌照，标志着其在智能驾驶领域迈出了重要一步。华为常务董事余承东透露，智界RX目前正在公开城市快速路等复杂道路进行实测，这无疑为日常出行带来了新的可能性……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2fwww.sohu.com%2fa%2f1076866017_122004016&c=15541693744696482383&mkt=zh-hk",
-    "source": "搜狐",
+    "date": "2026-09-29",
+    "title": "详解英伟达VLA自动驾驶模型Alpamayo架构和训练方法",
+    "summary": "今年，英伟达 Alpamayo Summit 的第二场分论坛，讲的是整个开放生态的核心——推理模型本身。主讲人 Yurong You 是英伟达自动驾驶研究组的高级研究科学家，Alpamayo 模型的主要作者之一。这次演讲他分享了英伟达Alpamayo……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca548e0d9429391346ed557144aa8&url=https%3a%2f%2fview.inews.qq.com%2fa%2f20260930A000DM00&c=17867179842109963208&mkt=zh-hk",
+    "source": "腾讯新闻",
     "category": "技术与研究",
-    "tags": [],
-    "_gen": {
-      "id": "befbf79f6eb8",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    }
-  },
-  {
-    "date": "2026-09-16",
-    "title": "长安天枢领航在渝发布，自研驾驶辅助技术量产上车",
-    "summary": "近日，中国长安汽车第六届科技生态大会长安天枢领航技术发布暨长安启源Q06预售发布会在重庆举行。长安汽车正式发布智能驾驶辅助系统天枢领航，首搭天枢领航Ultra的长安启源Q06同步开启预售。此次发布将一段式端到端自研技术应用于量产车型，也进一步明确了长安汽车持续投入核心技术、深化开放合作的发展方向……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52c60a454ee5931a2932d2860c2b&url=https%3a%2f%2ffinance.sina.com.cn%2fstock%2frelnews%2fcn%2f2026-09-16%2fdoc-iniryzmc4918587.shtml&c=6380509276588166055&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "量产车型",
     "tags": [
-      "量产"
+      "VLA"
     ],
     "_gen": {
-      "id": "7ae30f977b94",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "智能驾驶 量产 车型"
+      "id": "69cb84bcefd2",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "自动驾驶 大模型 VLA"
     },
     "featured": true
   },
   {
-    "date": "2026-09-16",
-    "title": "浙大博士做世界模型，融资后估值冲百亿，00后能否撑起AI下半场？",
-    "summary": "接受记者采访的前几天，魔芯科技创始人陈天润接待了浙江省委副书记、省长刘捷的现场调研。过去8个月，这家世界模型研发和应用公司已连续完成4轮融资，投资方既有国资机构，也有来自芯片、能源、智能终端等领域的产业资本。世界模型赛道的火热，甚至让投资人有了紧迫感。一家国资背景投资机构在今年初对魔芯科技有了投资意……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260917A02DDP00&c=2326250740074821430&mkt=zh-hk",
-    "source": "腾讯新闻",
-    "category": "技术与研究",
+    "date": "2026-09-29",
+    "title": "特斯拉获300亿美元新信贷额度，全面加速Cybercab无人出租车与Optimus量产",
+    "summary": "特斯拉 宣布已敲定总额达300亿美元的新增信贷额度，重点用于支持Cybercab无人驾驶出租车（Robotaxi）、Optimus人形机器人以及Tesla Semi卡车的规模化研发与量产建设……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2fwww.chinaz.com%2fainews%2f31422.shtml&c=8054330365939915070&mkt=zh-hk",
+    "source": "chinaz.com",
+    "category": "出行运营",
     "tags": [
-      "世界模型",
-      "AI"
+      "量产",
+      "无人出租"
     ],
     "_gen": {
-      "id": "c4bf4277cbbd",
+      "id": "b12391929598",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "Robotaxi 无人出租车"
+    },
+    "featured": true
+  },
+  {
+    "date": "2026-09-29",
+    "title": "特斯拉Cybercab正式下线运营：无方向盘无人出租车每公里仅0.8元 ...",
+    "summary": "Cybercab下线事件标志着无人驾驶出租车从概念正式迈入商业化运营。2025年9月，特斯拉在美国奥斯汀街头全面投放了这款没有方向盘、刹车踏板和后视镜的Robotaxi，每公里出行成本仅0.8元人民币，仅为传统网约车平均水平的十分之一。这意味着你花一杯奶茶的钱，就能完成一次点对点通勤——而且全程无需……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2f3g.china.com%2fact%2fnews%2f10000169%2f20260930%2f49772664.html&c=5028525715141449221&mkt=zh-hk",
+    "source": "3g.china.com",
+    "category": "出行运营",
+    "tags": [
+      "无人出租",
+      "运营"
+    ],
+    "_gen": {
+      "id": "37ba65aab094",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "Robotaxi 无人出租车"
+    }
+  },
+  {
+    "date": "2026-09-29",
+    "title": "余承东：智界RX是鸿蒙智行30万级唯一L3级自动驾驶架构车型",
+    "summary": "9月28日，鸿蒙智行智界RX及新品发布会举行。华为常务董事、产品投资评审委员会主任、终端BG董事长余承东出席并发言。会上，余承东宣布鸿蒙智行将强化尊界、享界、智界、尚界“四界”布局，并发布智界RX、新款智界R7及享界V8三款产品。余承东在发言中这样表述：“智界RX是鸿蒙智行30万级唯一搭载L3级自动……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53bf0a2415bb3f14b8bae10afca&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260929A09OCF00&c=5831065056422478617&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "量产车型",
+    "tags": [
+      "车型"
+    ],
+    "_gen": {
+      "id": "529ae91009a2",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "智能驾驶 量产 车型"
+    }
+  },
+  {
+    "date": "2026-09-29",
+    "title": "余承东谈l3自动驾驶架构设计",
+    "summary": "9月28日鸿蒙智行发布会上，余承东首次系统阐释了L3自动驾驶的设计哲学——它不是硬件堆砌，而是一套覆盖八大关键节点的全链路冗余架构。 一、从L2到L3：安全逻辑的代际切换 责任主体转移：L2辅助驾驶始终以人为主导，系统遇到特殊情况会立即退出；而L3激活后，系统承担动态驾驶任务，人只需在必要时接管……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca550e26f448baf5b54dc532c29d6&url=https%3a%2f%2fcj.sina.com.cn%2farticles%2fview%2f7879996684%2f1d5af350c06801p1ao&c=13031386758170749804&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "政策与准入",
+    "tags": [],
+    "_gen": {
+      "id": "3426806b099c",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 自动驾驶 准入"
+    }
+  },
+  {
+    "date": "2026-09-29",
+    "title": "世界模型公司推荐指南：四类玩家的技术路径与场景适配",
+    "summary": "世界模型赛道正处于从技术研发向产业落地的关键阶段。当前赛道参与者类型多元，技术路线与落地方向各有侧重。对于寻求技术合作、方案落地的产业方而言，快速甄别不同企业的能力边界与场景适配性，是降低选型成本、提升合作效率的核心前提。本次深度梳理严格依托企业官方披露的技术成果、落地案例与行业公开认证信息，以核心……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca540fa054a60b5d487069c682735&url=https%3a%2f%2fnews.zol.com.cn%2f1254%2f12549163.html&c=18293770616844322092&mkt=zh-hk",
+    "source": "zol.com.cn",
+    "category": "技术与研究",
+    "tags": [
+      "世界模型"
+    ],
+    "_gen": {
+      "id": "00785f07205b",
       "feed": "必应资讯·世界模型与大模型",
       "query": "世界模型 自动驾驶"
     },
     "featured": true
   },
   {
-    "date": "2026-09-16",
-    "title": "智界RX获批L3级自动驾驶道路测试牌照，全链路冗余架构把“未来价值 ...",
-    "summary": "近日，智界RX正式获批L3级自动驾驶道路测试牌照。这意味着，其L3级自动驾驶架构不仅停留在设计层面，更进入公开道路验证阶段。对于一款面向主流价位市场的智能SUV而言，这张牌照的价值不止于“获准测试”，更在于它释放出一个清晰信号：L3正从豪华旗舰的专属标签，变成主流消费者可以提前锁定、长期受益的“未来……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52d68b104bb5b054811fc524017a&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260916A0D45400&c=9088470883626686057&mkt=zh-hk",
-    "source": "腾讯新闻",
+    "date": "2026-09-29",
+    "title": "QNX与智驾新程neueHCT携手加速全球智能驾驶部署，并获德系主流车企 ...",
+    "summary": "BlackBerry有限公司（纽约证券交易所代码：BB；多伦多证券交易所代码：BB）旗下业务部门QNX与由地平线与欧摩威集团（AUMOVIO）合资成立的智能驾驶公司智驾新程neueHCT近日宣布，搭载QNX技术的智驾新程HCT……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53bf0a2415bb3f14b8bae10afca&url=https%3a%2f%2ffinance.sina.com.cn%2ftech%2froll%2f2026-09-30%2fdoc-initnsei2948000.shtml&c=5501908477138681313&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "量产车型",
+    "tags": [],
+    "_gen": {
+      "id": "72630c62282d",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "智能驾驶 量产 车型"
+    }
+  },
+  {
+    "date": "2026-09-29",
+    "title": "L3级自动驾驶准入周期开启 强制性国标将于2027年7月1日实施",
+    "summary": "【导语】随着首批L3级有条件自动驾驶车型准入许可发放、强制性国家标准获批发布，我国自动驾驶正从技术验证进入准入管理阶段。强制性国标《智能网联汽车自动驾驶系统安全要求》（GB……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca550e26f448baf5b54dc532c29d6&url=https%3a%2f%2fwww.sohu.com%2fa%2f1082293131_122957505&c=12318488059956405219&mkt=zh-hk",
+    "source": "搜狐",
     "category": "政策与准入",
     "tags": [],
     "_gen": {
-      "id": "1bc9f6baafb0",
+      "id": "9ec1bcb54553",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 自动驾驶 准入"
+    }
+  },
+  {
+    "date": "2026-09-28",
+    "title": "“稳步迈进自动驾驶新时代”为主题，2026世界智能网联汽车大会定档 ...",
+    "summary": "9月28日，2026世界智能网联汽车大会新闻发布会在北京召开。工业和信息化部装备工业一司副司长郝立顺，交通运输部科技司副司长翁优灵，北京市经济和信息化局副局长苏国斌，工业和信息化部装备工业发展中心主任、世界智能网联汽车大会组委会秘书长瞿国春，北京经济技术开发区管委会副主任、北京市智慧城市基础设施与智……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53495b143e88baf533a33eb7387&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260929A0168V00&c=3384287118930717839&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "政策与准入",
+    "tags": [
+      "智能网联汽车"
+    ],
+    "_gen": {
+      "id": "022efcd8e32a",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "自动驾驶 最新 进展"
+    }
+  },
+  {
+    "date": "2026-09-28",
+    "title": "L3准入周期开启，智界RX的L3硬件预埋逻辑",
+    "summary": "L3正从PPT走向现实。在重庆内环快速路，你可能会看到挂着“渝AD0001Z”的L3级自动驾驶汽车已经开始在限定路段行驶。政策端，2026年7月30日，工信部组织制定的国内首部针对L3级、L4级自动驾驶系统的强制性国家标准《智能网联汽车自动驾驶系统安全要求》（GB44721—2026）已获准发布，2……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca550e26f448baf5b54dc532c29d6&url=https%3a%2f%2fm.163.com%2fnews%2farticle%2fL7UK22VS05199NPP.html&c=758592029276280986&mkt=zh-hk",
+    "source": "网易新闻",
+    "category": "政策与准入",
+    "tags": [
+      "L3 准入",
+      "L3准入"
+    ],
+    "_gen": {
+      "id": "21516497ae64",
       "feed": "必应资讯·L3与准入试点",
       "query": "L3 自动驾驶 准入"
     },
     "featured": true
   },
   {
-    "date": "2026-09-16",
-    "title": "地平线征程芯片量产突破1500万颗 牵手一汽‑大众加速智驾平权落地",
-    "summary": "9月15日，地平线举办“地平线智驾芯片量产突破1500万见证仪式”。活动现场宣布，品牌第1500万颗征程芯片将搭载于一汽‑大众全新车型ID.AURA T6，全场景辅助驾驶系统HSD V2.1版本也即将推出，新增全场景倒车功能……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52c60a454ee5931a2932d2860c2b&url=http%3a%2f%2fwww.zqrb.cn%2fauto%2fqichedongtai%2f2026-09-16%2fA1789489427275.html&c=10582215874550783580&mkt=zh-hk",
-    "source": "证券日报",
+    "date": "2026-09-28",
+    "title": "2026世界模型赛道优质企业盘点：聚焦具身大脑与端侧世界模型产业化 ...",
+    "summary": "星源智成立于2025年8月1日，由北京智源人工智能研究院深度孵化，是国内专注具身大脑赛道、深耕端侧具身世界模型的核心科创企业。企业成立初期入选2025世界机器人大会中国最具成长潜力机器人公司TOP50榜单，现阶段为Pre-A轮融资，累计融资突破10亿元人民币，获得高瓴、中科 创星 ...",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca540fa054a60b5d487069c682735&url=https%3a%2f%2fnews.zol.com.cn%2f1254%2f12546713.html&c=2427584902553493619&mkt=zh-hk",
+    "source": "zol.com.cn",
+    "category": "技术与研究",
+    "tags": [
+      "世界模型"
+    ],
+    "_gen": {
+      "id": "36b11adef747",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "世界模型 自动驾驶"
+    },
+    "featured": true
+  },
+  {
+    "date": "2026-09-27",
+    "title": "从自动驾驶到具身智能，一套基础模型真的能通吃吗？",
+    "summary": "现在很多企业探索让自动驾驶和具身智能使用相似的基础模型。 小鹏已经将VLA 2.0、Robotaxi和人形机器人纳入Physical AI布局，并提出以物理世界基础模型支撑不同智能载体。 学术界也有研究让同一个模型跨越车辆、轮式机器人、无人机等不同载体完成导航任务……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca540fa054a60b5d487069c682735&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260927A0426000&c=14973806596430381174&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "技术与研究",
+    "tags": [
+      "具身智能"
+    ],
+    "_gen": {
+      "id": "26a87bdd1c89",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "世界模型 自动驾驶"
+    },
+    "featured": true
+  },
+  {
+    "date": "2026-09-26",
+    "title": "端到端走到今天，边缘场景还是自动驾驶跨不过的那道坎吗？",
+    "summary": "端到端被公认为实现L3级自动驾驶的最优路径，在端到端刚出来的时候，自动驾驶行业很多人都认为这一技术是实现 L3甚至L4自动驾驶最有可能的路径。但其黑箱特性使其在面对边缘场景时只能猜。面对施工路段、侧翻车辆等极端情况时，这个短板足以致命。端到端技术发展到现在，也延伸出了 ...",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca548e0d9429391346ed557144aa8&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260926A0350Y00&c=16794121364280385072&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "技术与研究",
+    "tags": [
+      "端到端"
+    ],
+    "_gen": {
+      "id": "aa76b8c57ebb",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "自动驾驶 大模型 VLA"
+    },
+    "featured": true
+  },
+  {
+    "date": "2026-09-26",
+    "title": "Cybercab两座省成本 Robotaxi赛道开始算运营账",
+    "summary": "文｜定焦One 金玙璠 编辑 | 魏佳 9月初，特斯拉Cybercab已经在美国奥斯汀开始收费载客。 截至9月3日，特斯拉在得州登记了420辆自动驾驶车辆，其中Cybercab有45辆，其余主要是Model Y。Cybercab目前还只在奥斯汀部分区域运营，规模不大……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2fmolihua.org%2fmh-2363968%2f&c=6978696285285919758&mkt=zh-hk",
+    "source": "molihua.org",
+    "category": "出行运营",
+    "tags": [
+      "OTA",
+      "Robotaxi",
+      "RoboTaxi",
+      "运营"
+    ],
+    "_gen": {
+      "id": "dc82a05eceb1",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "Robotaxi 无人出租车"
+    },
+    "featured": true
+  },
+  {
+    "date": "2026-09-25",
+    "title": "为什么中国和美国走在无人驾驶前列？",
+    "summary": "【为什么中国和美国走在无人驾驶前列？】想象一下，你叫来一辆网约车，打开车门，却发现驾驶座上空无一人。别慌，你可能坐上了一辆Robotaxi（无人驾驶出租车）。目前，中国已有十多个城市提供Robotaxi服务。美国特斯拉也于今年9月在得克萨斯州奥斯汀开始使用Cybercab提供有限的Robotaxi服……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2ffinance.sina.com.cn%2fjjxw%2f2026-09-25%2fdoc-iniszvzy9435795.shtml&c=6511551565882103336&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "出行运营",
+    "tags": [],
+    "_gen": {
+      "id": "aa78fcb18a3e",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "Robotaxi 无人出租车"
+    }
+  },
+  {
+    "date": "2026-09-24",
+    "title": "朱华荣倡议L3级以上自动驾驶准入互认：一次认证全球通行有多难？3 ...",
+    "summary": "长安汽车董事长朱华荣在2026世界新能源汽车大会上提出L3级以上自动驾驶准入互认倡议，基于联合国ADS……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca550e26f448baf5b54dc532c29d6&url=https%3a%2f%2fauto.sina.cn%2f2026-09-24%2fdetail-iniswrrf5454875.d.html%3fvt%3d4&c=11578267561413216100&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "政策与准入",
+    "tags": [],
+    "_gen": {
+      "id": "9cfea3272ff6",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 自动驾驶 准入"
+    }
+  },
+  {
+    "date": "2026-09-23",
+    "title": "梅赛德斯-奔驰携手Wayve：未来两年将实现AI自动驾驶量产，豪华车 ...",
+    "summary": "梅赛德斯-奔驰（Mercedes-Benz）近日宣布与英国初创公司Wayve达成正式量产协议，计划在未来两年内将其前沿的“AIDriver”人工智能驾驶系统集成到新一代奔驰车型中。这一举措标志着Wayve的AI技术首次进军豪华车市场，双方的合作关系也因此得以进一步深化，奔驰早些时候已参与了Wayve……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53bf0a2415bb3f14b8bae10afca&url=https%3a%2f%2fwww.sohu.com%2fa%2f1080113777_122066676&c=16932724238511753201&mkt=zh-hk",
+    "source": "搜狐",
     "category": "量产车型",
     "tags": [
       "量产",
-      "芯片"
+      "AI"
     ],
     "_gen": {
-      "id": "00671ba1de02",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "智能驾驶 量产 车型"
-    },
-    "featured": true
-  },
-  {
-    "date": "2026-09-16",
-    "title": "华为智界RX获批L3级自动驾驶，未来出行新选择！",
-    "summary": "9月16日，智界汽车正式宣布其全新车型智界RX获得L3级自动驾驶道路测试牌照。这一里程碑式的进展标志着华为在自动驾驶技术领域的又一次突破。华为常务董事、产品投资评审委员会主任余承东对此表示，智界RX正在公开城市快速路等复杂道路进行有序实测，显示出其在智能驾驶技术上的强大实力……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2fwww.sohu.com%2fa%2f1076832652_122004016&c=9144853098279892601&mkt=zh-hk",
-    "source": "搜狐",
-    "category": "技术与研究",
-    "tags": [],
-    "_gen": {
-      "id": "eec55d431a6f",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    },
-    "featured": true
-  },
-  {
-    "date": "2026-09-16",
-    "title": "【科技和移动性亮点】长安汽车发布三个版本天枢领航智能驾驶辅助 ...",
-    "summary": "Ultra版本支持高速公路和城市领航辅助驾驶，首款搭载该系统的量产车型长安启源Q06同步开启预售……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52c60a454ee5931a2932d2860c2b&url=https%3a%2f%2fwww.sohu.com%2fa%2f1076878506_121124365&c=15388655458418336673&mkt=zh-hk",
-    "source": "搜狐",
-    "category": "量产车型",
-    "tags": [],
-    "_gen": {
-      "id": "78079ad8eb29",
+      "id": "05ec20c08f2d",
       "feed": "必应资讯·自动驾驶综合",
       "query": "智能驾驶 量产 车型"
     }
   },
   {
+    "date": "2026-09-23",
+    "title": "Mobileye Drive™ 推动德国自动驾驶出行升级",
+    "summary": "德国联邦车辆运输管理局（KBA）的数据证实，持有有效 L4 级测试许可的车辆中，超过60% 搭载 Mobileye Drive™。 德国大多数持有有效 L4 级自动驾驶测试许可的车辆，均搭载 Mobileye Drive™系统。 德国已然跻身全球自动驾驶汽车创新的首选市场，Mobileye……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53495b143e88baf533a33eb7387&url=https%3a%2f%2fwww.eeworld.com.cn%2fqcdz%2feic737318.html&c=6861760374367083795&mkt=zh-hk",
+    "source": "eeworld.com.cn",
+    "category": "政策与准入",
+    "tags": [],
+    "_gen": {
+      "id": "8e6b7cbb6204",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "自动驾驶 最新 进展"
+    }
+  },
+  {
+    "date": "2026-09-22",
+    "title": "前特斯拉、英伟达高管执掌现代汽车自动驾驶业务 剑指2029年量产",
+    "summary": "智通财经APP获悉，今年早些时候，曾在英伟达(NVDA.US)和特斯拉(TSLA.US)从事自动驾驶技术研发与商业化工作的Minwoo……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53495b143e88baf533a33eb7387&url=https%3a%2f%2fview.inews.qq.com%2fa%2f20260922A02QIZ00&c=10727502460140579875&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "量产车型",
+    "tags": [
+      "量产"
+    ],
+    "_gen": {
+      "id": "0f174f04e51f",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "自动驾驶 最新 进展"
+    }
+  },
+  {
+    "date": "2026-09-21",
+    "title": "现代汽车为Waymo造车：寄望无人驾驶出租车抵消电动车需求放缓冲击",
+    "summary": "智通财经APP获悉，现代汽车正将自动驾驶出租车运营商视为其电动车的一个重要新需求来源，计划为 Alphabet(GOOGL.US)旗下的 Waymo制造“数以万计”的 Ioniq 5 Robotaxi。现代汽车首席执行官何塞·穆尼奥斯(José……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca564499040f6b343e36000854528&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260921A02PBV00&c=1554135268040016309&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "出行运营",
+    "tags": [
+      "Waymo"
+    ],
+    "_gen": {
+      "id": "c4e8cfcf28e7",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "自动驾驶出租车 运营"
+    }
+  },
+  {
+    "date": "2026-09-21",
+    "title": "开环闭环双榜夺魁 千里智驾 WA-JEPA 重塑自动驾驶世界模型范式",
+    "summary": "近日，千里智驾联合电子科技大学、东南大学、北京邮电大学、天津大学发布并开源世界—动作模型WA-JEPA，为自动驾驶模型如何理解场景、预测未来并生成驾驶动作，探索了一条新的技术路径……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca540fa054a60b5d487069c682735&url=https%3a%2f%2fwww.sohu.com%2fa%2f1079016169_322372&c=6189237276933198019&mkt=zh-hk",
+    "source": "搜狐",
+    "category": "技术与研究",
+    "tags": [
+      "世界模型"
+    ],
+    "_gen": {
+      "id": "0b5689578cf6",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "世界模型 自动驾驶"
+    }
+  },
+  {
+    "date": "2026-09-20",
+    "title": "何小鹏称2026年可实现自动驾驶？跳过L3直入L4，这3个证据让质疑闭嘴+FAQ",
+    "summary": "何小鹏断言2026年将直接从L2跃迁至L4全自动驾驶，跳过L3。本文基于特斯拉FSD V14.2实测、小鹏VLA2.0架构、Robotaxi量产下线、第二代VLA大模型升级等核心事实，分三个维度论证这一判断的可信度，并针对不同用户给出购车/使用建议。",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca548e0d9429391346ed557144aa8&url=https%3a%2f%2fauto.sina.cn%2f2026-09-20%2fdetail-inisktzu7293351.d.html%3fvt%3d4&c=3200185483393397114&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "出行运营",
+    "tags": [],
+    "_gen": {
+      "id": "366218d966c0",
+      "feed": "必应资讯·世界模型与大模型",
+      "query": "自动驾驶 大模型 VLA"
+    }
+  },
+  {
+    "date": "2026-09-18",
+    "title": "特斯拉Cybercab带火Robotaxi赛道 无人出行商业化拐点渐近",
+    "summary": "无方向盘、无制动踏板的特斯拉Cybercab开启中国巡展，再度将全球Robotaxi赛道的讨论推向新高潮。业内专家认为，无人驾驶出租车所代表的无人出行业态，后续落地推广节奏有望提速，并将带动产业链上下游共同受益。放眼国内，车企与自动驾驶企业正加紧布局Robotaxi赛道，持续拓展商业化落地版图。多位……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260918A02CS500&c=15780741028984926396&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "出行运营",
+    "tags": [
+      "OTA",
+      "Robotaxi",
+      "RoboTaxi"
+    ],
+    "_gen": {
+      "id": "8520e2da64c7",
+      "feed": "必应资讯·Robotaxi与出行",
+      "query": "Robotaxi 无人出租车"
+    }
+  },
+  {
+    "date": "2026-09-18",
+    "title": "L3自动驾驶最新视频背后：法律定责、国标落地、首批车型上路，2027 ...",
+    "summary": "2026年8月，L3自动驾驶迎来历史性转折——道路交通安全法修订草案首次明确“激活状态违法由车企担责”，强制国标GB 44721-2026同步发布，首批长安深蓝SL03、极狐阿尔法S5获准入试点。本文从法律破冰、安全标准、商业落地三个维度拆解，告诉你L3何时能用、怎么用、出了事谁负责。",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca556711a48cd8c59d214be5dc0e6&url=https%3a%2f%2fauto.sina.cn%2f2026-09-18%2fdetail-inisfiik8631095.d.html%3fvt%3d4&c=8265245859278041711&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "政策与准入",
+    "tags": [
+      "车型"
+    ],
+    "_gen": {
+      "id": "09229055af6b",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 级自动驾驶 上路试点"
+    }
+  },
+  {
+    "date": "2026-09-18",
+    "title": "L3自动驾驶可以上路了吗？首批车型已获准，但只限这两座城+FAQ",
+    "summary": "2025年12月，长安深蓝SL03和极狐阿尔法S成为全国首批获L3准入的车型，在北京、重庆指定高速/快速路试点。但普通车主暂无法购买使用，需等2026年国家法规正式落地。本文从商业化进展、真实体验门槛、法律责任划分三个维度拆解，并给出分人群购买建议。",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca556711a48cd8c59d214be5dc0e6&url=https%3a%2f%2fk.sina.com.cn%2farticle_7879996685_1d5af350d06802h388.html&c=5198060731859301068&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "政策与准入",
+    "tags": [
+      "车型"
+    ],
+    "_gen": {
+      "id": "50c2e763495d",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 级自动驾驶 上路试点"
+    }
+  },
+  {
+    "date": "2026-09-17",
+    "title": "自动驾驶出事车企先举证！道路交通安全法修订草案设专章，9月25日 ...",
+    "summary": "2026年8月25日，《中华人民共和国道路交通安全法（修订草案）》提请十四届全国人大常委会第二十四次会议初次审议。这是该法自2004年施行以来首次系统性修订，新增\"自动驾驶汽车的特别规定\"专章共9条（第95条至第103条），对自动驾驶与辅助驾驶的法律边界、激活状态下的违法处理、事故责任调查、交强险制……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca53495b143e88baf533a33eb7387&url=https%3a%2f%2ffinance.sina.com.cn%2froll%2f2026-09-17%2fdoc-inisayam0335568.shtml&c=2185978620939115109&mkt=zh-hk",
+    "source": "新浪网",
+    "category": "政策与准入",
+    "tags": [],
+    "_gen": {
+      "id": "2839eb60e1d3",
+      "feed": "必应资讯·自动驾驶综合",
+      "query": "自动驾驶 最新 进展"
+    }
+  },
+  {
+    "date": "2026-09-16",
+    "title": "智界RX获批L3级自动驾驶道路测试牌照，全链路冗余架构把“未来价值 ...",
+    "summary": "近日，智界RX正式获批L3级自动驾驶道路测试牌照。这意味着，其L3级自动驾驶架构不仅停留在设计层面，更进入公开道路验证阶段。对于一款面向主流价位市场的智能SUV而言，这张牌照的价值不止于“获准测试”，更在于它释放出一个清晰信号：L3正从豪华旗舰的专属标签，变成主流消费者可以提前锁定、长期受益的“未来……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca550e26f448baf5b54dc532c29d6&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260916A0D45400&c=9088470883626686057&mkt=zh-hk",
+    "source": "腾讯新闻",
+    "category": "政策与准入",
+    "tags": [],
+    "_gen": {
+      "id": "83047b640b50",
+      "feed": "必应资讯·L3与准入试点",
+      "query": "L3 自动驾驶 准入"
+    }
+  },
+  {
     "date": "2026-09-15",
-    "title": "特斯拉无人出租车来华，国内 Robotaxi 已在接单",
-    "summary": "Cybercab 是特斯拉 Robotaxi 业务线推出的专用无人驾驶车型，也是特斯拉将自动驾驶能力从 \" 卖给车主的 FSD 功能 \" 转向 \" 自营出行服务 \" 的核心载体。该车于 2024 年 10 月在美国加州伯班克举行的 \"We, Robot\" ...",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2fwww.myzaker.com%2farticle%2f6aaa41128e9f0917667e119c&c=6849578103015994335&mkt=zh-hk",
-    "source": "myzaker.com",
+    "title": "特斯拉无人出租车来华，国内Robotaxi已在接单",
+    "summary": "特斯拉的无人驾驶出租车，要来中国了。但这次，它只负责站台，不负责接单……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2fwww.sohu.com%2fa%2f1076437793_120440806&c=18199155606231024137&mkt=zh-hk",
+    "source": "搜狐",
     "category": "出行运营",
     "tags": [
       "OTA",
@@ -135,69 +455,17 @@ window.NEWS_DATA = [
       "无人出租"
     ],
     "_gen": {
-      "id": "734960f15992",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "Robotaxi 无人出租车"
-    },
-    "featured": true
-  },
-  {
-    "date": "2026-09-15",
-    "title": "Waymo计划2027年在东京推出无人驾驶出租车服务",
-    "summary": "盖世汽车讯 Alphabet旗下自动驾驶公司Waymo与日本出行平台GO及日本交通（Nihon Kotsu）已正式达成协议，计划于2027年在东京启动无人驾驶网约车商业化运营。该服务将作为东京现有交通网络的补充，旨在应对日本人口老龄化及未来劳动力短缺问题……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab5319ca5544498231e938ac4a2cbc&url=https%3a%2f%2fwww.msn.cn%2fzh-cn%2fautos%2f%25E9%2580%259A%25E7%2594%25A8%2fwaymo%25E8%25AE%25A1%25E5%2588%25922027%25E5%25B9%25B4%25E5%259C%25A8%25E4%25B8%259C%25E4%25BA%25AC%25E6%258E%25A8%25E5%2587%25BA%25E6%2597%25A0%25E4%25BA%25BA%25E9%25A9%25BE%25E9%25A9%25B6%25E5%2587%25BA%25E7%25A7%259F%25E8%25BD%25A6%25E6%259C%258D%25E5%258A%25A1%2far-AA2cfmXM&c=8631660336051356238&mkt=zh-hk",
-    "source": "MSN 中国",
-    "category": "出行运营",
-    "tags": [
-      "Waymo"
-    ],
-    "_gen": {
-      "id": "2406357e02c8",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "自动驾驶出租车 运营"
-    },
-    "featured": true
-  },
-  {
-    "date": "2026-09-14",
-    "title": "零跑周洪涛：2026 年冲刺智驾头部，内部三条路线 PK 确定使用世界模型",
-    "summary": "IT之家 9 月 17 日消息，在 9 月 16 日晚间的零跑 2026 年度技术发布会上，零跑汽车公布了自研的世界模型智能辅助驾驶，宣称该智驾达到了“全行业第一梯队”的水平，将覆盖 A、B、C、D 全系车型，老车主也可升级。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2fwww.c114.net.cn%2findustry%2f124433.html&c=4674350645000857152&mkt=zh-hk",
-    "source": "c114.net.cn",
-    "category": "技术与研究",
-    "tags": [
-      "世界模型"
-    ],
-    "_gen": {
-      "id": "0bc2968b3a40",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "世界模型 自动驾驶"
-    },
-    "featured": true
-  },
-  {
-    "date": "2026-09-14",
-    "title": "网约车Lyft在纳什维尔推出无人出租车服务",
-    "summary": "【大纪元2026年09月14日讯】（大纪元记者高杉编译报导）美国网约车平台Lyft（来福车）与谷歌旗下自动驾驶公司Waymo（威莫）已在田纳西州纳什维尔（Nashville）正式启动一项商业合作，首次推出无人驾驶机器人出租车服务。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2fwww.epochtimes.com%2fgb%2f26%2f9%2f13%2fn14848928.htm&c=3391459848810280684&mkt=zh-hk",
-    "source": "epochtimes.com",
-    "category": "出行运营",
-    "tags": [
-      "无人出租",
-      "网约车"
-    ],
-    "_gen": {
-      "id": "0083c3d9b895",
+      "id": "e7b65d9917d8",
       "feed": "必应资讯·Robotaxi与出行",
       "query": "Robotaxi 无人出租车"
     }
   },
   {
-    "date": "2026-09-13",
+    "date": "2026-09-14",
     "title": "特斯拉无人出租车Robotaxi将搭载FSD V15，下月开始全天候运营",
-    "summary": "IT之家 9 月 14 日消息，特斯拉目前在已落地市场开展的商业化网约车业务，都设有固定运营时段，但全天候无人驾驶服务很快就要到来。特斯拉 AI 业务高管表示，下一代 FSD 架构正式上线后，将最终实现 24 小时不间断载人运营。 该消息由特斯拉 AI 副总裁阿肖克 · 埃卢斯瓦米（Ashok……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2fwww.msn.cn%2fzh-cn%2fnews%2fother%2f%25E7%2589%25B9%25E6%2596%25AF%25E6%258B%2589%25E6%2597%25A0%25E4%25BA%25BA%25E5%2587%25BA%25E7%25A7%259F%25E8%25BD%25A6robotaxi%25E5%25B0%2586%25E6%2590%25AD%25E8%25BD%25BDfsd-v15-%25E4%25B8%258B%25E6%259C%2588%25E5%25BC%2580%25E5%25A7%258B%25E5%2585%25A8%25E5%25A4%25A9%25E5%2580%2599%25E8%25BF%2590%25E8%2590%25A5%2far-AA2cadcz&c=11086110524180280087&mkt=zh-hk",
-    "source": "MSN 中国",
+    "summary": "IT之家 9 月 14 日消息，特斯拉目前在已落地市场开展的商业化网约车业务，都设有固定运营时段，但全天候无人驾驶服务很快就要到来。特斯拉 AI 业务高管表示，下一代 FSD 架构正式上线后，将最终实现 24 小时不间断载人运营。该消息由特斯拉 AI 副总裁阿肖克 · 埃卢斯瓦米（Ashok……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca55b69a84fc18d261906bbc7d48e&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260914A0924D00&c=8021867741281607470&mkt=zh-hk",
+    "source": "腾讯新闻",
     "category": "出行运营",
     "tags": [
       "搭载",
@@ -206,353 +474,73 @@ window.NEWS_DATA = [
       "RoboTaxi"
     ],
     "_gen": {
-      "id": "0355b5ba4939",
+      "id": "ee3468541bf0",
       "feed": "必应资讯·Robotaxi与出行",
       "query": "Robotaxi 无人出租车"
     }
   },
   {
-    "date": "2026-09-12",
-    "title": "现代汽车自研Atria AI驱动自动驾驶，2029年量产L2++车型并迈向L4",
-    "summary": "现代汽车集团近日宣布，正在全力推进以Atria AI为核心的自研自动驾驶技术研发。这一端到端人工智能模型被设计用于实时感知路况环境，并自主完成驾驶决策的全流程处理，标志着该企业在智能驾驶领域迈出关键一步……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52c60a454ee5931a2932d2860c2b&url=https%3a%2f%2fwww.msn.cn%2fzh-cn%2fnews%2fother%2f%25E7%258E%25B0%25E4%25BB%25A3%25E6%25B1%25BD%25E8%25BD%25A6%25E8%2587%25AA%25E7%25A0%2594atria-ai%25E9%25A9%25B1%25E5%258A%25A8%25E8%2587%25AA%25E5%258A%25A8%25E9%25A9%25BE%25E9%25A9%25B6-2029%25E5%25B9%25B4%25E9%2587%258F%25E4%25BA%25A7l2-%25E8%25BD%25A6%25E5%259E%258B%25E5%25B9%25B6%25E8%25BF%2588%25E5%2590%2591l4%2far-AA2c75gd&c=5022405037626615001&mkt=zh-hk",
-    "source": "MSN 中国",
-    "category": "量产车型",
-    "tags": [
-      "量产",
-      "车型",
-      "AI"
-    ],
-    "_gen": {
-      "id": "e914db90c0d3",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "智能驾驶 量产 车型"
-    }
-  },
-  {
-    "date": "2026-09-11",
-    "title": "和梁文锋师出同门，浙大00后做世界模型，将再融10亿元",
-    "summary": "《智能涌现》独家获悉，近日，专注做4D世界模型领域的魔芯科技即将新一轮融资，融资规模或达10亿元，估值也有望跃升至近100亿元。这将是他们今年的第五轮融资，也是近一个月以来的第二轮融资。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2ftech.ifeng.com%2fc%2f8wL4VWccNDT&c=8403117983921264891&mkt=zh-hk",
-    "source": "tech.ifeng.com",
-    "category": "技术与研究",
-    "tags": [
-      "世界模型"
-    ],
-    "_gen": {
-      "id": "ac2053c40242",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "世界模型 自动驾驶"
-    }
-  },
-  {
-    "date": "2026-09-10",
-    "title": "告别“AI味”驾驶：基于大语言模型的自动驾驶交互式决策研究",
-    "summary": "自动驾驶汽车是未来交通发展的核心技术之一。然而，在混合交通场景中，现有自动驾驶系统往往表现出保守或缺乏主动协商的行为，这不仅导致通行效率下降，更引发了公众对自动驾驶安全性与可靠性的质疑。那么，能否基于大语言模型（Large Language Model,……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2fwww.sohu.com%2fa%2f1074150863_122651730&c=10941330010653781581&mkt=zh-hk",
-    "source": "搜狐",
-    "category": "技术与研究",
-    "tags": [
-      "研究",
-      "AI"
-    ],
-    "_gen": {
-      "id": "4212a5e82123",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "世界模型 自动驾驶"
-    }
-  },
-  {
-    "date": "2026-09-10",
-    "title": "中国自动驾驶出海新进展，小马智行多哈首次开放全无人体验",
-    "summary": "第二届自动驾驶电动出行论坛9月9日在卡塔尔多哈落幕，小马智行与卡塔尔国家运输公司Mowasalat在大会上公布Robotaxi（自动驾驶出租车）商业化运营阶段性成果，正式推出多哈首个全无人驾驶Robotaxi体验项目，实现当地城市交通史上首次无安全员自动驾驶试乘，成为本届论坛备受关注的技术落地标杆案……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260910A07J2700&c=17232877519894593056&mkt=zh-hk",
-    "source": "腾讯新闻",
-    "category": "出行运营",
-    "tags": [
-      "小马智行"
-    ],
-    "_gen": {
-      "id": "37bfb15f3dec",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    }
-  },
-  {
-    "date": "2026-09-10",
-    "title": "L3级自动驾驶普及难在哪？技术、法规、成本的三重博弈",
-    "summary": "前几年相比，中国新能源汽车行业已经成熟很多。 这一点，相信很多人在假期也感受到了。车流中的新能源汽车越来越多，充电难、充电慢的问题也大幅缓解。商务部的数据显示，2025年新能源乘用车渗透率已经达到了53.9%……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260910A08PYW00&c=6366222640200724400&mkt=zh-hk",
-    "source": "腾讯新闻",
-    "category": "政策与准入",
-    "tags": [
-      "法规"
-    ],
-    "_gen": {
-      "id": "db1d44791e07",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    }
-  },
-  {
-    "date": "2026-09-09",
-    "title": "离开自动驾驶量产一线，张颖创业做AI for Physical AI",
-    "summary": "过去几年，大模型推动 AI 能力快速进入数字世界。但当 AI 从文本、代码走向真实环境，更为复杂的问题开始浮现：机器如何理解世界？如何预测变化？如何在现实环境中持续行动？ 这也是为什么 Physical AI（物理智能）正成为全球科技产业最炙手可热的赛道之一……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2ffinance.sina.com.cn%2ftech%2froll%2f2026-09-09%2fdoc-inirfqcq8978605.shtml&c=13032486905440817677&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "技术与研究",
-    "tags": [
-      "量产",
-      "AI"
-    ],
-    "_gen": {
-      "id": "07399925f68a",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "世界模型 自动驾驶"
-    }
-  },
-  {
-    "date": "2026-09-09",
-    "title": "小马智行多哈开放全无人驾驶Robotaxi试乘 中国自动驾驶技术出海实现 ...",
-    "summary": "小马智行创始人兼CEO彭军称，多哈项目是中国自动驾驶技术走向全球的关键一步，企业将继续深化与当地合作方的协作，助力卡塔尔建设可持续智能交通体系，输出可复制的交通升级方案。该项目采用小马智行“共建车队”全球化模式，输出自研自动驾驶核心技术，依托合作方的本地运营资源、用户渠道与车队网络实现落地。截至目前……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2ftj.chinadaily.com.cn%2fa%2f202609%2f09%2fWS6aa0d0c4e4b09a165c788d93.html&c=9352244510619181149&mkt=zh-hk",
-    "source": "tj.chinadaily.com.cn",
-    "category": "出行运营",
-    "tags": [
-      "OTA",
-      "Robotaxi",
-      "RoboTaxi",
-      "小马智行"
-    ],
-    "_gen": {
-      "id": "7ceaeeea7646",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    }
-  },
-  {
-    "date": "2026-09-09",
-    "title": "双芯齐发｜爱芯元智 M9 系列正式推出，构筑国产智驾大模型算力新基座",
-    "summary": "当下，VLA 大模型、世界模型、一段式端到端成为智能驾驶领域发展热点，城区 NOA 功能也正从高端车型加速向主流乘用车市场渗透，车载芯片已经成为决定智能驾驶体验上限的关键核心。 近日，爱芯元智正式推出 M9 系列高阶智驾车规芯片，包含旗舰档位 M97 与主流档位 M95 两款 5nm……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52d10b0f4812aa618d7f797954d1&url=https%3a%2f%2fwww.sohu.com%2fa%2f1073928800_114822&c=16364672243437257881&mkt=zh-hk",
-    "source": "搜狐",
-    "category": "技术与研究",
-    "tags": [
-      "大模型"
-    ],
-    "_gen": {
-      "id": "6cf487fa2c31",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "自动驾驶 大模型 VLA"
-    }
-  },
-  {
-    "date": "2026-09-08",
-    "title": "智能驾驶辅助赛道，来了个央企玩家",
-    "summary": "汽车行业的智能驾驶辅助上车速度，这两年被拉到了极限。 车型更新越来越快，智能化功能越来越多，布会上的技术名词也越来越密集。车企似乎越来越擅长在短时间内完成一款“智能汽车”的产品包装……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52c60a454ee5931a2932d2860c2b&url=https%3a%2f%2ffinance.sina.com.cn%2fwm%2f2026-09-08%2fdoc-inirceww4612101.shtml&c=7778287730663441571&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "量产车型",
-    "tags": [],
-    "_gen": {
-      "id": "c2aae541eb0b",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "智能驾驶 量产 车型"
-    }
-  },
-  {
-    "date": "2026-09-08",
-    "title": "无人驾驶冲击出租车司机饭碗，也带来了新市场",
-    "summary": "技术的进步总会带来一个行业的兴衰更替，这不可避免，但它也有可能给行业带来新的机会。2026年，无人驾驶出租车正从测试场驶入现实。全国26座城市已获批L4级全无人自动驾驶网约车商业化运营，无人车队规模突破4000辆。特斯拉Cybercab也于9月正式发布。技术浪潮已至，冲击真实可感。在广州，有网约车司……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260908A0BSK300&c=14504227353085495031&mkt=zh-hk",
-    "source": "腾讯新闻",
-    "category": "出行运营",
-    "tags": [],
-    "_gen": {
-      "id": "3869185e0164",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "Robotaxi 无人出租车"
-    }
-  },
-  {
-    "date": "2026-09-08",
-    "title": "小马智行多哈商业化运营取得新进展 首次开放全无人Robotaxi体验",
-    "summary": "上证报中国证券网讯（记者 窦世平）9月7日至9日，由卡塔尔交通部主办的第二届自动驾驶电动出行论坛（AEMOB）在多哈国家会议中心举行。小马智行与卡塔尔国家运输公司Mowasalat共同发布Robotaxi商业化运营阶段性成果，并在论坛期间推出多哈首个全无人驾驶Robotaxi体验项目……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52be92c541f0ac1fabc6ae05cc86&url=https%3a%2f%2ffinance.sina.com.cn%2froll%2f2026-09-09%2fdoc-inirfcpy3847040.shtml&c=17399066980719799722&mkt=zh-hk",
+    "date": "2026-09-14",
+    "title": "中国自动驾驶科技公司获西班牙首张L4级自动驾驶乘用车运营牌照",
+    "summary": "中新社广州9月10日电 (记者 蔡敏婕)中国自动驾驶科技公司文远知行10日发布消息称，该企业获得西班牙首张L4级自动驾驶乘用车运营牌照，获准在公共道路开展车辆部署，这标志着西班牙首次在国家层面为L4级Robotaxi(自动驾驶出租车)开放准入……",
+    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6abca564499040f6b343e36000854528&url=https%3a%2f%2ffinance.sina.com.cn%2froll%2f2026-09-10%2fdoc-inirveaq9288415.shtml&c=15975418122423512580&mkt=zh-hk",
     "source": "新浪网",
     "category": "出行运营",
     "tags": [
-      "OTA",
-      "Robotaxi",
-      "RoboTaxi",
-      "小马智行"
-    ],
-    "_gen": {
-      "id": "55453093474c",
-      "feed": "必应资讯·自动驾驶综合",
-      "query": "自动驾驶 最新 进展"
-    }
-  },
-  {
-    "date": "2026-09-07",
-    "title": "世界模型赛道再添新赛题！第五届琶洲算法大赛×智能驾驶世界模型 ...",
-    "summary": "当前，世界模型正成为自动驾驶领域技术演进的重要方向，依托对物理环境的理解与行为推演能力，为破解复杂非结构化场景感知、决策难题带来新思路。矿山重载车辆在雨雾扬尘环境下，依靠无人驾驶系统精准辨识周边交通参与者与障碍物，平稳通行无信号灯路口——这并非遥不可及的未来图景，而是第五届琶洲算法大赛面向全球开发者……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52cb386849faa61441aadfa9f154&url=https%3a%2f%2fnews.qq.com%2frain%2fa%2f20260907A0CH1100&c=17919120665035581422&mkt=zh-hk",
-    "source": "腾讯新闻",
-    "category": "技术与研究",
-    "tags": [
-      "世界模型",
-      "算法"
-    ],
-    "_gen": {
-      "id": "7fdc038b9c2f",
-      "feed": "必应资讯·世界模型与大模型",
-      "query": "世界模型 自动驾驶"
-    }
-  },
-  {
-    "date": "2026-09-06",
-    "title": "特斯拉：预计将于下月实现 Robotaxi 自动驾驶无人出租车 24 小时全 ...",
-    "summary": "IT之家 9 月 6 日消息，特斯拉 AI 负责人 Ashok Elluswamy 本周表示，特斯拉 Robotaxi 自动驾驶无人出租车距离“实现 24 小时全天候运营”已经不远。针对一名希望在深夜使用 Cybercab 出行的用户，他在 X 平台回复称，待“v15……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2ffinance.sina.com.cn%2ftech%2fdigi%2f2026-09-06%2fdoc-iniqvvnz9666870.shtml&c=5230090432677850751&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "出行运营",
-    "tags": [
-      "OTA",
-      "Robotaxi",
-      "RoboTaxi",
-      "无人出租"
-    ],
-    "_gen": {
-      "id": "16ea34c2b5e8",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "Robotaxi 无人出租车"
-    }
-  },
-  {
-    "date": "2026-09-06",
-    "title": "特斯拉Robotaxi下月实现24小时运营！无人出租车时代真的来了？",
-    "summary": "特斯拉正在加速推进无人驾驶出租车的商业化落地。据最新消息，特斯拉Robotaxi有望在下个月实现24小时全天候运营，这意味着无人出租车将从\"限时体验\"正式迈入\"全时段服务\"阶段。对于整个自动驾驶行业来说，这可能是一个里程碑式的时刻。 从限时试运营到24小时全覆盖……",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab53134af542c5a786df45f0611603&url=https%3a%2f%2fwww.sohu.com%2fa%2f1072432069_121292414&c=10128442750637887746&mkt=zh-hk",
-    "source": "搜狐",
-    "category": "出行运营",
-    "tags": [
-      "OTA",
-      "Robotaxi",
-      "RoboTaxi",
-      "无人出租"
-    ],
-    "_gen": {
-      "id": "b7948e3d2a32",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "Robotaxi 无人出租车"
-    }
-  },
-  {
-    "date": "2026-09-04",
-    "title": "特斯拉开始招募Cybercab车队运营商 自动驾驶出租车业务或将向第三方 ...",
-    "summary": "特斯拉近日在官网发布了一份面向企业的意向调查表，征集有意购买Cybercab车队或为其运营网络提供基础设施的公司。这一举动表明，特斯拉对这款金色自动驾驶汽车的规划，可能不再局限于亲自运营自动驾驶出租车，而是希望借助外部企业扩大业务规模。不过，这份调查并不能证明特斯拉已经决定向第三方出售自动驾驶汽车。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab5319ca5544498231e938ac4a2cbc&url=https%3a%2f%2fwww.cnbeta.com.tw%2farticles%2ftech%2f1576340.htm&c=9092693975796036954&mkt=zh-hk",
-    "source": "cnbeta.com.tw",
-    "category": "出行运营",
-    "tags": [
-      "自动驾驶出租",
-      "运营",
-      "车队"
-    ],
-    "_gen": {
-      "id": "202d394c4915",
-      "feed": "必应资讯·Robotaxi与出行",
-      "query": "自动驾驶出租车 运营"
-    }
-  },
-  {
-    "date": "2026-09-04",
-    "title": "Cybercab将开放第三方运营？特斯拉发布自动驾驶出租车意向书",
-    "summary": "财联社9月4日讯（编辑 马兰） 特斯拉周四低调发布了Cybercab，尽管发布会现场细节并未流出，但特斯拉透露该车型彻底取消了方向盘、油门刹车踏板和后视镜，完全依赖特斯拉FSD完全自动驾驶系统运行。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab5319ca5544498231e938ac4a2cbc&url=https%3a%2f%2ffinance.sina.com.cn%2fjjxw%2f2026-09-04%2fdoc-iniqrtww0837597.shtml&c=15110361237340145515&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "出行运营",
-    "tags": [
-      "自动驾驶出租",
       "运营"
     ],
     "_gen": {
-      "id": "75ec3aea5a0b",
+      "id": "c786de35a125",
       "feed": "必应资讯·Robotaxi与出行",
       "query": "自动驾驶出租车 运营"
-    }
-  },
-  {
-    "date": "2026-08-31",
-    "title": "智界RX开展L3级自动驾驶准入测试",
-    "summary": "此外，新车首发华为智擎新一代高性能电驱，后驱 CLTC 工况效率达 93% 以上；L3 级自动驾驶架构配备 38 个融合感知传感器，含 896 线双光路图像级激光雷达在内的四颗激光雷达，以及供电、通信、感知、转向、制动等全链路冗余。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52d68b104bb5b054811fc524017a&url=https%3a%2f%2ftech.ifeng.com%2fc%2f8w2jU9JBcqO&c=536975692590861361&mkt=zh-hk",
-    "source": "tech.ifeng.com",
-    "category": "量产车型",
-    "tags": [],
-    "_gen": {
-      "id": "d21718c625e9",
-      "feed": "必应资讯·L3与准入试点",
-      "query": "L3 自动驾驶 准入"
-    }
-  },
-  {
-    "date": "2026-08-31",
-    "title": "2027年7月实施！L3/L4自动驾驶强制国标发布：以后车企不能随便吹智驾了",
-    "summary": "这也是我国首部针对L3/L4级智能网联汽车自动驾驶系统安全要求的强制性国标，正式敲定将于2027年7月1日起落地实施，所有在售搭载高阶自动驾驶功能的车型后续都必须符合该标准的硬性要求。",
-    "link": "http://www.bing.com/news/apiclick.aspx?ref=FexRss&aid=&tid=6aab52d68b104bb5b054811fc524017a&url=https%3a%2f%2ffinance.sina.com.cn%2ftech%2froll%2f2026-08-31%2fdoc-iniqexuv9004913.shtml&c=12747757194954826362&mkt=zh-hk",
-    "source": "新浪网",
-    "category": "政策与准入",
-    "tags": [],
-    "_gen": {
-      "id": "68ee90165327",
-      "feed": "必应资讯·L3与准入试点",
-      "query": "L3 自动驾驶 准入"
     }
   }
 ];
 
 window.NEWS_META = {
-  "updatedAt": "2026-09-17",
-  "fetchedAt": "2026-09-17T10:40:25+08:00",
+  "updatedAt": "2026-09-30",
+  "fetchedAt": "2026-09-30T14:00:06+08:00",
   "maxTotal": 30,
   "totalManual": 0,
   "totalAuto": 30,
   "total": 30,
   "removedOldAuto": 30,
-  "removedByCap": 6,
-  "removedDup": 4,
+  "removedByCap": 12,
+  "removedDup": 2,
   "totalFeatured": 8,
-  "removedFeaturedCap": 13,
+  "removedFeaturedCap": 9,
   "sources": [
     [
       "必应资讯·自动驾驶综合",
-      6
+      9
     ],
     [
       "必应资讯·自动驾驶综合",
-      6
+      3
     ],
     [
       "必应资讯·世界模型与大模型",
-      6
+      5
     ],
     [
       "必应资讯·世界模型与大模型",
-      2
+      3
     ],
     [
       "必应资讯·L3与准入试点",
-      8
+      9
+    ],
+    [
+      "必应资讯·L3与准入试点",
+      3
     ],
     [
       "必应资讯·Robotaxi与出行",
-      8
+      9
     ],
     [
       "必应资讯·Robotaxi与出行",
-      4
+      3
     ]
   ],
   "note": "每次运行只保留最新 30 条：本次抓取覆盖旧的自动条目；手工条目若排不进最新 30 条也会被移出。"
