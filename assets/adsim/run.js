@@ -1,8 +1,9 @@
 /* ADSim - 命令行运行器
  * 用法：
- *   node assets/adsim/run.js                 跑全部场景
- *   node assets/adsim/run.js cut-in 800      跑指定场景、指定步数
+ *   node assets/adsim/run.js                 跑全部场景（每个场景跑它自带的 scene.steps）
+ *   node assets/adsim/run.js cut-in 800      跑指定场景、指定步数（显式步数覆盖所有场景）
  * 输出：每个场景的指标表 + 断言结论；全部通过退出码 0。
+ * 步数口径：显式参数 > scene.steps > DEFAULT_STEPS，与 selftest.js 保持一致。
  */
 const path = require("path");
 const Sim = require("./core/sim.js");
@@ -10,7 +11,10 @@ const scenarios = require("./scenarios.js");
 
 const args = process.argv.slice(2);
 const onlyId = args[0] && isNaN(Number(args[0])) ? args[0] : null;
-const steps = parseInt(args[1] || (onlyId ? "0" : "0") || "0", 10) || 600;
+// 步数口径：命令行显式参数 > scene.steps > DEFAULT_STEPS（与 selftest.js 一致，
+// 避免“场景断言按 520 步设计、CLI 却硬跑 600 步”导致同一场景结论相反）。
+const cliSteps = parseInt(args[1] || "", 10) || 0;
+const DEFAULT_STEPS = 620;
 const dt = 0.05;
 
 const list = onlyId ? scenarios.list.filter(function (s) { return s.id === onlyId; }) : scenarios.list;
@@ -27,7 +31,7 @@ function pad(s, n) {
 function num(v) { return v === null || v === undefined ? "-" : v; }
 
 console.log("ADSim 闭环仿真 · 命令行运行器");
-console.log("时间步长 " + dt + " s  预测/规划时域 3 s  随机种子 20260917（结果可复现）");
+console.log("时间步长 " + dt + " s  步数取 scene.steps（可用第二个参数覆盖）  预测/规划时域 3 s  随机种子 20260917（结果可复现）");
 console.log("");
 
 let allPass = true;
@@ -35,6 +39,7 @@ const rows = [];
 
 for (const scene of list) {
   const sim = Sim.createSimulation(scene, { dt: dt, seed: 20260917 });
+  const steps = cliSteps || scene.steps || DEFAULT_STEPS;
   const t0 = Date.now();
   for (let i = 0; i < steps; i++) sim.step();
   const wall = Date.now() - t0;
